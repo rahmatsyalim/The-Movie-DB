@@ -4,6 +4,11 @@ import android.content.Context
 import android.view.View
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_401
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_404
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_500
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR
+import retrofit2.HttpException
 
 
 /**
@@ -21,8 +26,17 @@ fun View.showSnackBar(message: String, indefinite: Boolean) {
       message,
       if (indefinite) Snackbar.LENGTH_INDEFINITE else Snackbar.LENGTH_LONG
    ).apply {
-      if (indefinite) setAction("OK"){
+      if (indefinite) setAction("OK") {
          this.dismiss()
       }
    }.show()
+}
+
+fun HttpException.getErrorMessage(): String {
+   return when (this.code()) {
+      401 -> HTTP_ERROR_401
+      404 -> HTTP_ERROR_404
+      500 -> HTTP_ERROR_500
+      else -> HTTP_ERROR
+   }
 }

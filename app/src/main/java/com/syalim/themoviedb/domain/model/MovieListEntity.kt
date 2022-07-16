@@ -6,5 +6,5 @@ package com.syalim.themoviedb.domain.model
  * rahmatsyalim@gmail.com
  */
 data class MovieListEntity(
-   val results: List<MovieItemEntity?>? = emptyList()
+   val results: List<MovieItemEntity>? = emptyList()
 )
