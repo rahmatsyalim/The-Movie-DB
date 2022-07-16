@@ -8,4 +8,5 @@ import androidx.lifecycle.ViewModel
  * rahmatsyalim@gmail.com
  */
 class MainViewModel: ViewModel() {
+
 }
