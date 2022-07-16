@@ -1,7 +1,8 @@
-package com.syalim.themoviedb
+package com.syalim.themoviedb.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.syalim.themoviedb.R
 
 class MainActivity : AppCompatActivity() {
    override fun onCreate(savedInstanceState: Bundle?) {
