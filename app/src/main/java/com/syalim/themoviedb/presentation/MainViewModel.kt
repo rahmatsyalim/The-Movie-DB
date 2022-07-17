@@ -43,7 +43,7 @@ class MainViewModel @Inject constructor(
 
    init {
 
-      loadMovies()
+
 
    }
 
@@ -59,7 +59,7 @@ class MainViewModel @Inject constructor(
                ::getNowPlayingMovies,
                ::getTopRatedMovies
             )
-            _homeState.value = State(data = "Finish")
+            _homeState.value = State()
          }
       }
    }

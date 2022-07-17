@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
@@ -17,14 +16,14 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-   private val viewModel: MainViewModel by viewModels()
-
    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
    private val navController by lazy {
       (supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment)
          .findNavController()
    }
+
+   val ivFiler by lazy { binding.ivFilter }
 
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
    }
 
-   private fun setAppBar(){
+   private fun setAppBar() {
       val topBarLayout = binding.topBarLayout
       val bottomBar = binding.bottomNavigation
 
@@ -46,6 +45,9 @@ class MainActivity : AppCompatActivity() {
       )
 
       navController.addOnDestinationChangedListener { _, destination, _ ->
+         binding.tvTitle.text = destination.label
+         binding.ivFilter.isVisible = destination.id == R.id.genre_fragment
+
          topLevelDest.apply {
             if (this.contains(destination.id)) {
                topBarLayout.showWithAnimation()
