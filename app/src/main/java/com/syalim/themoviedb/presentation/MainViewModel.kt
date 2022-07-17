@@ -11,6 +11,8 @@ import com.syalim.themoviedb.domain.use_case.get_upcoming_movies_use_case.GetUpc
 import com.syalim.themoviedb.domain.use_case.internet_connected_use_case.InternetConnectedUseCase
 import com.syalim.themoviedb.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,30 +31,26 @@ class MainViewModel @Inject constructor(
    private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase
 ) : BaseViewModel() {
 
-   private val _upcomingState = MutableLiveData(State<List<MovieItemEntity>>())
-   private val _popularState = MutableLiveData(State<List<MovieItemEntity>>())
-   private val _nowPlayingState = MutableLiveData(State<List<MovieItemEntity>>())
-   private val _topRatedState = MutableLiveData(State<List<MovieItemEntity>>())
-   private val _homeState = MutableLiveData(State<String>())
+   private val _upcomingState = MutableStateFlow(State<List<MovieItemEntity>>())
+   private val _popularState = MutableStateFlow(State<List<MovieItemEntity>>())
+   private val _nowPlayingState = MutableStateFlow(State<List<MovieItemEntity>>())
+   private val _topRatedState = MutableStateFlow(State<List<MovieItemEntity>>())
+   private val _homeState = MutableStateFlow(State<String>())
 
-   val upcomingStates: LiveData<State<List<MovieItemEntity>>> get() = _upcomingState
-   val popularStateLiveData: LiveData<State<List<MovieItemEntity>>> get() = _popularState
-   val nowPlayingStateLiveData: LiveData<State<List<MovieItemEntity>>> get() = _nowPlayingState
-   val topRatedStateLiveData: LiveData<State<List<MovieItemEntity>>> get() = _topRatedState
-   val homeState: LiveData<State<String>> get() = _homeState
+   val upcomingStates: StateFlow<State<List<MovieItemEntity>>> get() = _upcomingState
+   val popularStateLiveData: StateFlow<State<List<MovieItemEntity>>> get() = _popularState
+   val nowPlayingStateLiveData: StateFlow<State<List<MovieItemEntity>>> get() = _nowPlayingState
+   val topRatedStateLiveData: StateFlow<State<List<MovieItemEntity>>> get() = _topRatedState
+   val homeState: StateFlow<State<String>> get() = _homeState
 
    init {
-
-
-
+      loadMovies(false)
    }
 
-   fun loadMovies() {
-      if (!internetConnectedUseCase()) {
-         _homeState.value = State(errorMessage = "No internet connection")
-      } else {
+   fun loadMovies(isReloading: Boolean) {
+      if (isConnected()) {
          viewModelScope.launch {
-            _homeState.value = State(isLoading = true)
+            _homeState.value = State(isLoading = true, isReloading = isReloading)
             awaitAll(
                ::getUpcomingMovies,
                ::getPopularMovies,
@@ -61,6 +59,8 @@ class MainViewModel @Inject constructor(
             )
             _homeState.value = State()
          }
+      } else {
+         _homeState.value = State(errorMessage = "No internet connection")
       }
    }
 
@@ -75,5 +75,7 @@ class MainViewModel @Inject constructor(
 
    private suspend fun getTopRatedMovies() =
       handleRequest(_topRatedState, getTopRatedMoviesUseCase())
+
+   private fun isConnected() = internetConnectedUseCase()
 
 }

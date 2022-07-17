@@ -7,6 +7,7 @@ package com.syalim.themoviedb.presentation
  */
 data class State<T>(
    val isLoading: Boolean = false,
-   val errorMessage: String = "",
+   val isReloading: Boolean = false,
+   val errorMessage: String? = null,
    val data: T? = null
 )

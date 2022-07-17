@@ -6,6 +6,7 @@ import com.syalim.themoviedb.common.Resource
 import com.syalim.themoviedb.presentation.State
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel : ViewModel() {
 
    protected suspend fun <T> handleRequest(
-      state: MutableLiveData<State<T>>,
+      state: MutableStateFlow<State<T>>,
       dataFlow: Flow<Resource<T>>
    ) =
       dataFlow.collectLatest { result ->
