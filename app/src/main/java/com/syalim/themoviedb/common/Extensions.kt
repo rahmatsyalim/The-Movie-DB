@@ -2,12 +2,15 @@ package com.syalim.themoviedb.common
 
 import android.content.Context
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_401
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_404
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_500
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR
+import com.syalim.themoviedb.common.Constants.IMAGE_URL
 import retrofit2.HttpException
 
 
@@ -30,6 +33,17 @@ fun View.showSnackBar(message: String, indefinite: Boolean) {
          this.dismiss()
       }
    }.show()
+}
+
+fun ImageView.setImage(uri: String) {
+   Glide.with(context)
+      .load(uri)
+      .centerCrop()
+      .into(this)
+}
+
+fun String.setImageUrl(): String {
+   return IMAGE_URL + this
 }
 
 fun HttpException.getErrorMessage(): String {

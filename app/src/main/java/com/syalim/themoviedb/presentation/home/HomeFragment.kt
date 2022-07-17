@@ -3,9 +3,11 @@ package com.syalim.themoviedb.presentation.home
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.syalim.themoviedb.common.showSnackBar
 import com.syalim.themoviedb.databinding.FragmentHomeBinding
 import com.syalim.themoviedb.presentation.MainViewModel
+import com.syalim.themoviedb.presentation.adapter.HomeMoviesAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -32,6 +34,40 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          viewModel.loadMovies(true)
       }
 
+      setRecyclerViewPopular()
+      setRecyclerViewNowPlaying()
+      setRecyclerViewTopRated()
+
+   }
+
+   private fun setRecyclerViewPopular() {
+      val recyclerAdapter = HomeMoviesAdapter()
+      binding.rvPopular.apply {
+         layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+         adapter = recyclerAdapter
+      }
+      recyclerAdapter.collectPopularMovies()
+   }
+
+   private fun setRecyclerViewNowPlaying() {
+      val recyclerAdapter = HomeMoviesAdapter()
+      binding.rvInTheatre.apply {
+         layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+         adapter = recyclerAdapter
+      }
+      recyclerAdapter.collectNowPlayingMovies()
+   }
+
+   private fun setRecyclerViewTopRated() {
+      val recyclerAdapter = HomeMoviesAdapter()
+      binding.rvTopRated.apply {
+         layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+         adapter = recyclerAdapter
+      }
+      recyclerAdapter.collectTopRatedMovies()
    }
 
    private fun collectHomeState() {
@@ -42,10 +78,47 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             progressBarLayout.isVisible = state.isLoading && !state.isReloading
 
             state.errorMessage?.let {
-               binding.root.showSnackBar(it,false)
+               binding.root.showSnackBar(it, false)
             }
          }
       }
    }
+
+   private fun HomeMoviesAdapter.collectPopularMovies() {
+      viewLifecycleOwner.lifecycleScope.launch {
+         viewModel.popularState.collectLatest { state ->
+            state.data?.let {
+               if (it.isNotEmpty()){
+                  this@collectPopularMovies.data.submitList(it)
+               }
+            }
+         }
+      }
+   }
+
+   private fun HomeMoviesAdapter.collectNowPlayingMovies() {
+      viewLifecycleOwner.lifecycleScope.launch {
+         viewModel.nowPlayingState.collectLatest { state ->
+            state.data?.let {
+               if (it.isNotEmpty()){
+                  this@collectNowPlayingMovies.data.submitList(it)
+               }
+            }
+         }
+      }
+   }
+
+   private fun HomeMoviesAdapter.collectTopRatedMovies() {
+      viewLifecycleOwner.lifecycleScope.launch {
+         viewModel.topRatedState.collectLatest { state ->
+            state.data?.let {
+               if (it.isNotEmpty()){
+                  this@collectTopRatedMovies.data.submitList(it)
+               }
+            }
+         }
+      }
+   }
+
 
 }

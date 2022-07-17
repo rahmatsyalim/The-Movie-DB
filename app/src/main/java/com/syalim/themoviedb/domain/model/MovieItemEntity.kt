@@ -9,7 +9,7 @@ data class MovieItemEntity(
    val adult: Boolean? = false,
    val id: Int,
    val originalTitle: String? = "Unknown",
-   val posterPath: String? = "",
+   val posterPath: String? = null,
    val releaseDate: String? = "TBA",
    val voteAverage: Double? = 0.0,
    val overview: String? = "No description"

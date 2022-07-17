@@ -37,10 +37,10 @@ class MainViewModel @Inject constructor(
    private val _topRatedState = MutableStateFlow(State<List<MovieItemEntity>>())
    private val _homeState = MutableStateFlow(State<String>())
 
-   val upcomingStates: StateFlow<State<List<MovieItemEntity>>> get() = _upcomingState
-   val popularStateLiveData: StateFlow<State<List<MovieItemEntity>>> get() = _popularState
-   val nowPlayingStateLiveData: StateFlow<State<List<MovieItemEntity>>> get() = _nowPlayingState
-   val topRatedStateLiveData: StateFlow<State<List<MovieItemEntity>>> get() = _topRatedState
+   val upcomingState: StateFlow<State<List<MovieItemEntity>>> get() = _upcomingState
+   val popularState: StateFlow<State<List<MovieItemEntity>>> get() = _popularState
+   val nowPlayingState: StateFlow<State<List<MovieItemEntity>>> get() = _nowPlayingState
+   val topRatedState: StateFlow<State<List<MovieItemEntity>>> get() = _topRatedState
    val homeState: StateFlow<State<String>> get() = _homeState
 
    init {
