@@ -72,7 +72,7 @@ class MovieRepositoryImpl @Inject constructor(
       return flow {
          emit(Resource.Loading())
          try {
-            val response = movieApi.getNowPlayingMovies(page = 1)
+            val response = movieApi.getTopRatedMovies(page = 1)
             val result = MovieListMapper.convert(response).results
             emit(Resource.Success(result))
          } catch (e: HttpException) {
