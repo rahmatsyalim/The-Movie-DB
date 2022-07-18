@@ -130,5 +130,12 @@
 
    </androidx.core.widget.NestedScrollView>
 
+   <TextView
+      android:id="@+id/tv_info_detail"
+      android:textColor="@color/white"
+      android:layout_centerInParent="true"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+
 
 </RelativeLayout>

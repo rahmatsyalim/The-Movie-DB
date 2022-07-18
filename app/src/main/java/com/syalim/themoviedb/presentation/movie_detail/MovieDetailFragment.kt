@@ -127,18 +127,27 @@ class MovieDetailFragment :
                   binding.ivBackdrop.setImage(it.setImageUrl())
                }
             }
+            if (!state.errorMessage.isNullOrBlank()){
+               binding.viewContainer.isVisible = false
+               binding.tvInfoDetail.isVisible = true
+               binding.tvInfoDetail.text = state.errorMessage
+            } else {
+               binding.viewContainer.isVisible = true
+               binding.tvInfoDetail.isVisible = false
+            }
          }
       }
    }
 
-   private fun collectTrailerState(){
+   private fun collectTrailerState() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.movieTrailerState.collectLatest { state ->
             state.data?.let { data ->
                data.key?.let {
-                  binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener(){
+                  binding.youtubePlayerView.addYouTubePlayerListener(object :
+                     AbstractYouTubePlayerListener() {
                      override fun onReady(youTubePlayer: YouTubePlayer) {
-                        youTubePlayer.cueVideo(it,0f)
+                        youTubePlayer.cueVideo(it, 0f)
                      }
                   })
                }
@@ -147,7 +156,7 @@ class MovieDetailFragment :
       }
    }
 
-   private fun initYoutubePlayer(){
+   private fun initYoutubePlayer() {
       viewLifecycleOwner.lifecycle.addObserver(binding.youtubePlayerView)
    }
 }
