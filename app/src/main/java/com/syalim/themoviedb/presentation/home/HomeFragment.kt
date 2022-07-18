@@ -161,8 +161,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          viewModel.upcomingState.collectLatest { state ->
             state.data?.let {
                if (it.isNotEmpty()) {
-                  val data = it.chunked(10).first()
-                  this@collectUpcoming.data.submitList(data)
+                  this@collectUpcoming.data.submitList(it)
                   this@collectUpcoming.setImageCarousel()
                }
             }
@@ -189,8 +188,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
             nextPage = position + 1
-            handler.removeCallbacks(viewPagerUpdate())
-            handler.postDelayed(viewPagerUpdate(), 2000)
+            handler.removeCallbacks(viewPagerUpdate)
+            handler.postDelayed(viewPagerUpdate, 3000)
 
             for (i in 0..pagesSize) {
                // TODO: set unselected dot image
@@ -200,11 +199,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       })
    }
 
-   private fun viewPagerUpdate() = Runnable {
+   private val viewPagerUpdate = Runnable {
       if (nextPage == pagesSize) {
          nextPage = 0
       }
       binding.vpUpcoming.setCurrentItem(nextPage, true)
+   }
+
+   override fun onDestroy() {
+      super.onDestroy()
+      handler.removeCallbacks(viewPagerUpdate)
    }
 
 }

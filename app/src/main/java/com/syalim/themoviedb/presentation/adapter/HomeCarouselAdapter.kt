@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.syalim.themoviedb.common.dateToViewDate
 import com.syalim.themoviedb.common.setImage
 import com.syalim.themoviedb.common.setImageUrl
 import com.syalim.themoviedb.databinding.ItemCarouselBinding
@@ -40,6 +41,8 @@ class HomeCarouselAdapter(private val viewPager: ViewPager2) :
             item.backdropPath?.let {
                ivBackdrop.setImage(it.setImageUrl())
                tvTitle.text = item.originalTitle
+               val date = item.releaseDate.dateToViewDate()
+               tvDate.text = "on ${item.releaseDate.dateToViewDate()}"
             }
          }
       }

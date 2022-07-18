@@ -53,3 +53,39 @@ fun HttpException.getErrorMessage(): String {
       else -> HTTP_ERROR
    }
 }
+
+fun String?.dateToViewDate(): String {
+   if (this == "0000-00-00" || this == null || this == "") {
+      return "Unknown"
+   } else {
+      val values = this.split("-".toRegex()).toTypedArray()
+      val year = values[0]
+      val month = when (values[1]) {
+         "01" -> "Jan"
+         "02" -> "Feb"
+         "03" -> "Mar"
+         "04" -> "Apr"
+         "05" -> "May"
+         "06" -> "Jun"
+         "07" -> "Jul"
+         "08" -> "Aug"
+         "09" -> "Sep"
+         "10" -> "Oct"
+         "11" -> "Nov"
+         else -> "Des"
+      }
+      val day = when (values[2]) {
+         "01" -> "1"
+         "02" -> "2"
+         "03" -> "3"
+         "04" -> "4"
+         "05" -> "5"
+         "06" -> "6"
+         "07" -> "7"
+         "08" -> "8"
+         "09" -> "9"
+         else -> values[2]
+      }
+      return "$month $day, $year"
+   }
+}
