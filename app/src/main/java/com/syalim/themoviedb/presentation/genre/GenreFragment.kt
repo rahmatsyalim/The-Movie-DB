@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.common.getScreenHeight
@@ -36,7 +37,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private val viewModel: MainViewModel by activityViewModels()
 
-   private val moviesAdapter = MoviesPagerAdapter()
+   private lateinit var moviesAdapter: MoviesPagerAdapter
 
    private lateinit var genreFilterAdapter: GenreFilterAdapter
 
@@ -60,8 +61,6 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
       setMoviesRecyclerView()
 
-      collectMoviesByGenre(viewModel.currentGenre)
-
       loadStateListener()
 
       binding.swipeRefreshLayout.setOnRefreshListener {
@@ -77,10 +76,10 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    }
 
-   private fun collectMoviesByGenre(genre: List<String>?) {
+   private fun MoviesPagerAdapter.collectMoviesByGenre(genre: List<String>?) {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.getMoviesByGenre(genre = genre ?: emptyList()).collectLatest { pagingData ->
-            moviesAdapter.submitData(pagingData)
+            this@collectMoviesByGenre.submitData(pagingData)
          }
       }
    }
@@ -97,19 +96,21 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
    }
 
    private fun setMoviesRecyclerView() {
-      binding.rvMovies.layoutManager = GridLayoutManager(requireContext(), 3)
-      with(moviesAdapter) {
-         binding.rvMovies.adapter = withLoadStateFooter(PagingLoadStateAdapter())
-         onItemClickListener {
-            val bundle = Bundle().apply {
-               putString("id", it.id.toString())
-            }
-            findNavController().navigate(
-               R.id.action_genre_fragment_to_movie_detail_fragment,
-               bundle
-            )
+      moviesAdapter = MoviesPagerAdapter()
+      moviesAdapter.onItemClickListener {
+         val bundle = Bundle().apply {
+            putString("id", it.id.toString())
          }
+         findNavController().navigate(
+            R.id.action_genre_fragment_to_movie_detail_fragment,
+            bundle
+         )
       }
+      binding.rvMovies.apply {
+         layoutManager = GridLayoutManager(requireContext(), 3)
+         adapter = moviesAdapter.withLoadStateFooter(PagingLoadStateAdapter())
+      }
+      moviesAdapter.collectMoviesByGenre(viewModel.currentGenre)
    }
 
    private fun loadStateListener() {
@@ -152,6 +153,8 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private fun setBottomSheetAkun() {
       bottomSheetdialog.setContentView(bindingBottomSheet.root)
+      bottomSheetdialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+      bottomSheetdialog.behavior.skipCollapsed = true
       bottomSheetdialog.behavior.maxHeight = requireActivity().getScreenHeight() - 150
 
       for (i in viewModel.currentGenre) {
@@ -163,7 +166,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
       setFilterRecyclerView(pickedGenre)
 
       bindingBottomSheet.btnFilter.setOnClickListener {
-         collectMoviesByGenre(pickedGenre)
+         moviesAdapter.collectMoviesByGenre(pickedGenre)
          bottomSheetdialog.dismiss()
       }
 

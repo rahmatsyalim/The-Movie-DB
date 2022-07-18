@@ -62,8 +62,8 @@ interface MovieApi {
 
    @GET("/3/movie/{id}")
    suspend fun getMovieDetails(
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
-      @Path("id") id: String
+      @Path("id") id: String,
+      @Query("api_key") apiKey: String = BuildConfig.apiKey
    ): MovieDetailDto
 
    @GET("/3/genre/movie/list")
@@ -74,15 +74,15 @@ interface MovieApi {
 
    @GET("/3/movie/{id}/reviews")
    suspend fun getMovieReviews(
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
       @Path("id") id: String,
+      @Query("api_key") apiKey: String = BuildConfig.apiKey,
       @Query("page") page: Int
    ): ReviewListDto
 
    @GET("/3/movie/{id}/videos")
    suspend fun getMovieTrailer(
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
-      @Path("id") id: String
+      @Path("id") id: String,
+      @Query("api_key") apiKey: String = BuildConfig.apiKey
    ): MovieTrailerListDto
 
 }

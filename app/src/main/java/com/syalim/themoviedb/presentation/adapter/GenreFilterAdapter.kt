@@ -29,19 +29,16 @@ class GenreFilterAdapter(private val genre: List<String>? = listOf()) : Recycler
                   if (it.contains(item.id.toString())){
                      isChecked = true
                      setBackgroundColor(resources.getColor(R.color.primary))
-                     setTextColor(resources.getColor(R.color.white))
                   }
                }
 
                setOnClickListener {
                   if (isChecked){
                      isChecked = false
-                     setBackgroundColor(resources.getColor(R.color.white))
-                     setTextColor(resources.getColor(R.color.grey))
+                     setBackgroundColor(resources.getColor(R.color.transparent))
                   } else {
                      isChecked = true
                      setBackgroundColor(resources.getColor(R.color.primary))
-                     setTextColor(resources.getColor(R.color.white))
                   }
                   onItemClickListener?.invoke(item,isChecked)
                }

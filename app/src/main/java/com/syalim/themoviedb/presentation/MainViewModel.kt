@@ -41,14 +41,14 @@ class MainViewModel @Inject constructor(
    private val _popularState = MutableStateFlow(State<List<MovieItemEntity>>())
    private val _nowPlayingState = MutableStateFlow(State<List<MovieItemEntity>>())
    private val _topRatedState = MutableStateFlow(State<List<MovieItemEntity>>())
-   private val _homeState = MutableStateFlow(State<String>())
+   private val _homeState = MutableStateFlow(State<Any>())
    private val _filterState = MutableStateFlow(State<List<GenreItemEntity>>())
 
    val upcomingState: StateFlow<State<List<MovieItemEntity>>> get() = _upcomingState
    val popularState: StateFlow<State<List<MovieItemEntity>>> get() = _popularState
    val nowPlayingState: StateFlow<State<List<MovieItemEntity>>> get() = _nowPlayingState
    val topRatedState: StateFlow<State<List<MovieItemEntity>>> get() = _topRatedState
-   val homeState: StateFlow<State<String>> get() = _homeState
+   val homeState: StateFlow<State<Any>> get() = _homeState
    val filterState: StateFlow<State<List<GenreItemEntity>>> get() = _filterState
 
    init {
@@ -56,19 +56,15 @@ class MainViewModel @Inject constructor(
    }
 
    fun loadMovies(isReloading: Boolean) {
-      if (isConnected()) {
-         viewModelScope.launch {
-            _homeState.value = State(isLoading = true, isReloading = isReloading)
-            awaitAll(
-               ::getUpcomingMovies,
-               ::getPopularMovies,
-               ::getNowPlayingMovies,
-               ::getTopRatedMovies
-            )
-            _homeState.value = State()
-         }
-      } else {
-         _homeState.value = State(errorMessage = "No internet connection")
+      viewModelScope.launch {
+         _homeState.value = State(isLoading = true, isReloading = isReloading)
+         awaitAll(
+            ::getUpcomingMovies,
+            ::getPopularMovies,
+            ::getNowPlayingMovies,
+            ::getTopRatedMovies
+         )
+         _homeState.value = State()
       }
    }
 
