@@ -3,7 +3,10 @@ package com.syalim.themoviedb.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.syalim.themoviedb.domain.model.MovieItemEntity
+import com.syalim.themoviedb.domain.use_case.get_movies_by_genre_use_case.GetMoviesByGenreUseCase
 import com.syalim.themoviedb.domain.use_case.get_now_playing_movies_use_case.GetNowPlayingMoviesUseCase
 import com.syalim.themoviedb.domain.use_case.get_popular_movies_use_case.GetPopularMoviesUseCase
 import com.syalim.themoviedb.domain.use_case.get_top_rated_movies_use_case.GetTopRatedMoviesUseCase
@@ -11,6 +14,7 @@ import com.syalim.themoviedb.domain.use_case.get_upcoming_movies_use_case.GetUpc
 import com.syalim.themoviedb.domain.use_case.internet_connected_use_case.InternetConnectedUseCase
 import com.syalim.themoviedb.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -28,7 +32,8 @@ class MainViewModel @Inject constructor(
    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
    private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
-   private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase
+   private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
+   private val getMoviesByGenreUseCase: GetMoviesByGenreUseCase
 ) : BaseViewModel() {
 
    private val _upcomingState = MutableStateFlow(State<List<MovieItemEntity>>())
@@ -77,5 +82,22 @@ class MainViewModel @Inject constructor(
       handleRequest(_topRatedState, getTopRatedMoviesUseCase())
 
    private fun isConnected() = internetConnectedUseCase()
+
+
+   private var currentGenre: String? = null
+
+   private var currentGenreResult: Flow<PagingData<MovieItemEntity>>? = null
+
+   fun getMoviesByGenre(genre: String?): Flow<PagingData<MovieItemEntity>> {
+      val lastResult = currentGenreResult
+      if (genre == currentGenre && lastResult != null) {
+         return lastResult
+      }
+      val newResult = getMoviesByGenreUseCase.invoke(genre)
+         .cachedIn(viewModelScope)
+      currentGenre = genre
+      currentGenreResult = newResult
+      return newResult
+   }
 
 }

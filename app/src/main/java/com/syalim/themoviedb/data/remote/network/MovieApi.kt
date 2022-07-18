@@ -56,7 +56,7 @@ interface MovieApi {
       @Query("api_key") apiKey: String = BuildConfig.apiKey,
       @Query("language") lang: String = "en-US",
       @Query("page") page: Int,
-      @Query("with_genres") genres: String
+      @Query("with_genres") genres: String?
    ): MovieListDto
 
    @GET("/3/movie/{id}")

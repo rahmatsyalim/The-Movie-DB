@@ -1,5 +1,6 @@
 package com.syalim.themoviedb.domain.repository
 
+import androidx.paging.PagingData
 import com.syalim.themoviedb.common.Resource
 import com.syalim.themoviedb.domain.model.MovieItemEntity
 import kotlinx.coroutines.flow.Flow
@@ -18,4 +19,6 @@ interface MovieRepository {
    fun getHomeNowPlayingMovies(): Flow<Resource<List<MovieItemEntity>>>
 
    fun getHomeTopRatedMovies(): Flow<Resource<List<MovieItemEntity>>>
+
+   fun getMoviesByGenre(genre: String?): Flow<PagingData<MovieItemEntity>>
 }
