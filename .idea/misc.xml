@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/layout/bottom_sheet_filter.xml" value="0.2947916666666667" />
         <entry key="app/src/main/res/layout/fragment_genre.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2947916666666667" />
+        <entry key="app/src/main/res/layout/fragment_movie_detail.xml" value="0.29375" />
         <entry key="app/src/main/res/layout/item_carousel.xml" value="0.2947916666666667" />
         <entry key="app/src/main/res/layout/item_filter.xml" value="0.29375" />
         <entry key="app/src/main/res/layout/item_movie.xml" value="0.29375" />

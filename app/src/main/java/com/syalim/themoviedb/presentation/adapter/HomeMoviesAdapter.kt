@@ -45,6 +45,9 @@ class HomeMoviesAdapter : RecyclerView.Adapter<HomeMoviesAdapter.HomeMoviesViewH
                ivPoster.setImage(it.setImageUrl())
             }
          }
+         itemView.setOnClickListener {
+            onItemClickListener?.invoke(item)
+         }
       }
    }
 

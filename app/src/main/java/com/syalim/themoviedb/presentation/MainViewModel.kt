@@ -90,14 +90,25 @@ class MainViewModel @Inject constructor(
       handleRequest(_filterState, getMovieGenreUseCase())
 
 
-   var currentGenre: List<String>? = null
+   var currentGenre: List<String> = emptyList()
 
-   fun getMoviesByGenre(genre: List<String>?): Flow<PagingData<MovieItemEntity>> {
-      val genreString = genre?.joinToString(",")
-      val result = getMoviesByGenreUseCase.invoke(genreString)
+   var currentResult: Flow<PagingData<MovieItemEntity>>? = null
+
+   fun getMoviesByGenre(genre: List<String>): Flow<PagingData<MovieItemEntity>> {
+      val genreString = genre.joinToString(",")
+      val lastResult = currentResult
+      if (lastResult != null) {
+         for (i in currentGenre){
+            if (genreString.contains(i)){
+               return lastResult
+            }
+         }
+      }
+      val newResult = getMoviesByGenreUseCase.invoke(genreString)
          .cachedIn(viewModelScope)
       currentGenre = genre
-      return result
+      currentResult = newResult
+      return newResult
    }
 
 }

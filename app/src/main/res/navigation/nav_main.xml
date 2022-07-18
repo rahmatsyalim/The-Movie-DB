@@ -7,9 +7,25 @@
    <fragment
       android:id="@+id/home_fragment"
       android:name="com.syalim.themoviedb.presentation.home.HomeFragment"
-      android:label="Home" />
+      android:label="Home" >
+      <action
+         android:id="@+id/action_home_fragment_to_movie_detail_fragment"
+         app:destination="@id/movie_detail_fragment" />
+   </fragment>
    <fragment
       android:id="@+id/genre_fragment"
       android:name="com.syalim.themoviedb.presentation.genre.GenreFragment"
-      android:label="Genre" />
+      android:label="Genre" >
+      <action
+         android:id="@+id/action_genre_fragment_to_movie_detail_fragment"
+         app:destination="@id/movie_detail_fragment" />
+   </fragment>
+   <fragment
+      android:id="@+id/movie_detail_fragment"
+      android:name="com.syalim.themoviedb.presentation.movie_detail.MovieDetailFragment"
+      android:label="Detail">
+      <argument
+         android:name="id"
+         app:argType="string" />
+   </fragment>
 </navigation>

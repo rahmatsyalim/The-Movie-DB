@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.syalim.themoviedb.R
 import com.syalim.themoviedb.common.getScreenHeight
 import com.syalim.themoviedb.common.showToast
 import com.syalim.themoviedb.databinding.BottomSheetFilterBinding
@@ -36,7 +38,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private val moviesAdapter = MoviesPagerAdapter()
 
-   private lateinit var genreFilterAdapter : GenreFilterAdapter
+   private lateinit var genreFilterAdapter: GenreFilterAdapter
 
    private val ivFilter by lazy {
       (requireActivity() as MainActivity).ivFiler
@@ -77,7 +79,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private fun collectMoviesByGenre(genre: List<String>?) {
       viewLifecycleOwner.lifecycleScope.launch {
-         viewModel.getMoviesByGenre(genre = genre).collectLatest { pagingData ->
+         viewModel.getMoviesByGenre(genre = genre ?: emptyList()).collectLatest { pagingData ->
             moviesAdapter.submitData(pagingData)
          }
       }
@@ -102,7 +104,10 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
             val bundle = Bundle().apply {
                putString("id", it.id.toString())
             }
-//            findNavController().navigate(destid, bundle)
+            findNavController().navigate(
+               R.id.action_genre_fragment_to_movie_detail_fragment,
+               bundle
+            )
          }
       }
    }
@@ -149,11 +154,9 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
       bottomSheetdialog.setContentView(bindingBottomSheet.root)
       bottomSheetdialog.behavior.maxHeight = requireActivity().getScreenHeight() - 150
 
-      viewModel.currentGenre?.let {
-         for (i in it){
-            if (!pickedGenre.contains(i)){
-               pickedGenre.add(i)
-            }
+      for (i in viewModel.currentGenre) {
+         if (!pickedGenre.contains(i)) {
+            pickedGenre.add(i)
          }
       }
 

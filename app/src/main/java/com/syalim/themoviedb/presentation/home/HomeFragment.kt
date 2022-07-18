@@ -1,15 +1,18 @@
 package com.syalim.themoviedb.presentation.home
 
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.syalim.themoviedb.R
 import com.syalim.themoviedb.common.showSnackBar
 import com.syalim.themoviedb.databinding.FragmentHomeBinding
 import com.syalim.themoviedb.presentation.MainViewModel
@@ -60,32 +63,50 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    private fun setRecyclerViewPopular() {
       val recyclerAdapter = HomeMoviesAdapter()
-      binding.rvPopular.apply {
-         layoutManager =
+      with(recyclerAdapter) {
+         binding.rvPopular.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-         adapter = recyclerAdapter
+         binding.rvPopular.adapter = this
+         setOnItemClickListener {
+            val bundle = Bundle().apply {
+               putString("id", it.id.toString())
+            }
+            findNavController().navigate(R.id.action_home_fragment_to_movie_detail_fragment, bundle)
+         }
+         collectPopular()
       }
-      recyclerAdapter.collectPopular()
    }
 
    private fun setRecyclerViewNowPlaying() {
       val recyclerAdapter = HomeMoviesAdapter()
-      binding.rvInTheatre.apply {
-         layoutManager =
+      with(recyclerAdapter) {
+         binding.rvInTheatre.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-         adapter = recyclerAdapter
+         binding.rvInTheatre.adapter = recyclerAdapter
+         setOnItemClickListener {
+            val bundle = Bundle().apply {
+               putString("id", it.id.toString())
+            }
+            findNavController().navigate(R.id.action_home_fragment_to_movie_detail_fragment, bundle)
+         }
+         collectNowPlaying()
       }
-      recyclerAdapter.collectNowPlaying()
    }
 
    private fun setRecyclerViewTopRated() {
       val recyclerAdapter = HomeMoviesAdapter()
-      binding.rvTopRated.apply {
-         layoutManager =
+      with(recyclerAdapter){
+         binding.rvTopRated.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-         adapter = recyclerAdapter
+         binding.rvTopRated.adapter = recyclerAdapter
+         setOnItemClickListener {
+            val bundle = Bundle().apply {
+               putString("id", it.id.toString())
+            }
+            findNavController().navigate(R.id.action_home_fragment_to_movie_detail_fragment, bundle)
+         }
+         collectTopRated()
       }
-      recyclerAdapter.collectTopRated()
    }
 
    private fun setViewPagerUpcoming() {
