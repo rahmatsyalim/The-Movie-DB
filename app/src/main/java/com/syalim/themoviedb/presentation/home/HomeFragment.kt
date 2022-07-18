@@ -1,17 +1,25 @@
 package com.syalim.themoviedb.presentation.home
 
+import android.os.Handler
+import android.os.Looper
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.syalim.themoviedb.common.showSnackBar
 import com.syalim.themoviedb.databinding.FragmentHomeBinding
 import com.syalim.themoviedb.presentation.MainViewModel
+import com.syalim.themoviedb.presentation.adapter.HomeCarouselAdapter
 import com.syalim.themoviedb.presentation.adapter.HomeMoviesAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 
 /**
@@ -26,17 +34,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    private val progressBarLayout by lazy { binding.includedProgressBar.progressBarLayout }
 
+   private lateinit var handler: Handler
+
+   private var nextPage = 0
+
+   private var pagesSize = 0
+
    override fun init() {
 
       collectHomeState()
 
+      setRecyclerViewPopular()
+
+      setRecyclerViewNowPlaying()
+
+      setRecyclerViewTopRated()
+
+      setViewPagerUpcoming()
+
       binding.swipeRefreshLayout.setOnRefreshListener {
          viewModel.loadMovies(true)
       }
-
-      setRecyclerViewPopular()
-      setRecyclerViewNowPlaying()
-      setRecyclerViewTopRated()
 
    }
 
@@ -47,7 +65,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
          adapter = recyclerAdapter
       }
-      recyclerAdapter.collectPopularMovies()
+      recyclerAdapter.collectPopular()
    }
 
    private fun setRecyclerViewNowPlaying() {
@@ -57,7 +75,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
          adapter = recyclerAdapter
       }
-      recyclerAdapter.collectNowPlayingMovies()
+      recyclerAdapter.collectNowPlaying()
    }
 
    private fun setRecyclerViewTopRated() {
@@ -67,7 +85,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
          adapter = recyclerAdapter
       }
-      recyclerAdapter.collectTopRatedMovies()
+      recyclerAdapter.collectTopRated()
+   }
+
+   private fun setViewPagerUpcoming() {
+      handler = Handler(Looper.myLooper()!!)
+      val carouselAdapter = HomeCarouselAdapter(binding.vpUpcoming)
+
+      with(binding.vpUpcoming) {
+         adapter = carouselAdapter
+         offscreenPageLimit = 3
+         clipToPadding = false
+         clipChildren = false
+         getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+      }
+
+      setCarouselTransformer()
+
+      carouselAdapter.collectUpcoming()
+
    }
 
    private fun collectHomeState() {
@@ -84,41 +120,91 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       }
    }
 
-   private fun HomeMoviesAdapter.collectPopularMovies() {
+   private fun HomeMoviesAdapter.collectPopular() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.popularState.collectLatest { state ->
             state.data?.let {
-               if (it.isNotEmpty()){
-                  this@collectPopularMovies.data.submitList(it)
+               if (it.isNotEmpty()) {
+                  this@collectPopular.data.submitList(it)
                }
             }
          }
       }
    }
 
-   private fun HomeMoviesAdapter.collectNowPlayingMovies() {
+   private fun HomeMoviesAdapter.collectNowPlaying() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.nowPlayingState.collectLatest { state ->
             state.data?.let {
-               if (it.isNotEmpty()){
-                  this@collectNowPlayingMovies.data.submitList(it)
+               if (it.isNotEmpty()) {
+                  this@collectNowPlaying.data.submitList(it)
                }
             }
          }
       }
    }
 
-   private fun HomeMoviesAdapter.collectTopRatedMovies() {
+   private fun HomeMoviesAdapter.collectTopRated() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.topRatedState.collectLatest { state ->
             state.data?.let {
-               if (it.isNotEmpty()){
-                  this@collectTopRatedMovies.data.submitList(it)
+               if (it.isNotEmpty()) {
+                  this@collectTopRated.data.submitList(it)
                }
             }
          }
       }
    }
 
+   private fun HomeCarouselAdapter.collectUpcoming() {
+      viewLifecycleOwner.lifecycleScope.launch {
+         viewModel.upcomingState.collectLatest { state ->
+            state.data?.let {
+               if (it.isNotEmpty()) {
+                  val data = it.chunked(10).first()
+                  this@collectUpcoming.data.submitList(data)
+                  this@collectUpcoming.setImageCarousel()
+               }
+            }
+         }
+      }
+   }
+
+   private fun setCarouselTransformer() {
+      val transformer = CompositePageTransformer()
+      transformer.addTransformer(MarginPageTransformer(40))
+      transformer.addTransformer { page, position ->
+         val r = 1 - abs(position)
+         page.scaleY = 0.85f + r * 0.14f
+      }
+
+      binding.vpUpcoming.setPageTransformer(transformer)
+   }
+
+   private fun HomeCarouselAdapter.setImageCarousel() {
+
+      pagesSize = this.data.currentList.size
+
+      binding.vpUpcoming.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+         override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            nextPage = position + 1
+            handler.removeCallbacks(viewPagerUpdate())
+            handler.postDelayed(viewPagerUpdate(), 2000)
+
+            for (i in 0..pagesSize) {
+               // TODO: set unselected dot image
+            }
+            // TODO: set selected dot image at position
+         }
+      })
+   }
+
+   private fun viewPagerUpdate() = Runnable {
+      if (nextPage == pagesSize) {
+         nextPage = 0
+      }
+      binding.vpUpcoming.setCurrentItem(nextPage, true)
+   }
 
 }

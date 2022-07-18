@@ -28,6 +28,28 @@
                <TextView
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:text="Upcoming"
+                  android:textSize="18sp"
+                  android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+               android:id="@+id/vp_upcoming"
+               android:layout_width="match_parent"
+               android:layout_height="240dp"
+               android:paddingHorizontal="40dp"
+               android:paddingTop="12dp"/>
+
+            <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:padding="12dp">
+
+               <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
                   android:text="Popular"
                   android:textSize="18sp"
                   android:textStyle="bold" />

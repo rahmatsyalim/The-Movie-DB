@@ -38,7 +38,6 @@ fun View.showSnackBar(message: String, indefinite: Boolean) {
 fun ImageView.setImage(uri: String) {
    Glide.with(context)
       .load(uri)
-      .centerCrop()
       .into(this)
 }
 

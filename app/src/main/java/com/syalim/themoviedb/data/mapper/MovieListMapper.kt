@@ -18,6 +18,7 @@ object MovieListMapper : BaseMapper<MovieListDto, MovieListEntity>() {
                id = it.id,
                originalTitle = it.originalTitle,
                posterPath = it.posterPath,
+               backdropPath = it.backdropPath,
                releaseDate = it.releaseDate,
                voteAverage = it.voteAverage,
                overview = it.overview,
