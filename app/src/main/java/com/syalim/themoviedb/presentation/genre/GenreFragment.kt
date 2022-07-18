@@ -134,8 +134,27 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
             loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
             else -> null
          }
-         errorState?.error?.message?.let {
-            requireContext().showToast(it)
+         if (errorState?.error?.message != null){
+            binding.rvMovies.isVisible = false
+            binding.tvInfoGenre.isVisible = true
+            binding.tvInfoGenre.text = errorState.error.message
+         } else {
+            binding.rvMovies.isVisible = true
+            binding.tvInfoGenre.isVisible = false
+         }
+
+         loadState.apply {
+            if (source.append is LoadState.NotLoading
+               && source.append.endOfPaginationReached
+               && moviesAdapter.itemCount == 0
+            ) {
+               binding.tvInfoGenre.isVisible = true
+               binding.tvInfoGenre.text = "No data found"
+               binding.rvMovies.isVisible = false
+            } else {
+               binding.tvInfoGenre.isVisible = false
+               binding.rvMovies.isVisible = true
+            }
          }
       }
    }

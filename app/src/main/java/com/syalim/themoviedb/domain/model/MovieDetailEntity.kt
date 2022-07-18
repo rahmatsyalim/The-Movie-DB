@@ -7,12 +7,12 @@ package com.syalim.themoviedb.domain.model
  */
 data class MovieDetailEntity(
    val adult: Boolean? = false,
-   val backdropPath: String? = "",
+   val backdropPath: String? = null,
    val genres: List<String>? = listOf("Unknown"),
    val id: Int,
    val originalTitle: String? = "Unknown",
    val overview: String? = "No description",
-   val posterPath: String? = "",
+   val posterPath: String? = null,
    val productionCountries: List<String>? = listOf("Unknown"),
    val releaseDate: String? = "TBA",
    val status: String? = "Unknown",

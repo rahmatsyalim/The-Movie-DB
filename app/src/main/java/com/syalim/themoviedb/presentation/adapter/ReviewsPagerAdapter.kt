@@ -24,7 +24,9 @@ class ReviewsPagerAdapter :
          binding.apply {
             tvName.text = item.author
             tvComments.text = item.content
-            ivPhoto.setImage(item.avatarPath?:"".setImageUrl())
+            item.avatarPath?.let {
+               ivPhoto.setImage(it.setImageUrl())
+            }
          }
       }
    }

@@ -6,6 +6,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.syalim.themoviedb.common.setImage
 import com.syalim.themoviedb.common.setImageUrl
 import com.syalim.themoviedb.common.showToast
@@ -50,7 +52,11 @@ class MovieDetailFragment :
 
       collectState()
 
+      collectTrailerState()
+
       reviewsLoadStateListener()
+
+      initYoutubePlayer()
 
    }
 
@@ -114,10 +120,34 @@ class MovieDetailFragment :
                binding.tvTitle.text = data.originalTitle
                binding.tvGenre.text = data.genres?.joinToString(", ")
                binding.tvDesc.text = data.overview
-               binding.ivPoster.setImage(data.posterPath!!.setImageUrl())
-               binding.ivBackdrop.setImage(data.backdropPath!!.setImageUrl())
+               data.posterPath?.let {
+                  binding.ivPoster.setImage(it.setImageUrl())
+               }
+               data.backdropPath?.let {
+                  binding.ivBackdrop.setImage(it.setImageUrl())
+               }
             }
          }
       }
+   }
+
+   private fun collectTrailerState(){
+      viewLifecycleOwner.lifecycleScope.launch {
+         viewModel.movieTrailerState.collectLatest { state ->
+            state.data?.let { data ->
+               data.key?.let {
+                  binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener(){
+                     override fun onReady(youTubePlayer: YouTubePlayer) {
+                        youTubePlayer.cueVideo(it,0f)
+                     }
+                  })
+               }
+            }
+         }
+      }
+   }
+
+   private fun initYoutubePlayer(){
+      viewLifecycleOwner.lifecycle.addObserver(binding.youtubePlayerView)
    }
 }
