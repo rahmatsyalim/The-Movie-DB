@@ -5,6 +5,7 @@ import com.syalim.themoviedb.data.remote.dto.genre.GenreListDto
 import com.syalim.themoviedb.data.remote.dto.movie_detail.MovieDetailDto
 import com.syalim.themoviedb.data.remote.dto.movie_list.MovieListDto
 import com.syalim.themoviedb.data.remote.dto.movie_review.ReviewListDto
+import com.syalim.themoviedb.data.remote.dto.movie_trailer.MovieTrailerListDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -77,5 +78,11 @@ interface MovieApi {
       @Path("id") id: String,
       @Query("page") page: Int
    ): ReviewListDto
+
+   @GET("/3/movie/{id}/videos")
+   suspend fun getMovieTrailer(
+      @Query("api_key") apiKey: String = BuildConfig.apiKey,
+      @Path("id") id: String
+   ): MovieTrailerListDto
 
 }
