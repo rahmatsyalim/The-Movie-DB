@@ -23,7 +23,7 @@
    <fragment
       android:id="@+id/movie_detail_fragment"
       android:name="com.syalim.themoviedb.presentation.movie_detail.MovieDetailFragment"
-      android:label="Detail">
+      android:label="">
       <argument
          android:name="id"
          app:argType="string" />

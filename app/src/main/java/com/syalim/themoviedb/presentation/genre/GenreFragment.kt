@@ -37,7 +37,9 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private val viewModel: MainViewModel by activityViewModels()
 
-   private lateinit var moviesAdapter: MoviesPagerAdapter
+   private val progressBar by lazy { (requireActivity() as MainActivity).progrssBar }
+
+   private val moviesAdapter by lazy { MoviesPagerAdapter() }
 
    private lateinit var genreFilterAdapter: GenreFilterAdapter
 
@@ -61,7 +63,13 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
       setMoviesRecyclerView()
 
-      loadStateListener()
+      moviesLoadStateListener()
+
+      if (moviesAdapter.itemCount < 1){
+         collectMoviesByGenre(viewModel.currentGenre, true)
+      } else {
+         collectMoviesByGenre(viewModel.currentGenre, false)
+      }
 
       binding.swipeRefreshLayout.setOnRefreshListener {
          moviesAdapter.refresh()
@@ -76,10 +84,10 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    }
 
-   private fun MoviesPagerAdapter.collectMoviesByGenre(genre: List<String>?) {
+   private fun collectMoviesByGenre(genre: List<String>?, isFirst: Boolean) {
       viewLifecycleOwner.lifecycleScope.launch {
-         viewModel.getMoviesByGenre(genre = genre ?: emptyList()).collectLatest { pagingData ->
-            this@collectMoviesByGenre.submitData(pagingData)
+         viewModel.getMoviesByGenre(genre = genre ?: emptyList(), isFirst).collectLatest { pagingData ->
+            moviesAdapter.submitData(pagingData)
          }
       }
    }
@@ -96,7 +104,6 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
    }
 
    private fun setMoviesRecyclerView() {
-      moviesAdapter = MoviesPagerAdapter()
       moviesAdapter.onItemClickListener {
          val bundle = Bundle().apply {
             putString("id", it.id.toString())
@@ -110,13 +117,16 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
          layoutManager = GridLayoutManager(requireContext(), 3)
          adapter = moviesAdapter.withLoadStateFooter(PagingLoadStateAdapter())
       }
-      moviesAdapter.collectMoviesByGenre(viewModel.currentGenre)
    }
 
-   private fun loadStateListener() {
+   private fun moviesLoadStateListener() {
       moviesAdapter.addLoadStateListener { loadState ->
 
-         binding.swipeRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
+         if (loadState.refresh !is LoadState.Loading) {
+            binding.swipeRefreshLayout.isRefreshing = false
+         }
+         progressBar.isVisible =
+            loadState.refresh is LoadState.Loading && moviesAdapter.itemCount < 1
 
          val errorState = when {
             loadState.append is LoadState.Error -> loadState.append as LoadState.Error
@@ -145,7 +155,6 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
          layoutManager = LinearLayoutManager(requireContext())
          adapter = genreFilterAdapter
       }
-
       genreFilterAdapter.collectGenre()
 
    }
@@ -166,7 +175,8 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
       setFilterRecyclerView(pickedGenre)
 
       bindingBottomSheet.btnFilter.setOnClickListener {
-         moviesAdapter.collectMoviesByGenre(pickedGenre)
+         binding.swipeRefreshLayout.isRefreshing = true
+         collectMoviesByGenre(pickedGenre, true)
          bottomSheetdialog.dismiss()
       }
 

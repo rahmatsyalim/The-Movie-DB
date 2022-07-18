@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
          .findNavController()
    }
 
+   val progrssBar by lazy { binding.progressBarLayout }
+
    val ivFiler by lazy { binding.ivFilter }
 
    override fun onCreate(savedInstanceState: Bundle?) {

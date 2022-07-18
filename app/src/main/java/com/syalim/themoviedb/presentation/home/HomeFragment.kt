@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.common.showSnackBar
 import com.syalim.themoviedb.databinding.FragmentHomeBinding
+import com.syalim.themoviedb.presentation.MainActivity
 import com.syalim.themoviedb.presentation.MainViewModel
 import com.syalim.themoviedb.presentation.adapter.HomeCarouselAdapter
 import com.syalim.themoviedb.presentation.adapter.HomeMoviesAdapter
@@ -35,7 +36,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    private val viewModel: MainViewModel by activityViewModels()
 
-   private val progressBarLayout by lazy { binding.includedProgressBar.progressBarLayout }
+   private val progressBar by lazy { (requireActivity() as MainActivity).progrssBar }
 
    private lateinit var handler: Handler
 
@@ -132,7 +133,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          viewModel.homeState.collectLatest { state ->
 
             binding.swipeRefreshLayout.isRefreshing = state.isReloading
-            progressBarLayout.isVisible = state.isLoading && !state.isReloading
+            progressBar.isVisible = state.isLoading && !state.isReloading
 
             state.errorMessage?.let {
                binding.root.showSnackBar(it, false)
@@ -149,6 +150,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                   this@collectPopular.data.submitList(it)
                }
             }
+            binding.viewContainer.isVisible = state.errorMessage.isNullOrBlank()
+            binding.tvInfoHome.isVisible = !state.errorMessage.isNullOrBlank()
+            state.errorMessage?.let {
+               binding.tvInfoHome.text = it
+            }
          }
       }
    }
@@ -160,6 +166,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                if (it.isNotEmpty()) {
                   this@collectNowPlaying.data.submitList(it)
                }
+            }
+            binding.viewContainer.isVisible = state.errorMessage.isNullOrBlank()
+            binding.tvInfoHome.isVisible = !state.errorMessage.isNullOrBlank()
+            state.errorMessage?.let {
+               binding.tvInfoHome.text = it
             }
          }
       }
@@ -173,6 +184,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                   this@collectTopRated.data.submitList(it)
                }
             }
+            binding.viewContainer.isVisible = state.errorMessage.isNullOrBlank()
+            binding.tvInfoHome.isVisible = !state.errorMessage.isNullOrBlank()
+            state.errorMessage?.let {
+               binding.tvInfoHome.text = it
+            }
          }
       }
    }
@@ -185,6 +201,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                   this@collectUpcoming.data.submitList(it)
                   this@collectUpcoming.setImageCarousel()
                }
+            }
+            binding.viewContainer.isVisible = state.errorMessage.isNullOrBlank()
+            binding.tvInfoHome.isVisible = !state.errorMessage.isNullOrBlank()
+            state.errorMessage?.let {
+               binding.tvInfoHome.text = it
             }
          }
       }

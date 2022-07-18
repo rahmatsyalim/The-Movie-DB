@@ -80,20 +80,25 @@ class MainViewModel @Inject constructor(
    private suspend fun getTopRatedMovies() =
       handleRequest(_topRatedState, getTopRatedMoviesUseCase())
 
-   private fun isConnected() = internetConnectedUseCase()
-
    suspend fun getGenre() =
       handleRequest(_filterState, getMovieGenreUseCase())
 
 
    var currentGenre: List<String> = emptyList()
+   var currentResult: Flow<PagingData<MovieItemEntity>>? = null
 
-   fun getMoviesByGenre(genre: List<String>): Flow<PagingData<MovieItemEntity>> {
-      val genreString = genre.joinToString(",")
-      val result = getMoviesByGenreUseCase.invoke(genreString)
-         .cachedIn(viewModelScope)
-      currentGenre = genre
-      return result
+   fun getMoviesByGenre(genre: List<String>, isFirst: Boolean): Flow<PagingData<MovieItemEntity>> {
+      val lastResult = currentResult
+      return if (!isFirst){
+         lastResult!!
+      } else {
+         val genreString = genre.joinToString(",")
+         val result = getMoviesByGenreUseCase.invoke(genreString)
+            .cachedIn(viewModelScope)
+         currentResult = result
+         currentGenre = genre
+         result
+      }
    }
 
 }
