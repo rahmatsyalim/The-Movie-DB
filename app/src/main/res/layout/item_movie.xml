@@ -13,7 +13,7 @@
    <com.google.android.material.imageview.ShapeableImageView
       android:id="@+id/iv_poster"
       android:layout_width="match_parent"
-      android:layout_height="200dp"
+      android:layout_height="170dp"
       android:scaleType="centerCrop"
       android:background="@color/light_grey"
       app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CornerSize10Percent" />

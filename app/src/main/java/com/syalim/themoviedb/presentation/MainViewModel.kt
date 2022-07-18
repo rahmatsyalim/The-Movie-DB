@@ -84,7 +84,7 @@ class MainViewModel @Inject constructor(
    private fun isConnected() = internetConnectedUseCase()
 
 
-   private var currentGenre: String? = null
+   var currentGenre: String? = null
 
    private var currentGenreResult: Flow<PagingData<MovieItemEntity>>? = null
 

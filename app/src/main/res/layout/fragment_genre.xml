@@ -3,4 +3,19 @@
    android:layout_width="match_parent"
    android:layout_height="match_parent">
 
+   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:id="@+id/swipe_refresh_layout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <androidx.recyclerview.widget.RecyclerView
+         android:id="@+id/rv_movies"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:clipToPadding="false"
+         android:paddingHorizontal="5dp"
+         android:paddingTop="5dp"
+         android:paddingBottom="?attr/actionBarSize" />
+   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
