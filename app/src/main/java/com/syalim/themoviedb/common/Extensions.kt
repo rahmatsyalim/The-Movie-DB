@@ -1,15 +1,20 @@
 package com.syalim.themoviedb.common
 
+import android.app.Activity
 import android.content.Context
+import android.graphics.Insets
+import android.os.Build
+import android.util.DisplayMetrics
 import android.view.View
+import android.view.WindowInsets
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_401
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_404
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_500
-import com.syalim.themoviedb.common.Constants.HTTP_ERROR
 import com.syalim.themoviedb.common.Constants.IMAGE_URL
 import retrofit2.HttpException
 
@@ -87,5 +92,18 @@ fun String?.dateToViewDate(): String {
          else -> values[2]
       }
       return "$month $day, $year"
+   }
+}
+
+fun Activity.getScreenHeight(): Int {
+   return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      val windowMetrics = this.windowManager.currentWindowMetrics
+      val insets: Insets = windowMetrics.windowInsets
+         .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+      windowMetrics.bounds.height() - insets.bottom - insets.top
+   } else {
+      val displayMetrics = DisplayMetrics()
+      this.windowManager.defaultDisplay.getMetrics(displayMetrics)
+      displayMetrics.heightPixels
    }
 }

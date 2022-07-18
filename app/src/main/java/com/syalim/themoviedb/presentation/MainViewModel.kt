@@ -1,11 +1,11 @@
 package com.syalim.themoviedb.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.syalim.themoviedb.domain.model.GenreItemEntity
 import com.syalim.themoviedb.domain.model.MovieItemEntity
+import com.syalim.themoviedb.domain.use_case.get_movie_genre_use_case.GetMovieGenreUseCase
 import com.syalim.themoviedb.domain.use_case.get_movies_by_genre_use_case.GetMoviesByGenreUseCase
 import com.syalim.themoviedb.domain.use_case.get_now_playing_movies_use_case.GetNowPlayingMoviesUseCase
 import com.syalim.themoviedb.domain.use_case.get_popular_movies_use_case.GetPopularMoviesUseCase
@@ -33,7 +33,8 @@ class MainViewModel @Inject constructor(
    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
    private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
    private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
-   private val getMoviesByGenreUseCase: GetMoviesByGenreUseCase
+   private val getMoviesByGenreUseCase: GetMoviesByGenreUseCase,
+   private val getMovieGenreUseCase: GetMovieGenreUseCase
 ) : BaseViewModel() {
 
    private val _upcomingState = MutableStateFlow(State<List<MovieItemEntity>>())
@@ -41,12 +42,14 @@ class MainViewModel @Inject constructor(
    private val _nowPlayingState = MutableStateFlow(State<List<MovieItemEntity>>())
    private val _topRatedState = MutableStateFlow(State<List<MovieItemEntity>>())
    private val _homeState = MutableStateFlow(State<String>())
+   private val _filterState = MutableStateFlow(State<List<GenreItemEntity>>())
 
    val upcomingState: StateFlow<State<List<MovieItemEntity>>> get() = _upcomingState
    val popularState: StateFlow<State<List<MovieItemEntity>>> get() = _popularState
    val nowPlayingState: StateFlow<State<List<MovieItemEntity>>> get() = _nowPlayingState
    val topRatedState: StateFlow<State<List<MovieItemEntity>>> get() = _topRatedState
    val homeState: StateFlow<State<String>> get() = _homeState
+   val filterState: StateFlow<State<List<GenreItemEntity>>> get() = _filterState
 
    init {
       loadMovies(false)
@@ -83,21 +86,18 @@ class MainViewModel @Inject constructor(
 
    private fun isConnected() = internetConnectedUseCase()
 
+   suspend fun getGenre() =
+      handleRequest(_filterState, getMovieGenreUseCase())
 
-   var currentGenre: String? = null
 
-   private var currentGenreResult: Flow<PagingData<MovieItemEntity>>? = null
+   var currentGenre: List<String>? = null
 
-   fun getMoviesByGenre(genre: String?): Flow<PagingData<MovieItemEntity>> {
-      val lastResult = currentGenreResult
-      if (genre == currentGenre && lastResult != null) {
-         return lastResult
-      }
-      val newResult = getMoviesByGenreUseCase.invoke(genre)
+   fun getMoviesByGenre(genre: List<String>?): Flow<PagingData<MovieItemEntity>> {
+      val genreString = genre?.joinToString(",")
+      val result = getMoviesByGenreUseCase.invoke(genreString)
          .cachedIn(viewModelScope)
       currentGenre = genre
-      currentGenreResult = newResult
-      return newResult
+      return result
    }
 
 }

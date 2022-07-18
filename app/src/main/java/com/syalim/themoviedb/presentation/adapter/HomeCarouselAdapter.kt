@@ -41,7 +41,6 @@ class HomeCarouselAdapter(private val viewPager: ViewPager2) :
             item.backdropPath?.let {
                ivBackdrop.setImage(it.setImageUrl())
                tvTitle.text = item.originalTitle
-               val date = item.releaseDate.dateToViewDate()
                tvDate.text = "on ${item.releaseDate.dateToViewDate()}"
             }
          }
@@ -60,18 +59,11 @@ class HomeCarouselAdapter(private val viewPager: ViewPager2) :
 
    val data = AsyncListDiffer(this, CarouselComparator)
 
-//   val data: ArrayList<MovieItemEntity> = arrayListOf()
-
    private var onItemClickListener: ((MovieItemEntity) -> Unit)? = null
 
    fun setOnItemClickListener(listener: (MovieItemEntity) -> Unit) {
       onItemClickListener = listener
    }
-
-//   private val runnable = Runnable {
-//      data.addAll(data)
-//      notifyDataSetChanged()
-//   }
 
 
 }

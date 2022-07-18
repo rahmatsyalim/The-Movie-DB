@@ -5,9 +5,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.syalim.themoviedb.common.Resource
 import com.syalim.themoviedb.common.getErrorMessage
+import com.syalim.themoviedb.data.mapper.GenreListMapper
 import com.syalim.themoviedb.data.mapper.MovieListMapper
 import com.syalim.themoviedb.data.paging.data_source.MoviesByGenrePagingSource
 import com.syalim.themoviedb.data.remote.network.MovieApi
+import com.syalim.themoviedb.domain.model.GenreItemEntity
 import com.syalim.themoviedb.domain.model.MovieItemEntity
 import com.syalim.themoviedb.domain.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
@@ -104,6 +106,21 @@ class MovieRepositoryImpl @Inject constructor(
          ),
          pagingSourceFactory = { MoviesByGenrePagingSource(api = movieApi, genre = genre) }
       ).flow
+   }
+
+   override fun getMovieGenres(): Flow<Resource<List<GenreItemEntity>>> {
+      return flow {
+         emit(Resource.Loading())
+         try {
+            val response = movieApi.getMovieGenres()
+            val result = GenreListMapper.convert(response).genres
+            emit(Resource.Success(result))
+         } catch (e: HttpException) {
+            emit(Resource.Error(e.getErrorMessage()))
+         } catch (e: IOException) {
+            emit(Resource.Error("Couldn't reach server"))
+         }
+      }.flowOn(Dispatchers.IO)
    }
 
 }
