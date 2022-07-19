@@ -15,6 +15,9 @@
       <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
       <item name="bottomSheetDialogTheme">@style/BottomSheetDialogStyle</item>
+
+      <item name="android:windowBackground">?attr/colorPrimaryVariant</item>
+      <item name="android:navigationBarColor">?attr/colorPrimaryVariant</item>
    </style>
 
    <style name="ShapeAppearanceOverlay.CornerSize10Percent" parent="">
