@@ -6,12 +6,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syalim.themoviedb.R
+import com.syalim.themoviedb.common.PagingLoadStateHandler
 import com.syalim.themoviedb.common.getScreenHeight
 import com.syalim.themoviedb.databinding.BottomSheetFilterBinding
 import com.syalim.themoviedb.databinding.FragmentGenreBinding
@@ -62,9 +62,9 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
       setMoviesRecyclerView()
 
-      moviesLoadStateListener()
-
       collectMoviesByGenre()
+
+      setMoviesLoadStateListener()
 
       binding.swipeRefreshLayout.setOnRefreshListener {
          moviesAdapter.refresh()
@@ -85,7 +85,6 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
             moviesAdapter.submitData(pagingData)
          }
       }
-
    }
 
    private fun collectGenre() {
@@ -101,6 +100,10 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private fun setMoviesRecyclerView() {
       moviesAdapter = MoviesPagerAdapter()
+      binding.rvMovies.apply {
+         layoutManager = GridLayoutManager(requireContext(), 3)
+         adapter = moviesAdapter.withLoadStateFooter(PagingLoadStateAdapter())
+      }
       moviesAdapter.onItemClickListener {
          val bundle = Bundle().apply {
             putString("id", it.id.toString())
@@ -110,14 +113,14 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
             bundle
          )
       }
-      binding.rvMovies.apply {
-         layoutManager = GridLayoutManager(requireContext(), 3)
-         adapter = moviesAdapter.withLoadStateFooter(PagingLoadStateAdapter())
-      }
    }
 
    private fun setFilterRecyclerView(genre: List<String>?) {
       genreFilterAdapter = GenreFilterAdapter(genre)
+      bindingBottomSheet.rvFilter.apply {
+         layoutManager = LinearLayoutManager(requireContext())
+         adapter = genreFilterAdapter
+      }
       genreFilterAdapter.setOnItemClickListener { item, isChecked ->
          if (isChecked) {
             pickedGenre.add(item.id.toString())
@@ -126,49 +129,27 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
             pickedGenre.remove(item.id.toString())
          }
       }
-      bindingBottomSheet.rvFilter.apply {
-         layoutManager = LinearLayoutManager(requireContext())
-         adapter = genreFilterAdapter
-      }
    }
 
-   private fun moviesLoadStateListener() {
-      moviesAdapter.addLoadStateListener { loadState ->
-         if (loadState.refresh !is LoadState.Loading) {
-            binding.swipeRefreshLayout.isRefreshing = false
+   private fun setMoviesLoadStateListener() {
+      PagingLoadStateHandler(moviesAdapter).invoke(
+         onFirstLoading = {
+            progressBar.isVisible = it
+         },
+         onLoading = {
+            binding.swipeRefreshLayout.isRefreshing = it
+         },
+         onError = {
+            binding.rvMovies.isVisible = it == null
+            binding.tvInfoGenre.isVisible = it != null
+            binding.tvInfoGenre.text = it
+         },
+         onEmpty = {
+            binding.tvInfoGenre.isVisible = it
+            binding.tvInfoGenre.text = "No data found"
+            binding.rvMovies.isVisible = !it
          }
-         progressBar.isVisible =
-            loadState.refresh is LoadState.Loading && moviesAdapter.itemCount < 1
-
-         val errorState = when {
-            loadState.append is LoadState.Error -> loadState.append as LoadState.Error
-            loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
-            loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
-            else -> null
-         }
-         if (errorState?.error?.message != null) {
-            binding.rvMovies.isVisible = false
-            binding.tvInfoGenre.isVisible = true
-            binding.tvInfoGenre.text = errorState.error.message
-         } else {
-            binding.rvMovies.isVisible = true
-            binding.tvInfoGenre.isVisible = false
-         }
-
-         loadState.apply {
-            if (source.append is LoadState.NotLoading
-               && source.append.endOfPaginationReached
-               && moviesAdapter.itemCount == 0
-            ) {
-               binding.tvInfoGenre.isVisible = true
-               binding.tvInfoGenre.text = "No data found"
-               binding.rvMovies.isVisible = false
-            } else {
-               binding.tvInfoGenre.isVisible = false
-               binding.rvMovies.isVisible = true
-            }
-         }
-      }
+      )
    }
 
    private fun setBottomSheetAkun() {
@@ -183,12 +164,11 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
          }
       }
 
-      setFilterRecyclerView(pickedGenre)
+      setFilterRecyclerView(viewModel.currentGenre)
 
       collectGenre()
 
       bindingBottomSheet.btnFilter.setOnClickListener {
-         binding.swipeRefreshLayout.isRefreshing = true
          viewModel.currentGenre = pickedGenre
          viewModel.getMoviesByGenre()
          collectMoviesByGenre()
