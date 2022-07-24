@@ -1,7 +1,6 @@
 package com.syalim.themoviedb.presentation
 
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.syalim.themoviedb.domain.model.GenreItemEntity
 import com.syalim.themoviedb.domain.model.MovieItemEntity
@@ -14,7 +13,7 @@ import com.syalim.themoviedb.domain.use_case.get_upcoming_movies_use_case.GetUpc
 import com.syalim.themoviedb.domain.use_case.internet_connected_use_case.InternetConnectedUseCase
 import com.syalim.themoviedb.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -55,7 +54,7 @@ class MainViewModel @Inject constructor(
       loadMovies(false)
    }
 
-   fun loadMovies(isReloading: Boolean) {
+   fun loadMovies(isReloading: Boolean) =
       viewModelScope.launch {
          _homeState.value = State(isLoading = true, isReloading = isReloading)
          awaitAll(
@@ -66,7 +65,7 @@ class MainViewModel @Inject constructor(
          )
          _homeState.value = State()
       }
-   }
+
 
    private suspend fun getUpcomingMovies() =
       handleRequest(_upcomingState, getUpcomingMoviesUseCase())
@@ -85,20 +84,12 @@ class MainViewModel @Inject constructor(
 
 
    var currentGenre: List<String> = emptyList()
-   var currentResult: Flow<PagingData<MovieItemEntity>>? = null
+   private fun getGenreString() = currentGenre.joinToString(",")
 
-   fun getMoviesByGenre(genre: List<String>, isFirst: Boolean): Flow<PagingData<MovieItemEntity>> {
-      val lastResult = currentResult
-      return if (!isFirst){
-         lastResult!!
-      } else {
-         val genreString = genre.joinToString(",")
-         val result = getMoviesByGenreUseCase.invoke(genreString)
-            .cachedIn(viewModelScope)
-         currentResult = result
-         currentGenre = genre
-         result
-      }
+   var moviesByGenre = getMoviesByGenreUseCase.invoke(getGenreString()).cachedIn(viewModelScope)
+
+   fun getMoviesByGenre() {
+      moviesByGenre = getMoviesByGenreUseCase.invoke(getGenreString()).cachedIn(viewModelScope)
    }
 
 }
