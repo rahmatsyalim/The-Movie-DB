@@ -21,7 +21,6 @@ class GenreFilterAdapter(private val genre: List<String>? = listOf()) : Recycler
       RecyclerView.ViewHolder(binding.root) {
 
          fun bind(item: GenreItemEntity){
-            Log.d("genre_picked", genre.toString())
             binding.ctGenre.apply {
                text = item.name
 

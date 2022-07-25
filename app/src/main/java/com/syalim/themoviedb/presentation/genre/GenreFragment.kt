@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syalim.themoviedb.R
-import com.syalim.themoviedb.presentation.PagingLoadStateHandler
 import com.syalim.themoviedb.common.getScreenHeight
 import com.syalim.themoviedb.databinding.BottomSheetFilterBinding
 import com.syalim.themoviedb.databinding.FragmentGenreBinding
 import com.syalim.themoviedb.presentation.MainActivity
 import com.syalim.themoviedb.presentation.MainViewModel
+import com.syalim.themoviedb.presentation.PagingLoadState
 import com.syalim.themoviedb.presentation.adapter.GenreFilterAdapter
 import com.syalim.themoviedb.presentation.adapter.MoviesPagerAdapter
 import com.syalim.themoviedb.presentation.adapter.PagingLoadStateAdapter
@@ -132,7 +132,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
    }
 
    private fun setMoviesLoadStateListener() {
-      PagingLoadStateHandler(moviesAdapter).invoke(
+      PagingLoadState(moviesAdapter).invoke(
          onFirstLoading = {
             progressBar.isVisible = it
          },
@@ -140,14 +140,18 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
             binding.swipeRefreshLayout.isRefreshing = it
          },
          onError = {
-            binding.rvMovies.isVisible = it == null
-            binding.tvInfoGenre.isVisible = it != null
+            binding.rvMovies.isVisible = false
+            binding.tvInfoGenre.isVisible = true
             binding.tvInfoGenre.text = it
          },
          onEmpty = {
-            binding.tvInfoGenre.isVisible = it
+            binding.tvInfoGenre.isVisible = true
             binding.tvInfoGenre.text = "No data found"
-            binding.rvMovies.isVisible = !it
+            binding.rvMovies.isVisible = false
+         },
+         onSuccess = {
+            binding.rvMovies.isVisible = true
+            binding.tvInfoGenre.isVisible = false
          }
       )
    }

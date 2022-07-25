@@ -11,7 +11,7 @@ import com.syalim.themoviedb.common.setImage
 import com.syalim.themoviedb.common.setImageUrl
 import com.syalim.themoviedb.databinding.FragmentMovieDetailBinding
 import com.syalim.themoviedb.presentation.MainActivity
-import com.syalim.themoviedb.presentation.PagingLoadStateHandler
+import com.syalim.themoviedb.presentation.PagingLoadState
 import com.syalim.themoviedb.presentation.State
 import com.syalim.themoviedb.presentation.adapter.ReviewsPagerAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
@@ -78,7 +78,7 @@ class MovieDetailFragment :
    }
 
    private fun reviewsLoadStateListener() {
-      PagingLoadStateHandler(reviewsAdapter)(
+      PagingLoadState(reviewsAdapter)(
          onError = {
             binding.tvInfoReviews.isVisible = it != null
             it?.let { binding.tvInfoReviews.text = it }
