@@ -193,6 +193,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.upcomingState.collectLatest { state ->
             State.Handle(state)(
+               onLoading = {
+                  binding.swipeRefreshLayout.isRefreshing = false
+               },
                onSuccess = {
                   this@collectUpcoming.data.submitList(it)
                   binding.shimmerUpcoming.apply {
