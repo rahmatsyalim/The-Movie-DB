@@ -56,7 +56,7 @@ class MainViewModel @Inject constructor(
    val filterState: StateFlow<State<List<GenreItemEntity>>> get() = _filterState
 
    init {
-      loadMovies(false)
+      loadMovies(true)
    }
 
    fun loadMovies(isFirstLoading: Boolean) = viewModelScope.launch {

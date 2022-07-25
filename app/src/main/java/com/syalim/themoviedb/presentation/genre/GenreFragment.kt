@@ -17,11 +17,13 @@ import com.syalim.themoviedb.databinding.FragmentGenreBinding
 import com.syalim.themoviedb.presentation.MainActivity
 import com.syalim.themoviedb.presentation.MainViewModel
 import com.syalim.themoviedb.presentation.PagingLoadState
+import com.syalim.themoviedb.presentation.State
 import com.syalim.themoviedb.presentation.adapter.GenreFilterAdapter
 import com.syalim.themoviedb.presentation.adapter.MoviesPagerAdapter
 import com.syalim.themoviedb.presentation.adapter.PagingLoadStateAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -70,6 +72,8 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
          moviesAdapter.refresh()
       }
 
+      moviesAdapter.retry()
+
       ivFilter.setOnClickListener {
          setBottomSheetAkun()
          viewLifecycleOwner.lifecycleScope.launch {
@@ -79,8 +83,11 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    }
 
+   private var collectMoviesByGenreJob: Job? = null
+
    private fun collectMoviesByGenre() {
-      viewLifecycleOwner.lifecycleScope.launch {
+      collectMoviesByGenreJob?.cancel()
+      collectMoviesByGenreJob = viewLifecycleOwner.lifecycleScope.launch {
          viewModel.moviesByGenre.collectLatest { pagingData ->
             moviesAdapter.submitData(pagingData)
          }
@@ -90,10 +97,14 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
    private fun collectGenre() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.filterState.collectLatest { state ->
-            bindingBottomSheet.progressBar.isVisible = state.isLoading
-            state.data?.let {
-               genreFilterAdapter.data.submitList(it)
-            }
+            State.Handle(state)(
+               onLoading = {
+                  bindingBottomSheet.progressBar.isVisible = it
+               },
+               onSuccess = {
+                  genreFilterAdapter.data.submitList(it)
+               }
+            )
          }
       }
    }

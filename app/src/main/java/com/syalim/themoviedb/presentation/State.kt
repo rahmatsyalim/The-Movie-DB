@@ -17,13 +17,15 @@ data class State<T>(
          onFirstLoading: ((Boolean) -> Unit)? = null,
          onLoading: ((Boolean) -> Unit)? = null,
          onError: ((String?) -> Unit)? = null,
-         onEmpty: ((Boolean) -> Unit)? = null,
+         onEmpty: (() -> Unit)? = null,
          onSuccess: ((T) -> Unit)? = null
       ) {
          onFirstLoading?.invoke(state.isFirstLoading)
          onLoading?.invoke(state.isLoading)
-         onError?.invoke(state.errorMsg)
-         onEmpty?.invoke(state.isEmpty)
+         state.errorMsg?.let {
+            onError?.invoke(it)
+         }
+         if (state.isEmpty) onEmpty?.invoke()
          state.data?.let { onSuccess?.invoke(it) }
       }
    }

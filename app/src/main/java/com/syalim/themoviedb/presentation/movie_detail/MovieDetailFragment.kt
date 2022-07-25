@@ -80,12 +80,15 @@ class MovieDetailFragment :
    private fun reviewsLoadStateListener() {
       PagingLoadState(reviewsAdapter)(
          onError = {
-            binding.tvInfoReviews.isVisible = it != null
-            it?.let { binding.tvInfoReviews.text = it }
+            binding.tvInfoReviews.isVisible = true
+            binding.tvInfoReviews.text = it
          },
          onEmpty = {
-            binding.tvInfoReviews.isVisible = it
+            binding.tvInfoReviews.isVisible = true
             binding.tvInfoReviews.text = "No reviews yet"
+         },
+         onSuccess = {
+            binding.tvInfoReviews.isVisible = false
          }
       )
    }
