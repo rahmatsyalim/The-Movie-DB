@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.common.getScreenHeight
+import com.syalim.themoviedb.common.showSnackBar
 import com.syalim.themoviedb.databinding.BottomSheetFilterBinding
 import com.syalim.themoviedb.databinding.FragmentGenreBinding
 import com.syalim.themoviedb.presentation.MainActivity
@@ -37,8 +38,6 @@ import kotlinx.coroutines.launch
 class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::inflate) {
 
    private val viewModel: MainViewModel by activityViewModels()
-
-   private val progressBar by lazy { (requireActivity() as MainActivity).progrssBar }
 
    private lateinit var moviesAdapter: MoviesPagerAdapter
 
@@ -144,25 +143,25 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private fun setMoviesLoadStateListener() {
       PagingLoadState(moviesAdapter).invoke(
-         onFirstLoading = {
-            progressBar.isVisible = it
-         },
          onLoading = {
             binding.swipeRefreshLayout.isRefreshing = it
          },
          onError = {
-            binding.rvMovies.isVisible = false
-            binding.tvInfoGenre.isVisible = true
-            binding.tvInfoGenre.text = it
+            binding.root.showSnackBar(it, true)
          },
          onEmpty = {
             binding.tvInfoGenre.isVisible = true
             binding.tvInfoGenre.text = "No data found"
             binding.rvMovies.isVisible = false
+            binding.shimmer.isVisible = false
          },
          onSuccess = {
-            binding.rvMovies.isVisible = true
             binding.tvInfoGenre.isVisible = false
+            binding.shimmer.apply {
+               stopShimmer()
+               isVisible = false
+            }
+            binding.rvMovies.isVisible = true
          }
       )
    }
