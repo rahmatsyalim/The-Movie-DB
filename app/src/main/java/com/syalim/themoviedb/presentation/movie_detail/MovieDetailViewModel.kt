@@ -10,6 +10,7 @@ import com.syalim.themoviedb.domain.use_case.get_movie_trailer_use_case.GetMovie
 import com.syalim.themoviedb.presentation.State
 import com.syalim.themoviedb.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -39,8 +40,9 @@ class MovieDetailViewModel @Inject constructor(
 
    fun loadDetails(id: String) = viewModelScope.launch {
       _detailState.emit(State(isLoading = true))
-      launch { getMovieDetail(id) }
-      launch { getMovieTrailer(id) }
+      getMovieDetail(id)
+      getMovieTrailer(id)
+      delay(300)
       _detailState.emit(State(isLoading = false))
    }
 
