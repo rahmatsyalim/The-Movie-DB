@@ -44,6 +44,9 @@ class HomeCarouselAdapter(private val viewPager: ViewPager2) :
                tvDate.text = "on ${item.releaseDate.dateToViewDate()}"
             }
          }
+         itemView.setOnClickListener {
+            onItemClickListener?.let { it(item) }
+         }
       }
    }
 

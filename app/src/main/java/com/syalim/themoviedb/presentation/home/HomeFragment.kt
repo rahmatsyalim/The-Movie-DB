@@ -1,8 +1,6 @@
 package com.syalim.themoviedb.presentation.home
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +19,8 @@ import com.syalim.themoviedb.presentation.adapter.HomeCarouselAdapter
 import com.syalim.themoviedb.presentation.adapter.HomeMoviesAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -35,12 +35,6 @@ import kotlin.math.abs
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
    private val viewModel: MainViewModel by activityViewModels()
-
-   private lateinit var handler: Handler
-
-   private var nextPage = 0
-
-   private var pagesSize = 0
 
    override fun init() {
 
@@ -107,7 +101,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    }
 
    private fun setViewPagerUpcoming() {
-      handler = Handler(Looper.myLooper()!!)
       val carouselAdapter = HomeCarouselAdapter(binding.vpUpcoming)
 
       with(binding.vpUpcoming) {
@@ -116,6 +109,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          clipToPadding = false
          clipChildren = false
          getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+      }
+
+      carouselAdapter.setOnItemClickListener {
+         val bundle = Bundle().apply {
+            putString("id", it.id.toString())
+         }
+         findNavController().navigate(R.id.action_home_fragment_to_movie_detail_fragment, bundle)
       }
 
       setCarouselTransformer()
@@ -192,7 +192,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                      isVisible = false
                   }
                   binding.viewUpcoming.isVisible = true
-                  this@collectUpcoming.setImageCarousel()
+
+                  carouselJob?.cancel()
+                  carouselJob = viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+                     binding.vpUpcoming.setImageCarousel(3000L)
+                  }
                }
             )
          }
@@ -210,35 +214,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       binding.vpUpcoming.setPageTransformer(transformer)
    }
 
-   private fun HomeCarouselAdapter.setImageCarousel() {
+   private var carouselJob: Job? = null
 
-      pagesSize = this.data.currentList.size
+   private suspend fun ViewPager2.setImageCarousel(interval: Long) {
+      delay(interval)
 
-      binding.vpUpcoming.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-         override fun onPageSelected(position: Int) {
-            super.onPageSelected(position)
-            nextPage = position + 1
-            handler.removeCallbacks(viewPagerUpdate)
-            handler.postDelayed(viewPagerUpdate, 3000)
+      val itemSize = adapter?.itemCount ?: 0
+      val lastItem = if (itemSize > 0) itemSize - 1 else 0
+      val nextItem = if (currentItem == lastItem) 0 else currentItem + 1
 
-            for (i in 0..pagesSize) {
-               // TODO: set unselected dot image
-            }
-            // TODO: set selected dot image at position
-         }
-      })
-   }
+      setCurrentItem(nextItem, true)
 
-   private val viewPagerUpdate = Runnable {
-      if (nextPage == pagesSize) {
-         nextPage = 0
-      }
-      binding.vpUpcoming.setCurrentItem(nextPage, true)
-   }
-
-   override fun onDestroy() {
-      super.onDestroy()
-      handler.removeCallbacks(viewPagerUpdate)
+      setImageCarousel(interval)
    }
 
 }
