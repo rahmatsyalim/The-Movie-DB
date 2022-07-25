@@ -1,4 +1,4 @@
-package com.syalim.themoviedb.common
+package com.syalim.themoviedb.presentation
 
 import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter

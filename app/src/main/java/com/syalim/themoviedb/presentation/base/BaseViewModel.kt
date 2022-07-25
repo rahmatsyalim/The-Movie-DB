@@ -1,14 +1,11 @@
 package com.syalim.themoviedb.presentation.base
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.syalim.themoviedb.common.Resource
 import com.syalim.themoviedb.presentation.State
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 
 /**
@@ -19,21 +16,26 @@ abstract class BaseViewModel : ViewModel() {
 
    protected suspend fun <T> handleRequest(
       state: MutableStateFlow<State<T>>,
-      dataFlow: Flow<Resource<T>>
+      dataFlow: Flow<Resource<T>>,
+      isFirstLoad: Boolean = false
    ) =
       dataFlow.collectLatest { result ->
-         when (result) {
-            is Resource.Loading -> state.value = State(isLoading = true)
-            is Resource.Error -> state.value =
-               State(errorMessage = result.message.toString())
-            is Resource.Success -> state.value = State(data = result.data)
-         }
+         Resource.Handle(result)(
+            onLoading = {
+               state.value = if (isFirstLoad) {
+                  State(isFirstLoading = it)
+               } else {
+                  State(isLoading = it)
+               }
+            },
+            onError = {
+               state.value = State(errorMsg = it)
+            },
+            onSuccess = {
+               state.value = it?.let {
+                  State(data = it)
+               } ?: State(isEmpty = true)
+            }
+         )
       }
-
-   protected suspend fun awaitAll(vararg blocks: suspend () -> Unit) = coroutineScope {
-      blocks.forEach {
-         launch { it() }
-      }
-   }
-
 }

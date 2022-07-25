@@ -13,7 +13,7 @@ import com.syalim.themoviedb.domain.use_case.get_upcoming_movies_use_case.GetUpc
 import com.syalim.themoviedb.domain.use_case.internet_connected_use_case.InternetConnectedUseCase
 import com.syalim.themoviedb.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -36,48 +36,52 @@ class MainViewModel @Inject constructor(
    private val getMovieGenreUseCase: GetMovieGenreUseCase
 ) : BaseViewModel() {
 
-   private val _upcomingState = MutableStateFlow(State<List<MovieItemEntity>>())
-   private val _popularState = MutableStateFlow(State<List<MovieItemEntity>>())
-   private val _nowPlayingState = MutableStateFlow(State<List<MovieItemEntity>>())
-   private val _topRatedState = MutableStateFlow(State<List<MovieItemEntity>>())
-   private val _homeState = MutableStateFlow(State<Any>())
-   private val _filterState = MutableStateFlow(State<List<GenreItemEntity>>())
+   private val _homeState: MutableStateFlow<State<Any>> = MutableStateFlow(State())
+   private val _upcomingState: MutableStateFlow<State<List<MovieItemEntity>>> =
+      MutableStateFlow(State())
+   private val _popularState: MutableStateFlow<State<List<MovieItemEntity>>> =
+      MutableStateFlow(State())
+   private val _nowPlayingState: MutableStateFlow<State<List<MovieItemEntity>>> =
+      MutableStateFlow(State())
+   private val _topRatedState: MutableStateFlow<State<List<MovieItemEntity>>> =
+      MutableStateFlow(State())
+   private val _filterState: MutableStateFlow<State<List<GenreItemEntity>>> =
+      MutableStateFlow(State())
 
+   val homeState: StateFlow<State<Any>> get() = _homeState
    val upcomingState: StateFlow<State<List<MovieItemEntity>>> get() = _upcomingState
    val popularState: StateFlow<State<List<MovieItemEntity>>> get() = _popularState
    val nowPlayingState: StateFlow<State<List<MovieItemEntity>>> get() = _nowPlayingState
    val topRatedState: StateFlow<State<List<MovieItemEntity>>> get() = _topRatedState
-   val homeState: StateFlow<State<Any>> get() = _homeState
    val filterState: StateFlow<State<List<GenreItemEntity>>> get() = _filterState
 
    init {
       loadMovies(false)
    }
 
-   fun loadMovies(isReloading: Boolean) =
-      viewModelScope.launch {
-         _homeState.value = State(isLoading = true, isReloading = isReloading)
-         awaitAll(
-            ::getUpcomingMovies,
-            ::getPopularMovies,
-            ::getNowPlayingMovies,
-            ::getTopRatedMovies
-         )
-         _homeState.value = State()
+   fun loadMovies(isFirstLoading: Boolean) = viewModelScope.launch {
+      if (!internetConnectedUseCase()){
+         _homeState.value = State(errorMsg = "No Internet Connection")
+         this.cancel()
       }
+      getUpcomingMovies(isFirstLoading)
+      getPopularMovies(isFirstLoading)
+      getNowPlayingMovies(isFirstLoading)
+      getTopRatedMovies(isFirstLoading)
+   }
 
 
-   private suspend fun getUpcomingMovies() =
-      handleRequest(_upcomingState, getUpcomingMoviesUseCase())
+   private suspend fun getUpcomingMovies(isFirstLoading: Boolean) =
+      handleRequest(_upcomingState, getUpcomingMoviesUseCase(), isFirstLoading)
 
-   private suspend fun getPopularMovies() =
-      handleRequest(_popularState, getPopularMoviesUseCase())
+   private suspend fun getPopularMovies(isFirstLoading: Boolean) =
+      handleRequest(_popularState, getPopularMoviesUseCase(), isFirstLoading)
 
-   private suspend fun getNowPlayingMovies() =
-      handleRequest(_nowPlayingState, getNowPlayingMoviesUseCase())
+   private suspend fun getNowPlayingMovies(isFirstLoading: Boolean) =
+      handleRequest(_nowPlayingState, getNowPlayingMoviesUseCase(), isFirstLoading)
 
-   private suspend fun getTopRatedMovies() =
-      handleRequest(_topRatedState, getTopRatedMoviesUseCase())
+   private suspend fun getTopRatedMovies(isFirstLoading: Boolean) =
+      handleRequest(_topRatedState, getTopRatedMoviesUseCase(), isFirstLoading)
 
    suspend fun getGenre() =
       handleRequest(_filterState, getMovieGenreUseCase())

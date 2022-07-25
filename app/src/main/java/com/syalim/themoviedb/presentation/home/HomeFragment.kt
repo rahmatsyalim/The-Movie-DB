@@ -3,7 +3,6 @@ package com.syalim.themoviedb.presentation.home
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,8 +14,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.common.showSnackBar
 import com.syalim.themoviedb.databinding.FragmentHomeBinding
-import com.syalim.themoviedb.presentation.MainActivity
 import com.syalim.themoviedb.presentation.MainViewModel
+import com.syalim.themoviedb.presentation.State
 import com.syalim.themoviedb.presentation.adapter.HomeCarouselAdapter
 import com.syalim.themoviedb.presentation.adapter.HomeMoviesAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
@@ -36,8 +35,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    private val viewModel: MainViewModel by activityViewModels()
 
-   private val progressBar by lazy { (requireActivity() as MainActivity).progrssBar }
-
    private lateinit var handler: Handler
 
    private var nextPage = 0
@@ -48,16 +45,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
       collectHomeState()
 
+      setViewPagerUpcoming()
+
       setRecyclerViewPopular()
 
       setRecyclerViewNowPlaying()
 
       setRecyclerViewTopRated()
 
-      setViewPagerUpcoming()
-
       binding.swipeRefreshLayout.setOnRefreshListener {
-         viewModel.loadMovies(true)
+         viewModel.loadMovies(false)
       }
 
    }
@@ -96,7 +93,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    private fun setRecyclerViewTopRated() {
       val recyclerAdapter = HomeMoviesAdapter()
-      with(recyclerAdapter){
+      with(recyclerAdapter) {
          binding.rvTopRated.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
          binding.rvTopRated.adapter = recyclerAdapter
@@ -131,13 +128,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    private fun collectHomeState() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.homeState.collectLatest { state ->
-
-            binding.swipeRefreshLayout.isRefreshing = state.isReloading
-            progressBar.isVisible = state.isLoading && !state.isReloading
-
-            state.errorMessage?.let {
-               binding.root.showSnackBar(it, false)
-            }
+            State.Handle(state)(
+               onError = { message ->
+                  message?.let { binding.root.showSnackBar(it, true) }
+               }
+            )
          }
       }
    }
@@ -145,16 +140,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    private fun HomeMoviesAdapter.collectPopular() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.popularState.collectLatest { state ->
-            state.data?.let {
-               if (it.isNotEmpty()) {
+            State.Handle(state)(
+               onFirstLoading = {
+
+               },
+               onLoading = {
+
+               },
+               onEmpty = {
+
+               },
+               onError = {
+
+               },
+               onSuccess = {
                   this@collectPopular.data.submitList(it)
                }
-            }
-            binding.viewContainer.isVisible = state.errorMessage.isNullOrBlank()
-            binding.tvInfoHome.isVisible = !state.errorMessage.isNullOrBlank()
-            state.errorMessage?.let {
-               binding.tvInfoHome.text = it
-            }
+            )
          }
       }
    }
@@ -162,16 +164,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    private fun HomeMoviesAdapter.collectNowPlaying() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.nowPlayingState.collectLatest { state ->
-            state.data?.let {
-               if (it.isNotEmpty()) {
+            State.Handle(state)(
+               onFirstLoading = {
+
+               },
+               onLoading = {
+
+               },
+               onEmpty = {
+
+               },
+               onError = {
+
+               },
+               onSuccess = {
                   this@collectNowPlaying.data.submitList(it)
                }
-            }
-            binding.viewContainer.isVisible = state.errorMessage.isNullOrBlank()
-            binding.tvInfoHome.isVisible = !state.errorMessage.isNullOrBlank()
-            state.errorMessage?.let {
-               binding.tvInfoHome.text = it
-            }
+            )
          }
       }
    }
@@ -179,16 +188,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    private fun HomeMoviesAdapter.collectTopRated() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.topRatedState.collectLatest { state ->
-            state.data?.let {
-               if (it.isNotEmpty()) {
+            State.Handle(state)(
+               onFirstLoading = {
+
+               },
+               onLoading = {
+
+               },
+               onEmpty = {
+
+               },
+               onError = {
+
+               },
+               onSuccess = {
                   this@collectTopRated.data.submitList(it)
                }
-            }
-            binding.viewContainer.isVisible = state.errorMessage.isNullOrBlank()
-            binding.tvInfoHome.isVisible = !state.errorMessage.isNullOrBlank()
-            state.errorMessage?.let {
-               binding.tvInfoHome.text = it
-            }
+            )
          }
       }
    }
@@ -196,17 +212,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    private fun HomeCarouselAdapter.collectUpcoming() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.upcomingState.collectLatest { state ->
-            state.data?.let {
-               if (it.isNotEmpty()) {
+            State.Handle(state)(
+               onFirstLoading = {
+
+               },
+               onLoading = {
+
+               },
+               onEmpty = {
+
+               },
+               onError = {
+
+               },
+               onSuccess = {
                   this@collectUpcoming.data.submitList(it)
                   this@collectUpcoming.setImageCarousel()
                }
-            }
-            binding.viewContainer.isVisible = state.errorMessage.isNullOrBlank()
-            binding.tvInfoHome.isVisible = !state.errorMessage.isNullOrBlank()
-            state.errorMessage?.let {
-               binding.tvInfoHome.text = it
-            }
+            )
          }
       }
    }

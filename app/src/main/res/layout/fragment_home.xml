@@ -10,7 +10,6 @@
       android:layout_height="match_parent">
 
       <androidx.core.widget.NestedScrollView
-         android:id="@+id/view_container"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:clipToPadding="false"
@@ -21,137 +20,163 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
+               android:id="@+id/view_upcoming"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:orientation="horizontal"
-               android:padding="12dp">
+               android:orientation="vertical">
 
-               <TextView
-                  android:layout_width="wrap_content"
+               <RelativeLayout
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="Upcoming Movies"
-                  android:textColor="@color/white"
-                  android:textSize="16sp"
-                  android:textStyle="bold" />
+                  android:orientation="horizontal"
+                  android:padding="12dp">
 
-            </RelativeLayout>
+                  <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="Upcoming Movies"
+                     android:textColor="@color/white"
+                     android:textSize="16sp"
+                     android:textStyle="bold" />
 
-            <androidx.viewpager2.widget.ViewPager2
-               android:id="@+id/vp_upcoming"
-               android:nestedScrollingEnabled="false"
-               android:layout_width="match_parent"
-               android:layout_height="240dp"
-               android:paddingHorizontal="40dp" />
+                  <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentEnd="true"
+                     android:text="View more"
+                     android:textColor="@color/primary"
+                     android:textSize="14sp" />
 
-            <RelativeLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="horizontal"
-               android:padding="12dp">
+               </RelativeLayout>
 
-               <TextView
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="Popular Movies"
-                  android:textColor="@color/white"
-                  android:textSize="16sp"
-                  android:textStyle="bold" />
+               <androidx.viewpager2.widget.ViewPager2
+                  android:id="@+id/vp_upcoming"
+                  android:layout_width="match_parent"
+                  android:layout_height="240dp"
+                  android:nestedScrollingEnabled="false"
+                  android:paddingHorizontal="40dp" />
+            </LinearLayout>
 
-               <TextView
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_alignParentEnd="true"
-                  android:text="View more"
-                  android:textColor="@color/primary"
-                  android:textSize="14sp" />
-            </RelativeLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-               android:id="@+id/rv_popular"
-               android:nestedScrollingEnabled="false"
+            <LinearLayout
+               android:id="@+id/view_popular"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:clipToPadding="false"
-               android:paddingHorizontal="5dp"
-               android:paddingVertical="5dp" />
+               android:orientation="vertical">
 
-            <RelativeLayout
+               <RelativeLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:padding="12dp">
+
+                  <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="Popular Movies"
+                     android:textColor="@color/white"
+                     android:textSize="16sp"
+                     android:textStyle="bold" />
+
+                  <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentEnd="true"
+                     android:text="View more"
+                     android:textColor="@color/primary"
+                     android:textSize="14sp" />
+               </RelativeLayout>
+
+               <androidx.recyclerview.widget.RecyclerView
+                  android:id="@+id/rv_popular"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:clipToPadding="false"
+                  android:nestedScrollingEnabled="false"
+                  android:paddingHorizontal="5dp"
+                  android:paddingVertical="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+               android:id="@+id/view_top_rated"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:orientation="horizontal"
-               android:padding="12dp">
+               android:orientation="vertical">
 
-               <TextView
-                  android:layout_width="wrap_content"
+               <RelativeLayout
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="Top Rated Movies"
-                  android:textColor="@color/white"
-                  android:textSize="16sp"
-                  android:textStyle="bold" />
+                  android:orientation="horizontal"
+                  android:padding="12dp">
 
-               <TextView
-                  android:layout_width="wrap_content"
+                  <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="Top Rated Movies"
+                     android:textColor="@color/white"
+                     android:textSize="16sp"
+                     android:textStyle="bold" />
+
+                  <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentEnd="true"
+                     android:text="View more"
+                     android:textColor="@color/primary"
+                     android:textSize="14sp" />
+               </RelativeLayout>
+
+               <androidx.recyclerview.widget.RecyclerView
+                  android:id="@+id/rv_topRated"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:layout_alignParentEnd="true"
-                  android:text="View more"
-                  android:textColor="@color/primary"
-                  android:textSize="14sp" />
-            </RelativeLayout>
+                  android:clipToPadding="false"
+                  android:nestedScrollingEnabled="false"
+                  android:paddingHorizontal="5dp"
+                  android:paddingVertical="5dp" />
+            </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-               android:id="@+id/rv_topRated"
-               android:nestedScrollingEnabled="false"
+            <LinearLayout
+               android:id="@+id/view_now_playing"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:clipToPadding="false"
-               android:paddingHorizontal="5dp"
-               android:paddingVertical="5dp" />
+               android:orientation="vertical">
 
-            <RelativeLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="horizontal"
-               android:padding="12dp">
-
-               <TextView
-                  android:layout_width="wrap_content"
+               <RelativeLayout
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="In Theater Now"
-                  android:textColor="@color/white"
-                  android:textSize="16sp"
-                  android:textStyle="bold" />
+                  android:orientation="horizontal"
+                  android:padding="12dp">
 
-               <TextView
-                  android:layout_width="wrap_content"
+                  <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="In Theater Now"
+                     android:textColor="@color/white"
+                     android:textSize="16sp"
+                     android:textStyle="bold" />
+
+                  <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentEnd="true"
+                     android:text="View more"
+                     android:textColor="@color/primary"
+                     android:textSize="14sp" />
+               </RelativeLayout>
+
+               <androidx.recyclerview.widget.RecyclerView
+                  android:id="@+id/rv_inTheatre"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:layout_alignParentEnd="true"
-                  android:text="View more"
-                  android:textColor="@color/primary"
-                  android:textSize="14sp" />
-            </RelativeLayout>
+                  android:clipToPadding="false"
+                  android:nestedScrollingEnabled="false"
+                  android:paddingHorizontal="5dp"
+                  android:paddingVertical="5dp" />
+            </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-               android:id="@+id/rv_inTheatre"
-               android:nestedScrollingEnabled="false"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:clipToPadding="false"
-               android:paddingHorizontal="5dp"
-               android:paddingVertical="5dp" />
          </LinearLayout>
       </androidx.core.widget.NestedScrollView>
    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-   <TextView
-      android:id="@+id/tv_info_home"
-      android:visibility="gone"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textColor="@color/white"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

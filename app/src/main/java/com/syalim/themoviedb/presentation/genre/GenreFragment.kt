@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syalim.themoviedb.R
-import com.syalim.themoviedb.common.PagingLoadStateHandler
+import com.syalim.themoviedb.presentation.PagingLoadStateHandler
 import com.syalim.themoviedb.common.getScreenHeight
 import com.syalim.themoviedb.databinding.BottomSheetFilterBinding
 import com.syalim.themoviedb.databinding.FragmentGenreBinding

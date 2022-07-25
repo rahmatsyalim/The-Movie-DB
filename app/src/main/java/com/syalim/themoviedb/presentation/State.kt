@@ -2,12 +2,29 @@ package com.syalim.themoviedb.presentation
 
 
 /**
- * Created by Rahmat Syalim on 2022/07/16
+ * Created by Rahmat Syalim on 2022/07/25
  * rahmatsyalim@gmail.com
  */
 data class State<T>(
+   val isFirstLoading: Boolean = false,
    val isLoading: Boolean = false,
-   val isReloading: Boolean = false,
-   val errorMessage: String? = null,
+   val errorMsg: String? = null,
+   val isEmpty: Boolean = false,
    val data: T? = null
-)
+) {
+   class Handle<T>(private val state: State<T>) {
+      operator fun invoke(
+         onFirstLoading: ((Boolean) -> Unit)? = null,
+         onLoading: ((Boolean) -> Unit)? = null,
+         onError: ((String?) -> Unit)? = null,
+         onEmpty: ((Boolean) -> Unit)? = null,
+         onSuccess: ((T) -> Unit)? = null
+      ) {
+         onFirstLoading?.invoke(state.isFirstLoading)
+         onLoading?.invoke(state.isLoading)
+         onError?.invoke(state.errorMsg)
+         onEmpty?.invoke(state.isEmpty)
+         state.data?.let { onSuccess?.invoke(it) }
+      }
+   }
+}

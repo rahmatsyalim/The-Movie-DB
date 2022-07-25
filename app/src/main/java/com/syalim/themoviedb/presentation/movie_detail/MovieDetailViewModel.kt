@@ -27,27 +27,27 @@ class MovieDetailViewModel @Inject constructor(
    private val getMovieTrailerUseCase: GetMovieTrailerUseCase
 ) : BaseViewModel() {
 
-   private val _movieDetailState = MutableStateFlow(State<MovieDetailEntity>())
-   private val _movieTrailerState = MutableStateFlow(State<MovieTrailerEntity>())
-   private val _detailState = MutableStateFlow(State<Any>())
+   private val _movieDetailState: MutableStateFlow<State<MovieDetailEntity>> =
+      MutableStateFlow(State())
+   private val _movieTrailerState: MutableStateFlow<State<MovieTrailerEntity>> =
+      MutableStateFlow(State())
+   private val _detailState: MutableStateFlow<State<Any>> = MutableStateFlow(State())
 
    val movieDetailState: StateFlow<State<MovieDetailEntity>> get() = _movieDetailState
    val movieTrailerState: StateFlow<State<MovieTrailerEntity>> get() = _movieTrailerState
    val detailState: StateFlow<State<Any>> get() = _detailState
 
-   suspend fun loadDetails(id: String, isReloading: Boolean) {
-      _detailState.value = State(isLoading = true, isReloading = isReloading)
-      awaitAll(
-         { getMovieDetail(id) },
-         { getMovieTrailer(id) }
-      )
-      _detailState.value = State()
+   fun loadDetails(id: String) = viewModelScope.launch {
+      _detailState.emit(State(isLoading = true))
+      launch { getMovieDetail(id) }
+      launch { getMovieTrailer(id) }
+      _detailState.emit(State(isLoading = false))
    }
 
    fun getMovieReview(id: String) = getMovieReviewsUseCase.invoke(id).cachedIn(viewModelScope)
 
    private suspend fun getMovieDetail(id: String) {
-      handleRequest(_movieDetailState, getMovieDetailUseCase(id))
+      handleRequest(_movieDetailState, getMovieDetailUseCase.invoke(id))
    }
 
    private suspend fun getMovieTrailer(id: String) {
