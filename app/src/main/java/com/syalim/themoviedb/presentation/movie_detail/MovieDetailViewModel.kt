@@ -1,9 +1,11 @@
 package com.syalim.themoviedb.presentation.movie_detail
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.syalim.themoviedb.domain.model.MovieDetailEntity
 import com.syalim.themoviedb.domain.model.MovieTrailerEntity
+import com.syalim.themoviedb.domain.model.ReviewItemEntity
 import com.syalim.themoviedb.domain.use_case.get_movie_detail_use_case.GetMovieDetailUseCase
 import com.syalim.themoviedb.domain.use_case.get_movie_reviews_use_case.GetMovieReviewsUseCase
 import com.syalim.themoviedb.domain.use_case.get_movie_trailer_use_case.GetMovieTrailerUseCase
@@ -11,8 +13,10 @@ import com.syalim.themoviedb.presentation.State
 import com.syalim.themoviedb.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,11 +46,15 @@ class MovieDetailViewModel @Inject constructor(
       _detailState.emit(State(isLoading = true))
       getMovieDetail(id)
       getMovieTrailer(id)
-      delay(300)
+      getMovieReview(id)
       _detailState.emit(State(isLoading = false))
    }
 
-   fun getMovieReview(id: String) = getMovieReviewsUseCase.invoke(id).cachedIn(viewModelScope)
+   var movieReviews: Flow<PagingData<ReviewItemEntity>> = flowOf(PagingData.empty())
+
+   private fun getMovieReview(id: String) {
+      movieReviews = getMovieReviewsUseCase.invoke(id).cachedIn(viewModelScope)
+   }
 
    private suspend fun getMovieDetail(id: String) {
       handleRequest(_movieDetailState, getMovieDetailUseCase.invoke(id))

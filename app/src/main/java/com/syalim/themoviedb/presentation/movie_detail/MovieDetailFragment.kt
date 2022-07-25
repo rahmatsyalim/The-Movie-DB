@@ -7,16 +7,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.syalim.themoviedb.presentation.PagingLoadStateHandler
 import com.syalim.themoviedb.common.setImage
 import com.syalim.themoviedb.common.setImageUrl
-import com.syalim.themoviedb.common.showToast
 import com.syalim.themoviedb.databinding.FragmentMovieDetailBinding
 import com.syalim.themoviedb.presentation.MainActivity
+import com.syalim.themoviedb.presentation.PagingLoadStateHandler
 import com.syalim.themoviedb.presentation.State
 import com.syalim.themoviedb.presentation.adapter.ReviewsPagerAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -35,7 +35,7 @@ class MovieDetailFragment :
 
    private val progressBar by lazy { (requireActivity() as MainActivity).progrssBar }
 
-   private val reviewsAdapter by lazy { ReviewsPagerAdapter() }
+   private lateinit var reviewsAdapter: ReviewsPagerAdapter
 
    override fun init() {
 
@@ -47,13 +47,13 @@ class MovieDetailFragment :
          viewModel.loadDetails(id = arg.id)
       }
 
-      setRecyclerViewReviews()
+      collectState()
 
       collectDetailState()
 
-      collectState()
-
       collectTrailerState()
+
+      setRecyclerViewReviews()
 
       reviewsLoadStateListener()
 
@@ -63,20 +63,14 @@ class MovieDetailFragment :
 
    private fun collectState() {
       viewLifecycleOwner.lifecycleScope.launch {
-         viewModel.detailState.collectLatest { state ->
+         viewModel.detailState.collect { state ->
             State.Handle(state)(
                onLoading = {
-                  progressBar.isVisible = it
-                  binding.viewContainer.isVisible = !it
-               },
-               onError = {
-
-               },
-               onEmpty = {
-
-               },
-               onSuccess = {
-
+                  if (it) {
+                     progressBar.isVisible = true
+                     binding.viewContainer.isVisible = false
+                  }
+                  if (!it) collectReviews()
                }
             )
          }
@@ -85,14 +79,9 @@ class MovieDetailFragment :
 
    private fun reviewsLoadStateListener() {
       PagingLoadStateHandler(reviewsAdapter)(
-         onFirstLoading = {
-            binding.progressBar.isVisible = it
-         },
-         onLoading = {
-            binding.progressBar.isVisible = it
-         },
          onError = {
-            it?.let { requireContext().showToast(it) }
+            binding.tvInfoReviews.isVisible = it != null
+            it?.let { binding.tvInfoReviews.text = it }
          },
          onEmpty = {
             binding.tvInfoReviews.isVisible = it
@@ -102,14 +91,14 @@ class MovieDetailFragment :
    }
 
    private fun setRecyclerViewReviews() {
+      reviewsAdapter = ReviewsPagerAdapter()
       binding.rvReviews.adapter = reviewsAdapter
-      reviewsAdapter.collectReviews()
    }
 
-   private fun ReviewsPagerAdapter.collectReviews() {
+   private fun collectReviews() {
       viewLifecycleOwner.lifecycleScope.launch {
-         viewModel.getMovieReview(id = arg.id).collectLatest { pagingData ->
-            this@collectReviews.submitData(pagingData)
+         viewModel.movieReviews.collectLatest { pagingData ->
+            reviewsAdapter.submitData(pagingData)
          }
       }
    }
@@ -118,22 +107,27 @@ class MovieDetailFragment :
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.movieDetailState.collectLatest { state ->
             State.Handle(state)(
-               onLoading = {
-
-               },
-               onError = { message ->
-                  binding.tvInfoDetail.isVisible = message != null
-                  message?.let { binding.tvInfoDetail.text = it }
+               onError = {
+                  binding.tvInfoDetail.isVisible = it != null
+                  it?.let {
+                     progressBar.isVisible = false
+                     binding.tvInfoDetail.text = it
+                  }
                },
                onSuccess = { data ->
-                  binding.tvTitle.text = data.originalTitle
-                  binding.tvGenre.text = data.genres?.joinToString(", ")
-                  binding.tvDesc.text = data.overview
-                  data.posterPath?.let {
-                     binding.ivPoster.setImage(it.setImageUrl())
-                  }
-                  data.backdropPath?.let {
-                     binding.ivBackdrop.setImage(it.setImageUrl())
+                  viewLifecycleOwner.lifecycleScope.launch {
+                     binding.tvTitle.text = data.originalTitle
+                     binding.tvGenre.text = data.genres?.joinToString(", ")
+                     binding.tvDesc.text = data.overview
+                     data.posterPath?.let {
+                        binding.ivPoster.setImage(it.setImageUrl())
+                     }
+                     data.backdropPath?.let {
+                        binding.ivBackdrop.setImage(it.setImageUrl())
+                     }
+                     delay(300)
+                     progressBar.isVisible = false
+                     binding.viewContainer.isVisible = true
                   }
                }
             )
@@ -147,12 +141,6 @@ class MovieDetailFragment :
             State.Handle(state)(
                onLoading = {
                   binding.youtubePlayerView.isVisible = !it
-               },
-               onError = { message ->
-
-               },
-               onEmpty = {
-
                },
                onSuccess = { data ->
                   data.key?.let {

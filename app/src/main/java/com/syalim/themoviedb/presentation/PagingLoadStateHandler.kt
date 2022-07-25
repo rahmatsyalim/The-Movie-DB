@@ -11,25 +11,25 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class PagingLoadStateHandler<T : Any, VH : RecyclerView.ViewHolder>(val adapter: PagingDataAdapter<T, VH>) {
    operator fun invoke(
-      onFirstLoading: (Boolean) -> Unit,
-      onLoading: (Boolean) -> Unit,
-      onError: (String?) -> Unit,
-      onEmpty: (Boolean) -> Unit
+      onFirstLoading: ((Boolean) -> Unit)? = null,
+      onLoading: ((Boolean) -> Unit)? = null,
+      onError: ((String?) -> Unit)? = null,
+      onEmpty: ((Boolean) -> Unit)? = null
    ) {
       adapter.addLoadStateListener { loadState ->
          loadState.apply {
-            onFirstLoading(refresh is LoadState.Loading && adapter.itemCount == 0)
+            onFirstLoading?.invoke(refresh is LoadState.Loading && adapter.itemCount == 0)
 
-            onLoading(refresh is LoadState.Loading && adapter.itemCount > 0)
+            onLoading?.invoke(refresh is LoadState.Loading && adapter.itemCount > 0)
 
             val errorState =
                loadState.append as? LoadState.Error
                   ?: loadState.prepend as? LoadState.Error
                   ?: loadState.refresh as? LoadState.Error
 
-            onError(errorState?.error?.message)
+            onError?.invoke(errorState?.error?.message)
 
-            onEmpty(
+            onEmpty?.invoke(
                source.append is LoadState.NotLoading
                   && source.append.endOfPaginationReached
                   && adapter.itemCount == 0
