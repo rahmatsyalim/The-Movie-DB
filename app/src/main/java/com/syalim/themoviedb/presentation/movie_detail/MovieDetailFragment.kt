@@ -111,11 +111,9 @@ class MovieDetailFragment :
          viewModel.movieDetailState.collectLatest { state ->
             State.Handle(state)(
                onError = {
-                  binding.tvInfoDetail.isVisible = it != null
-                  it?.let {
-                     progressBar.isVisible = false
-                     binding.tvInfoDetail.text = it
-                  }
+                  binding.tvInfoDetail.isVisible = true
+                  progressBar.isVisible = false
+                  binding.tvInfoDetail.text = it
                },
                onSuccess = { data ->
                   viewLifecycleOwner.lifecycleScope.launch {
@@ -142,9 +140,6 @@ class MovieDetailFragment :
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.movieTrailerState.collectLatest { state ->
             State.Handle(state)(
-               onLoading = {
-                  binding.youtubePlayerView.isVisible = !it
-               },
                onSuccess = { data ->
                   data.key?.let {
                      binding.youtubePlayerView.addYouTubePlayerListener(object :

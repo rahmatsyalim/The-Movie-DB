@@ -16,7 +16,7 @@ data class State<T>(
       operator fun invoke(
          onFirstLoading: ((Boolean) -> Unit)? = null,
          onLoading: ((Boolean) -> Unit)? = null,
-         onError: ((String?) -> Unit)? = null,
+         onError: ((String) -> Unit)? = null,
          onEmpty: (() -> Unit)? = null,
          onSuccess: ((T) -> Unit)? = null
       ) {

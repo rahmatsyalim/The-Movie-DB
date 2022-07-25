@@ -10,10 +10,8 @@ import com.syalim.themoviedb.domain.use_case.get_now_playing_movies_use_case.Get
 import com.syalim.themoviedb.domain.use_case.get_popular_movies_use_case.GetPopularMoviesUseCase
 import com.syalim.themoviedb.domain.use_case.get_top_rated_movies_use_case.GetTopRatedMoviesUseCase
 import com.syalim.themoviedb.domain.use_case.get_upcoming_movies_use_case.GetUpcomingMoviesUseCase
-import com.syalim.themoviedb.domain.use_case.internet_connected_use_case.InternetConnectedUseCase
 import com.syalim.themoviedb.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -27,7 +25,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-   private val internetConnectedUseCase: InternetConnectedUseCase,
    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
    private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
@@ -36,7 +33,6 @@ class MainViewModel @Inject constructor(
    private val getMovieGenreUseCase: GetMovieGenreUseCase
 ) : BaseViewModel() {
 
-   private val _homeState: MutableStateFlow<State<Any>> = MutableStateFlow(State())
    private val _upcomingState: MutableStateFlow<State<List<MovieItemEntity>>> =
       MutableStateFlow(State())
    private val _popularState: MutableStateFlow<State<List<MovieItemEntity>>> =
@@ -48,7 +44,6 @@ class MainViewModel @Inject constructor(
    private val _filterState: MutableStateFlow<State<List<GenreItemEntity>>> =
       MutableStateFlow(State())
 
-   val homeState: StateFlow<State<Any>> get() = _homeState
    val upcomingState: StateFlow<State<List<MovieItemEntity>>> get() = _upcomingState
    val popularState: StateFlow<State<List<MovieItemEntity>>> get() = _popularState
    val nowPlayingState: StateFlow<State<List<MovieItemEntity>>> get() = _nowPlayingState
@@ -60,10 +55,6 @@ class MainViewModel @Inject constructor(
    }
 
    fun loadMovies(isFirstLoading: Boolean) = viewModelScope.launch {
-      if (!internetConnectedUseCase()){
-         _homeState.value = State(errorMsg = "No Internet Connection")
-         this.cancel()
-      }
       getUpcomingMovies(isFirstLoading)
       getPopularMovies(isFirstLoading)
       getNowPlayingMovies(isFirstLoading)

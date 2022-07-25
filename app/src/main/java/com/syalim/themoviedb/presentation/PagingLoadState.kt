@@ -15,7 +15,7 @@ class PagingLoadState<T : Any, VH : RecyclerView.ViewHolder>(val adapter: Paging
       onLoading: ((Boolean) -> Unit)? = null,
       onError: ((String) -> Unit)? = null,
       onEmpty: (() -> Unit)? = null,
-      onSuccess: (()->Unit)? = null
+      onSuccess: (() -> Unit)? = null
    ) {
       adapter.addLoadStateListener { loadState ->
          loadState.apply {
@@ -29,7 +29,11 @@ class PagingLoadState<T : Any, VH : RecyclerView.ViewHolder>(val adapter: Paging
                   ?: source.refresh as? LoadState.Error
 
             errorState?.error?.message?.let {
-               onError?.invoke(it)
+               if (it.contains("Unable to resolve host")) {
+                  onError?.invoke("Couldn't reach server")
+               } else {
+                  onError?.invoke(it)
+               }
             }
 
             if (source.append is LoadState.NotLoading
@@ -39,7 +43,8 @@ class PagingLoadState<T : Any, VH : RecyclerView.ViewHolder>(val adapter: Paging
                onEmpty?.invoke()
             }
             if (source.refresh is LoadState.NotLoading
-               && adapter.itemCount > 0){
+               && adapter.itemCount > 0
+            ) {
                onSuccess?.invoke()
             }
          }

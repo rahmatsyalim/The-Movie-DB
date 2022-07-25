@@ -44,8 +44,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    override fun init() {
 
-      collectHomeState()
-
       setViewPagerUpcoming()
 
       setRecyclerViewPopular()
@@ -126,18 +124,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    }
 
-   private fun collectHomeState() {
-      viewLifecycleOwner.lifecycleScope.launch {
-         viewModel.homeState.collectLatest { state ->
-            State.Handle(state)(
-               onError = { message ->
-                  message?.let { binding.root.showSnackBar(it, true) }
-               }
-            )
-         }
-      }
-   }
-
    private fun HomeMoviesAdapter.collectPopular() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.popularState.collectLatest { state ->
@@ -195,6 +181,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             State.Handle(state)(
                onLoading = {
                   binding.swipeRefreshLayout.isRefreshing = false
+               },
+               onError = {
+                  binding.root.showSnackBar(it, true)
                },
                onSuccess = {
                   this@collectUpcoming.data.submitList(it)
