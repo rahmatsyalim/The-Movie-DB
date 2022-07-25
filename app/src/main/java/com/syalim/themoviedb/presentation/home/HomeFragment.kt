@@ -3,6 +3,7 @@ package com.syalim.themoviedb.presentation.home
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -141,20 +142,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.popularState.collectLatest { state ->
             State.Handle(state)(
-               onFirstLoading = {
-
-               },
-               onLoading = {
-
-               },
-               onEmpty = {
-
-               },
-               onError = {
-
-               },
                onSuccess = {
                   this@collectPopular.data.submitList(it)
+                  binding.shimmerPopular.apply {
+                     stopShimmer()
+                     isVisible = false
+                  }
+                  binding.viewPopular.isVisible = true
                }
             )
          }
@@ -165,20 +159,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.nowPlayingState.collectLatest { state ->
             State.Handle(state)(
-               onFirstLoading = {
-
-               },
-               onLoading = {
-
-               },
-               onEmpty = {
-
-               },
-               onError = {
-
-               },
                onSuccess = {
-                  this@collectNowPlaying.data.submitList(it)
+                  binding.shimmerNowPlaying.apply {
+                     this@collectNowPlaying.data.submitList(it)
+                     stopShimmer()
+                     isVisible = false
+                  }
+                  binding.viewNowPlaying.isVisible = true
                }
             )
          }
@@ -189,20 +176,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.topRatedState.collectLatest { state ->
             State.Handle(state)(
-               onFirstLoading = {
-
-               },
-               onLoading = {
-
-               },
-               onEmpty = {
-
-               },
-               onError = {
-
-               },
                onSuccess = {
                   this@collectTopRated.data.submitList(it)
+                  binding.shimmerTopRated.apply {
+                     stopShimmer()
+                     isVisible = false
+                  }
+                  binding.viewTopRated.isVisible = true
                }
             )
          }
@@ -213,20 +193,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.upcomingState.collectLatest { state ->
             State.Handle(state)(
-               onFirstLoading = {
-
-               },
-               onLoading = {
-
-               },
-               onEmpty = {
-
-               },
-               onError = {
-
-               },
                onSuccess = {
                   this@collectUpcoming.data.submitList(it)
+                  binding.shimmerUpcoming.apply {
+                     stopShimmer()
+                     isVisible = false
+                  }
+                  binding.viewUpcoming.isVisible = true
                   this@collectUpcoming.setImageCarousel()
                }
             )

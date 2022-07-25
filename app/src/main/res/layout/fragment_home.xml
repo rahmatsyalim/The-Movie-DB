@@ -20,11 +20,22 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+               android:id="@+id/shimmer_upcoming"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:shimmer_base_alpha="0.2"
+               app:shimmer_tilt="0.5">
+
+               <include layout="@layout/shimmer_ph_home_movie_carousel" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <LinearLayout
                android:id="@+id/view_upcoming"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:orientation="vertical">
+               android:orientation="vertical"
+               android:visibility="gone">
 
                <RelativeLayout
                   android:layout_width="match_parent"
@@ -58,11 +69,22 @@
                   android:paddingHorizontal="40dp" />
             </LinearLayout>
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+               android:id="@+id/shimmer_popular"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:shimmer_base_alpha="0.2"
+               app:shimmer_tilt="0.5">
+
+               <include layout="@layout/shimmer_ph_home_movie_list" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <LinearLayout
                android:id="@+id/view_popular"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:orientation="vertical">
+               android:orientation="vertical"
+               android:visibility="gone">
 
                <RelativeLayout
                   android:layout_width="match_parent"
@@ -97,11 +119,22 @@
                   android:paddingVertical="5dp" />
             </LinearLayout>
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+               android:id="@+id/shimmer_top_rated"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:shimmer_base_alpha="0.2"
+               app:shimmer_tilt="0.5">
+
+               <include layout="@layout/shimmer_ph_home_movie_list" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <LinearLayout
                android:id="@+id/view_top_rated"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:orientation="vertical">
+               android:orientation="vertical"
+               android:visibility="gone">
 
                <RelativeLayout
                   android:layout_width="match_parent"
@@ -136,11 +169,22 @@
                   android:paddingVertical="5dp" />
             </LinearLayout>
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+               android:id="@+id/shimmer_now_playing"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:shimmer_base_alpha="0.2"
+               app:shimmer_tilt="0.5">
+
+               <include layout="@layout/shimmer_ph_home_movie_list" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <LinearLayout
                android:id="@+id/view_now_playing"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:orientation="vertical">
+               android:orientation="vertical"
+               android:visibility="gone">
 
                <RelativeLayout
                   android:layout_width="match_parent"
