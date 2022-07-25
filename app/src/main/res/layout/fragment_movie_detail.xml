@@ -86,14 +86,24 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-
-         <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-            android:id="@+id/youtube_player_view"
+         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:autoPlay="false" />
+            android:layout_marginBottom="12dp">
 
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+               android:id="@+id/youtube_player_view"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:autoPlay="false" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+               android:id="@+id/progress_bar_trailer"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerInParent="true"
+               android:indeterminate="true" />
+         </RelativeLayout>
 
          <TextView
             android:layout_width="match_parent"

@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.syalim.themoviedb.common.setImage
@@ -66,10 +67,7 @@ class MovieDetailFragment :
          viewModel.detailState.collect { state ->
             State.Handle(state)(
                onLoading = {
-                  if (it) {
-                     progressBar.isVisible = true
-                     binding.viewContainer.isVisible = false
-                  }
+                  if (it) progressBar.isVisible = true
                   if (!it) collectReviews()
                }
             )
@@ -146,6 +144,19 @@ class MovieDetailFragment :
                         AbstractYouTubePlayerListener() {
                         override fun onReady(youTubePlayer: YouTubePlayer) {
                            youTubePlayer.cueVideo(it, 0f)
+                        }
+
+                        override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
+                           super.onVideoId(youTubePlayer, videoId)
+                           binding.progressBarTrailer.isVisible = false
+                        }
+
+                        override fun onError(
+                           youTubePlayer: YouTubePlayer,
+                           error: PlayerConstants.PlayerError
+                        ) {
+                           super.onError(youTubePlayer, error)
+                           binding.progressBarTrailer.isVisible = false
                         }
                      })
                   }
