@@ -1,6 +1,5 @@
 package com.syalim.themoviedb.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -27,17 +26,17 @@ class GenreFilterAdapter(private val genre: List<String>? = listOf()) : Recycler
                genre?.let {
                   if (it.contains(item.id.toString())){
                      isChecked = true
-                     setBackgroundColor(resources.getColor(R.color.primary))
+                     setTextColor(resources.getColor(R.color.primary, context.theme))
                   }
                }
 
                setOnClickListener {
                   if (isChecked){
                      isChecked = false
-                     setBackgroundColor(resources.getColor(R.color.transparent))
+                     setTextColor(resources.getColor(R.color.white, context.theme))
                   } else {
                      isChecked = true
-                     setBackgroundColor(resources.getColor(R.color.primary))
+                     setTextColor(resources.getColor(R.color.primary, context.theme))
                   }
                   onItemClickListener?.invoke(item,isChecked)
                }

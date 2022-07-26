@@ -93,8 +93,11 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
       }
    }
 
+   private var collectGenreJob: Job? = null
+
    private fun collectGenre() {
-      viewLifecycleOwner.lifecycleScope.launch {
+      collectGenreJob?.cancel()
+      collectGenreJob = viewLifecycleOwner.lifecycleScope.launch {
          viewModel.filterState.collectLatest { state ->
             State.Handle(state)(
                onLoading = {

@@ -7,6 +7,9 @@
         <entry key="app/src/main/res/drawable-v24/ic_genre_not_selected.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/bg_movie_rate.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/bg_rounded_top.xml" value="0.1725" />
+        <entry key="app/src/main/res/drawable/ic_check.xml" value="0.1725" />
+        <entry key="app/src/main/res/drawable/ic_favorite.xml" value="0.1605" />
+        <entry key="app/src/main/res/drawable/ic_favorite_fill.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/ic_filter_top.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/ic_genre_not_selected.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/ic_genre_selected.xml" value="0.1725" />

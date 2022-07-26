@@ -1,5 +1,6 @@
 package com.syalim.themoviedb.presentation.movie_detail
 
+import android.content.res.ColorStateList
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -8,6 +9,8 @@ import androidx.navigation.fragment.navArgs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.syalim.themoviedb.R
+import com.syalim.themoviedb.common.dateToViewDate
 import com.syalim.themoviedb.common.setImage
 import com.syalim.themoviedb.common.setImageUrl
 import com.syalim.themoviedb.databinding.FragmentMovieDetailBinding
@@ -114,8 +117,23 @@ class MovieDetailFragment :
                   binding.tvInfoDetail.text = it
                },
                onSuccess = { data ->
+                  binding.tvInfoDetail.isVisible = false
+                  binding.fabTrailer.setOnClickListener {
+                     binding.viewTrailer.isVisible = !binding.viewTrailer.isVisible
+                  }
+                  binding.fabFavorite.setOnClickListener {
+                     // TODO: save to db
+                     binding.fabFavorite.imageTintList = ColorStateList.valueOf(
+                        resources.getColor(
+                           R.color.primary,
+                           requireContext().theme
+                        )
+                     )
+                  }
                   viewLifecycleOwner.lifecycleScope.launch {
+                     binding.topBar.title = data.originalTitle
                      binding.tvTitle.text = data.originalTitle
+                     binding.tvReleaseDate.text = "Release : ${data.releaseDate.dateToViewDate()}"
                      binding.tvGenre.text = data.genres?.joinToString(", ")
                      binding.tvDesc.text = data.overview
                      data.posterPath?.let {
@@ -126,6 +144,8 @@ class MovieDetailFragment :
                      }
                      delay(300)
                      progressBar.isVisible = false
+                     binding.fabFavorite.show()
+                     binding.fabTrailer.show()
                      binding.viewContainer.isVisible = true
                   }
                }
