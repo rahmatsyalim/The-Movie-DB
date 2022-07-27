@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.syalim.themoviedb.common.dateToViewDate
-import com.syalim.themoviedb.common.setImage
-import com.syalim.themoviedb.common.setImageUrl
+import com.syalim.themoviedb.common.loadImage
 import com.syalim.themoviedb.databinding.ItemCarouselBinding
 import com.syalim.themoviedb.domain.model.MovieItemEntity
 
@@ -38,7 +37,7 @@ class HomeCarouselAdapter :
       fun bind(item: MovieItemEntity) {
          binding.apply {
             item.backdropPath?.let {
-               ivBackdrop.setImage(it.setImageUrl())
+               ivBackdrop.loadImage(it)
                tvTitle.text = item.title
                tvDate.text = item.releaseDate.dateToViewDate()
             }

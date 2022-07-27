@@ -17,11 +17,8 @@ import com.syalim.themoviedb.presentation.State
 import com.syalim.themoviedb.presentation.adapter.ReviewsPagerAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -149,10 +146,10 @@ class MovieDetailFragment :
                      }
                      binding.tvDesc.text = data.overview
                      data.posterPath?.let {
-                        binding.ivPoster.setImage(it.setImageUrl())
+                        binding.ivPoster.loadImage(it)
                      }
                      data.backdropPath?.let {
-                        binding.ivBackdrop.setImage(it.setImageUrl())
+                        binding.ivBackdrop.loadImage(it)
                      }
                      binding.shimmerMovieDetail.apply {
                         stopShimmer()

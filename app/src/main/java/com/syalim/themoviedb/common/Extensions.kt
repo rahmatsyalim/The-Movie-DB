@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.syalim.themoviedb.R
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_400
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_401
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_404
@@ -48,9 +49,20 @@ fun View.showSnackBar(message: String, indefinite: Boolean) {
    }.show()
 }
 
-fun ImageView.setImage(uri: String) {
+fun ImageView.loadImage(uri: String) {
+   Glide
+      .with(context)
+      .load(uri.setImageUrl())
+      .error(resources.getDrawable(R.drawable.placeholder_image, context.theme))
+      .placeholder(resources.getDrawable(R.drawable.placeholder_image, context.theme))
+      .into(this)
+}
+
+fun ImageView.loadAvatarImage(uri: String) {
    Glide.with(context)
-      .load(uri)
+      .load(uri.setImageUrl())
+      .error(resources.getDrawable(R.drawable.placeholder_avatar, context.theme))
+      .placeholder(resources.getDrawable(R.drawable.placeholder_avatar, context.theme))
       .into(this)
 }
 

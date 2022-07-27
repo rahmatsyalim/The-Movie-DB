@@ -5,8 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.syalim.themoviedb.common.setImage
-import com.syalim.themoviedb.common.setImageUrl
+import com.syalim.themoviedb.common.loadAvatarImage
 import com.syalim.themoviedb.databinding.ItemReviewBinding
 import com.syalim.themoviedb.domain.model.ReviewItemEntity
 
@@ -25,7 +24,7 @@ class ReviewsPagerAdapter :
             tvName.text = item.author
             tvComments.text = item.content
             item.avatarPath?.let {
-               ivPhoto.setImage(it.setImageUrl())
+               ivPhoto.loadAvatarImage(it)
             }
          }
       }

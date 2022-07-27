@@ -6,8 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.syalim.themoviedb.common.dateGetYear
-import com.syalim.themoviedb.common.setImage
-import com.syalim.themoviedb.common.setImageUrl
+import com.syalim.themoviedb.common.loadImage
 import com.syalim.themoviedb.databinding.ItemMovieBinding
 import com.syalim.themoviedb.domain.model.MovieItemEntity
 
@@ -26,7 +25,7 @@ class MoviesPagerAdapter :
          binding.apply {
             tvTitle.text = "${item.title} (${item.releaseDate.dateGetYear()})"
             item.posterPath?.let {
-               ivPoster.setImage(it.setImageUrl())
+               ivPoster.loadImage(it)
             }
          }
          itemView.setOnClickListener {
