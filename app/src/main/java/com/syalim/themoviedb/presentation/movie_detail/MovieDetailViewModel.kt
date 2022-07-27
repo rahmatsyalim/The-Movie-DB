@@ -46,8 +46,8 @@ class MovieDetailViewModel @Inject constructor(
       _detailState.emit(State(isLoading = true))
       getMovieDetail(id)
       getMovieTrailer(id)
-      getMovieReview(id)
       _detailState.emit(State(isLoading = false))
+      getMovieReview(id)
    }
 
    var movieReviews: Flow<PagingData<ReviewItemEntity>> = flowOf(PagingData.empty())

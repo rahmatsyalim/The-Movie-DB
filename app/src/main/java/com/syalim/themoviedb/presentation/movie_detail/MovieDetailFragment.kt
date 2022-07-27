@@ -10,20 +10,18 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.syalim.themoviedb.R
-import com.syalim.themoviedb.common.convertToTimeDuration
-import com.syalim.themoviedb.common.dateToViewDate
-import com.syalim.themoviedb.common.setImage
-import com.syalim.themoviedb.common.setImageUrl
+import com.syalim.themoviedb.common.*
 import com.syalim.themoviedb.databinding.FragmentMovieDetailBinding
-import com.syalim.themoviedb.presentation.MainActivity
 import com.syalim.themoviedb.presentation.PagingLoadState
 import com.syalim.themoviedb.presentation.State
 import com.syalim.themoviedb.presentation.adapter.ReviewsPagerAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -37,8 +35,6 @@ class MovieDetailFragment :
    private val viewModel: MovieDetailViewModel by viewModels()
 
    private val arg by navArgs<MovieDetailFragmentArgs>()
-
-   private val progressBar by lazy { (requireActivity() as MainActivity).progrssBar }
 
    private lateinit var reviewsAdapter: ReviewsPagerAdapter
 
@@ -71,7 +67,6 @@ class MovieDetailFragment :
          viewModel.detailState.collect { state ->
             State.Handle(state)(
                onLoading = {
-                  if (it) progressBar.isVisible = true
                   if (!it) collectReviews()
                }
             )
@@ -113,12 +108,9 @@ class MovieDetailFragment :
          viewModel.movieDetailState.collectLatest { state ->
             State.Handle(state)(
                onError = {
-                  binding.tvInfoDetail.isVisible = true
-                  progressBar.isVisible = false
-                  binding.tvInfoDetail.text = it
+                  binding.root.showSnackBar(it, true)
                },
                onSuccess = { data ->
-                  binding.tvInfoDetail.isVisible = false
                   binding.fabTrailer.setOnClickListener {
                      binding.viewTrailer.isVisible = !binding.viewTrailer.isVisible
                      with(binding.fabTrailer) {
@@ -147,9 +139,13 @@ class MovieDetailFragment :
                         "${data.releaseDate.dateToViewDate()} · " +
                            "${data.genres.joinToString(", ")} · " +
                            data.runtime.convertToTimeDuration()
-                     data.tagline?.let {
-                        binding.tvTagline.text = "\"$it\""
-                        binding.tvTagline.isVisible = true
+                     if (!data.tagline.isNullOrBlank()) {
+                        binding.tvTagline.apply {
+                           text = "\"${data.tagline}\""
+                           isVisible = true
+                        }
+                     } else {
+                        binding.tvTagline.isVisible = false
                      }
                      binding.tvDesc.text = data.overview
                      data.posterPath?.let {
@@ -158,8 +154,10 @@ class MovieDetailFragment :
                      data.backdropPath?.let {
                         binding.ivBackdrop.setImage(it.setImageUrl())
                      }
-                     delay(300)
-                     progressBar.isVisible = false
+                     binding.shimmerMovieDetail.apply {
+                        stopShimmer()
+                        isVisible = false
+                     }
                      binding.fabFavorite.show()
                      binding.fabTrailer.show()
                      binding.viewContainer.isVisible = true

@@ -41,6 +41,8 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private lateinit var moviesAdapter: MoviesPagerAdapter
 
+   private lateinit var moviesLoadStateAdapter: PagingLoadStateAdapter
+
    private lateinit var genreFilterAdapter: GenreFilterAdapter
 
    private val ivFilter by lazy {
@@ -113,9 +115,20 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private fun setMoviesRecyclerView() {
       moviesAdapter = MoviesPagerAdapter()
+      moviesLoadStateAdapter = PagingLoadStateAdapter()
+      val gridLayoutManager = GridLayoutManager(requireContext(), 3)
+      gridLayoutManager.spanSizeLookup =  object : GridLayoutManager.SpanSizeLookup() {
+         override fun getSpanSize(position: Int): Int {
+            return if (position == moviesAdapter.itemCount  && moviesLoadStateAdapter.itemCount > 0) {
+               3
+            } else {
+               1
+            }
+         }
+      }
       binding.rvMovies.apply {
-         layoutManager = GridLayoutManager(requireContext(), 3)
-         adapter = moviesAdapter.withLoadStateFooter(PagingLoadStateAdapter())
+         layoutManager = gridLayoutManager
+         adapter = moviesAdapter.withLoadStateFooter(moviesLoadStateAdapter)
       }
       moviesAdapter.onItemClickListener {
          val bundle = Bundle().apply {

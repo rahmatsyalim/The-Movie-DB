@@ -180,13 +180,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          viewModel.upcomingState.collectLatest { state ->
             State.Handle(state)(
                onLoading = {
-                  binding.swipeRefreshLayout.isRefreshing = false
+                  if (it) binding.swipeRefreshLayout.isRefreshing = true
                },
                onError = {
                   binding.root.showSnackBar(it, true)
                },
                onSuccess = {
                   this@collectUpcoming.data.submitList(it)
+                  binding.swipeRefreshLayout.isRefreshing = false
                   binding.shimmerUpcoming.apply {
                      stopShimmer()
                      isVisible = false
