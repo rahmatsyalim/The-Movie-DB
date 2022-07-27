@@ -61,6 +61,8 @@
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
+                     android:fontFamily="@font/poppins_regular"
+                     android:letterSpacing="0"
                      android:text="View more"
                      android:textAllCaps="false"
                      android:textSize="12sp" />
@@ -118,6 +120,8 @@
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
+                     android:fontFamily="@font/poppins_regular"
+                     android:letterSpacing="0"
                      android:text="View more"
                      android:textAllCaps="false"
                      android:textSize="12sp" />
@@ -171,6 +175,8 @@
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
+                     android:fontFamily="@font/poppins_regular"
+                     android:letterSpacing="0"
                      android:text="View more"
                      android:textAllCaps="false"
                      android:textSize="12sp" />
@@ -224,6 +230,8 @@
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
+                     android:fontFamily="@font/poppins_regular"
+                     android:letterSpacing="0"
                      android:text="View more"
                      android:textAllCaps="false"
                      android:textSize="12sp" />

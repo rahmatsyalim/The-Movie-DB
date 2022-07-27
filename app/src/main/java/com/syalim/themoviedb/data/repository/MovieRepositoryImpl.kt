@@ -164,4 +164,19 @@ class MovieRepositoryImpl @Inject constructor(
       }.flowOn(Dispatchers.IO)
    }
 
+   override fun getRecommendationMovies(id: String): Flow<Resource<List<MovieItemEntity>>> {
+      return flow {
+         emit(Resource.Loading())
+         try {
+            val response = movieApi.getRecommendationMovies(id = id, page = 1)
+            val result = MovieListMapper.convert(response).results
+            emit(Resource.Success(result))
+         } catch (e: HttpException) {
+            emit(Resource.Error(e.getErrorMessage()))
+         } catch (e: IOException) {
+            emit(Resource.Error("Couldn't reach server"))
+         }
+      }.flowOn(Dispatchers.IO)
+   }
+
 }

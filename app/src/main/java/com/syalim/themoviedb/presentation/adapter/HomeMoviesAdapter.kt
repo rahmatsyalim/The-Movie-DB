@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.syalim.themoviedb.common.dateGetYear
 import com.syalim.themoviedb.common.loadImage
-import com.syalim.themoviedb.databinding.ItemMovieHomeBinding
+import com.syalim.themoviedb.databinding.ItemMovieBinding
 import com.syalim.themoviedb.domain.model.MovieItemEntity
 
 
@@ -18,13 +18,13 @@ import com.syalim.themoviedb.domain.model.MovieItemEntity
 class HomeMoviesAdapter : RecyclerView.Adapter<HomeMoviesAdapter.HomeMoviesViewHolder>() {
 
    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeMoviesViewHolder {
-      return HomeMoviesViewHolder(
-         ItemMovieHomeBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-         )
+      val itemBinding = ItemMovieBinding.inflate(
+         LayoutInflater.from(parent.context),
+         parent,
+         false
       )
+      itemBinding.root.layoutParams.width = ((parent.measuredWidth * 0.33).toInt())
+      return HomeMoviesViewHolder(itemBinding)
    }
 
    override fun onBindViewHolder(holder: HomeMoviesViewHolder, position: Int) {
@@ -35,7 +35,7 @@ class HomeMoviesAdapter : RecyclerView.Adapter<HomeMoviesAdapter.HomeMoviesViewH
       return data.currentList.size
    }
 
-   inner class HomeMoviesViewHolder(private val binding: ItemMovieHomeBinding) :
+   inner class HomeMoviesViewHolder(private val binding: ItemMovieBinding) :
       RecyclerView.ViewHolder(binding.root) {
 
       fun bind(item: MovieItemEntity) {

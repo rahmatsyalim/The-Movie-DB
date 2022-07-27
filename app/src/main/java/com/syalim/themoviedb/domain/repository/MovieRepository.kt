@@ -29,4 +29,6 @@ interface MovieRepository {
    fun getMovieReviews(id: String): Flow<PagingData<ReviewItemEntity>>
 
    fun getMovieTrailer(id: String): Flow<Resource<MovieTrailerEntity>>
+
+   fun getRecommendationMovies(id: String): Flow<Resource<List<MovieItemEntity>>>
 }

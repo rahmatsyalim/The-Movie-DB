@@ -20,42 +20,37 @@ interface MovieApi {
    @GET("/3/movie/popular")
    suspend fun getPopularMovies(
       @Query("api_key") apiKey: String = BuildConfig.apiKey,
-      @Query("language") lang: String = "en-US",
       @Query("page") page: Int
    ): MovieListDto
 
    @GET("/3/movie/now_playing")
    suspend fun getNowPlayingMovies(
       @Query("api_key") apiKey: String = BuildConfig.apiKey,
-      @Query("language") lang: String = "en-US",
       @Query("page") page: Int
    ): MovieListDto
 
    @GET("/3/movie/upcoming")
    suspend fun getUpcomingMovies(
       @Query("api_key") apiKey: String = BuildConfig.apiKey,
-      @Query("language") lang: String = "en-US",
       @Query("page") page: Int
    ): MovieListDto
 
    @GET("/3/movie/top_rated")
    suspend fun getTopRatedMovies(
       @Query("api_key") apiKey: String = BuildConfig.apiKey,
-      @Query("language") lang: String = "en-US",
       @Query("page") page: Int
    ): MovieListDto
 
-   @GET("/3/movie/latest")
-   suspend fun getLatestMovies(
+   @GET("/3/movie/{id}/similar")
+   suspend fun getRecommendationMovies(
+      @Path("id") id: String,
       @Query("api_key") apiKey: String = BuildConfig.apiKey,
-      @Query("language") lang: String = "en-US",
       @Query("page") page: Int
    ): MovieListDto
 
    @GET("/3/discover/movie")
    suspend fun getMoviesByGenre(
       @Query("api_key") apiKey: String = BuildConfig.apiKey,
-      @Query("language") lang: String = "en-US",
       @Query("page") page: Int,
       @Query("with_genres") genres: String?
    ): MovieListDto
@@ -69,7 +64,6 @@ interface MovieApi {
    @GET("/3/genre/movie/list")
    suspend fun getMovieGenres(
       @Query("api_key") apiKey: String = BuildConfig.apiKey,
-      @Query("language") lang: String = "en-US",
    ): GenreListDto
 
    @GET("/3/movie/{id}/reviews")

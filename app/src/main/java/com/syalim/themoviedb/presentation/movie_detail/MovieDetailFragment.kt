@@ -1,11 +1,13 @@
 package com.syalim.themoviedb.presentation.movie_detail
 
 import android.content.res.ColorStateList
+import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -14,6 +16,7 @@ import com.syalim.themoviedb.common.*
 import com.syalim.themoviedb.databinding.FragmentMovieDetailBinding
 import com.syalim.themoviedb.presentation.PagingLoadState
 import com.syalim.themoviedb.presentation.State
+import com.syalim.themoviedb.presentation.adapter.HomeMoviesAdapter
 import com.syalim.themoviedb.presentation.adapter.ReviewsPagerAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +38,8 @@ class MovieDetailFragment :
 
    private lateinit var reviewsAdapter: ReviewsPagerAdapter
 
+   private lateinit var recommendationMoviesAdapter: HomeMoviesAdapter
+
    override fun init() {
 
       binding.topBar.setNavigationOnClickListener {
@@ -51,7 +56,9 @@ class MovieDetailFragment :
 
       collectTrailerState()
 
-      setRecyclerViewReviews()
+      setRecommendationMoviesRecyclerView()
+
+      setReviewsRecyclerView()
 
       reviewsLoadStateListener()
 
@@ -79,23 +86,53 @@ class MovieDetailFragment :
          },
          onEmpty = {
             binding.tvInfoReviews.isVisible = true
-            binding.tvInfoReviews.text = "No reviews yet"
+            binding.tvInfoReviews.text = "No reviews"
          },
          onSuccess = {
             binding.tvInfoReviews.isVisible = false
+            binding.viewReviews.isVisible = true
          }
       )
    }
 
-   private fun setRecyclerViewReviews() {
+   private fun setReviewsRecyclerView() {
       reviewsAdapter = ReviewsPagerAdapter()
       binding.rvReviews.adapter = reviewsAdapter
+   }
+
+   private fun setRecommendationMoviesRecyclerView() {
+      recommendationMoviesAdapter = HomeMoviesAdapter()
+      with(recommendationMoviesAdapter) {
+         binding.rvRecommendationMovies.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+         binding.rvRecommendationMovies.adapter = recommendationMoviesAdapter
+         setOnItemClickListener {
+            val bundle = Bundle().apply {
+               putString("id", it.id.toString())
+            }
+            findNavController().navigate(R.id.action_movie_detail_fragment_self, bundle)
+         }
+         collectRecommendationMovies()
+      }
    }
 
    private fun collectReviews() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.movieReviews.collectLatest { pagingData ->
             reviewsAdapter.submitData(pagingData)
+         }
+      }
+   }
+
+   private fun HomeMoviesAdapter.collectRecommendationMovies() {
+      viewLifecycleOwner.lifecycleScope.launch {
+         viewModel.recommendationMoviesState.collectLatest { state ->
+            State.Handle(state)(
+               onSuccess = {
+                  this@collectRecommendationMovies.data.submitList(it)
+                  binding.viewRecommendationMovies.isVisible = true
+               }
+            )
          }
       }
    }

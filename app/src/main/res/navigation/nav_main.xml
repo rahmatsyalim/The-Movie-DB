@@ -7,18 +7,26 @@
    <fragment
       android:id="@+id/home_fragment"
       android:name="com.syalim.themoviedb.presentation.home.HomeFragment"
-      android:label="Home" >
+      android:label="Home">
       <action
          android:id="@+id/action_home_fragment_to_movie_detail_fragment"
-         app:destination="@id/movie_detail_fragment" />
+         app:destination="@id/movie_detail_fragment"
+         app:enterAnim="@anim/slide_in_right"
+         app:exitAnim="@anim/slide_out_left"
+         app:popEnterAnim="@anim/slide_in_left"
+         app:popExitAnim="@anim/slide_out_right" />
    </fragment>
    <fragment
       android:id="@+id/genre_fragment"
       android:name="com.syalim.themoviedb.presentation.genre.GenreFragment"
-      android:label="Genre" >
+      android:label="Genre">
       <action
          android:id="@+id/action_genre_fragment_to_movie_detail_fragment"
-         app:destination="@id/movie_detail_fragment" />
+         app:destination="@id/movie_detail_fragment"
+         app:enterAnim="@anim/slide_in_right"
+         app:exitAnim="@anim/slide_out_left"
+         app:popEnterAnim="@anim/slide_in_left"
+         app:popExitAnim="@anim/slide_out_right" />
    </fragment>
    <fragment
       android:id="@+id/movie_detail_fragment"
@@ -27,5 +35,12 @@
       <argument
          android:name="id"
          app:argType="string" />
+      <action
+         android:id="@+id/action_movie_detail_fragment_self"
+         app:destination="@id/movie_detail_fragment"
+         app:enterAnim="@anim/slide_in_right"
+         app:exitAnim="@anim/slide_out_left"
+         app:popEnterAnim="@anim/slide_in_left"
+         app:popExitAnim="@anim/slide_out_right" />
    </fragment>
 </navigation>

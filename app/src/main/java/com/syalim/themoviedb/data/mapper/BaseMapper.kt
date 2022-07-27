@@ -6,5 +6,5 @@ package com.syalim.themoviedb.data.mapper
  * rahmatsyalim@gmail.com
  */
 abstract class BaseMapper<Dto, Result> {
-   abstract fun  convert(dto: Dto): Result
+   abstract fun convert(dto: Dto): Result
 }

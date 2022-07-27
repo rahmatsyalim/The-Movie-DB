@@ -42,17 +42,18 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:maxLines="2"
+               android:paddingHorizontal="12dp"
                android:textColor="@color/white"
-               android:textSize="18sp"
+               android:textSize="16sp"
                android:textStyle="bold" />
 
             <TextView
                android:id="@+id/tv_release_genre_duration"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
+               android:paddingHorizontal="12dp"
                android:textColor="@color/white"
-               android:textSize="12sp"
-               android:textStyle="italic" />
+               android:textSize="12sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                android:layout_width="match_parent"
@@ -87,10 +88,10 @@
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_marginStart="12dp"
+                  android:ellipsize="end"
+                  android:maxLines="12"
                   android:textColor="@color/white"
                   android:textSize="12sp"
-                  android:maxLines="12"
-                  android:ellipsize="end"
                   app:layout_constraintEnd_toEndOf="parent"
                   app:layout_constraintStart_toEndOf="@id/iv_poster"
                   app:layout_constraintTop_toBottomOf="@id/tv_tagline" />
@@ -116,18 +117,16 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_below="@id/top_bar"
-      android:clipToPadding="false"
-      android:paddingBottom="40dp"
       app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
       <LinearLayout
          android:id="@+id/view_container"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
+         android:layout_marginTop="12dp"
+         android:layout_marginBottom="40dp"
          android:animateLayoutChanges="true"
          android:orientation="vertical"
-         android:paddingHorizontal="12dp"
-         android:paddingTop="12dp"
          android:visibility="gone">
 
          <RelativeLayout
@@ -135,6 +134,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:paddingHorizontal="12dp"
             android:visibility="gone">
 
             <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -151,30 +151,70 @@
                android:indeterminate="true" />
          </RelativeLayout>
 
-         <TextView
+         <LinearLayout
+            android:id="@+id/view_recommendation_movies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="12dp"
-            android:text="Reviews"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-         <TextView
-            android:id="@+id/tv_info_reviews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
-            android:textColor="@color/white" />
+            <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="12dp"
+               android:text="Recommendations"
+               android:textColor="@color/white"
+               android:textSize="16sp"
+               android:textStyle="bold" />
 
-         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_reviews"
+            <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/rv_recommendation_movies"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:clipToPadding="false"
+               android:nestedScrollingEnabled="false"
+               android:padding="5dp" />
+         </LinearLayout>
+
+         <LinearLayout
+            android:id="@+id/view_reviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_marginTop="24dp"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginStart="12dp"
+               android:text="Reviews"
+               android:textColor="@color/white"
+               android:textSize="16sp"
+               android:textStyle="bold" />
+
+            <TextView
+               android:id="@+id/tv_info_reviews"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+               android:layout_marginTop="40dp"
+               android:textColor="@color/white"
+               android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/rv_reviews"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="24dp"
+               android:nestedScrollingEnabled="false"
+               android:paddingHorizontal="12dp"
+               app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+         </LinearLayout>
 
       </LinearLayout>
 
@@ -200,12 +240,15 @@
       android:id="@+id/fab_trailer"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="24dp"
       android:backgroundTint="@color/transparent"
+      android:fontFamily="@font/poppins_regular"
+      android:letterSpacing="0"
       android:text="Show Trailer"
       android:textAlignment="center"
       android:textAllCaps="false"
       android:textColor="@color/white"
+      android:textSize="16sp"
+      android:textStyle="bold"
       android:visibility="gone"
       app:collapsedSize="0dp"
       app:icon="@drawable/ic_arrow_circle_down"
