@@ -41,7 +41,7 @@ class HomeCarouselAdapter(private val viewPager: ViewPager2) :
             item.backdropPath?.let {
                ivBackdrop.setImage(it.setImageUrl())
                tvTitle.text = item.originalTitle
-               tvDate.text = "on ${item.releaseDate.dateToViewDate()}"
+               tvDate.text = item.releaseDate.dateToViewDate()
             }
          }
          itemView.setOnClickListener {

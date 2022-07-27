@@ -10,7 +10,6 @@
       android:textSize="12sp"
       android:textStyle="italic"
       android:textColor="@color/white"
-      android:paddingHorizontal="20dp"
       android:layout_marginBottom="5dp"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"/>
@@ -23,13 +22,14 @@
       android:layout_below="@id/tv_date"
       android:background="@color/grey"
       android:scaleType="centerCrop"
-      app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CornerSize10Percent" />
+      app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CornerSize5Percent" />
 
    <TextView
       android:id="@+id/tv_title"
-      android:textStyle="bold"
       android:textColor="@color/white"
       android:layout_marginTop="10dp"
+      android:textSize="12sp"
+      android:textStyle="bold"
       android:gravity="center_horizontal"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

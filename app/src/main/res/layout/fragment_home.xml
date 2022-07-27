@@ -30,7 +30,7 @@
                <include layout="@layout/shimmer_ph_home_movie_carousel" />
             </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                android:id="@+id/view_upcoming"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
@@ -38,36 +38,47 @@
                android:visibility="gone">
 
                <RelativeLayout
+                  android:id="@+id/view_upcoming_title"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="horizontal"
-                  android:padding="12dp">
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent">
 
                   <TextView
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="Upcoming Movies"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="12dp"
+                     android:text="Upcoming"
                      android:textColor="@color/white"
                      android:textSize="16sp"
                      android:textStyle="bold" />
 
-                  <TextView
+                  <com.google.android.material.button.MaterialButton
+                     android:id="@+id/btn_more_upcoming"
+                     style="@style/Widget.MaterialComponents.Button.TextButton"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
                      android:text="View more"
-                     android:textColor="@color/primary"
-                     android:textSize="14sp" />
+                     android:textAllCaps="false"
+                     android:textSize="12sp" />
 
                </RelativeLayout>
 
                <androidx.viewpager2.widget.ViewPager2
                   android:id="@+id/vp_upcoming"
-                  android:layout_width="match_parent"
-                  android:layout_height="240dp"
+                  android:layout_width="0dp"
+                  android:layout_height="0dp"
                   android:nestedScrollingEnabled="false"
-                  android:paddingHorizontal="40dp" />
-            </LinearLayout>
+                  android:paddingHorizontal="40dp"
+                  app:layout_constraintDimensionRatio="16:9"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toBottomOf="@id/view_upcoming_title" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.facebook.shimmer.ShimmerFrameLayout
                android:id="@+id/shimmer_popular"
@@ -89,24 +100,27 @@
                <RelativeLayout
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:padding="12dp">
+                  android:orientation="horizontal">
 
                   <TextView
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="Popular Movies"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="12dp"
+                     android:text="Popular"
                      android:textColor="@color/white"
                      android:textSize="16sp"
                      android:textStyle="bold" />
 
-                  <TextView
+                  <com.google.android.material.button.MaterialButton
+                     android:id="@+id/btn_more_popular"
+                     style="@style/Widget.MaterialComponents.Button.TextButton"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
                      android:text="View more"
-                     android:textColor="@color/primary"
-                     android:textSize="14sp" />
+                     android:textAllCaps="false"
+                     android:textSize="12sp" />
                </RelativeLayout>
 
                <androidx.recyclerview.widget.RecyclerView
@@ -139,24 +153,27 @@
                <RelativeLayout
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:padding="12dp">
+                  android:orientation="horizontal">
 
                   <TextView
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="Top Rated Movies"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="12dp"
+                     android:text="Top Rated"
                      android:textColor="@color/white"
                      android:textSize="16sp"
                      android:textStyle="bold" />
 
-                  <TextView
+                  <com.google.android.material.button.MaterialButton
+                     android:id="@+id/btn_more_top_rated"
+                     style="@style/Widget.MaterialComponents.Button.TextButton"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
                      android:text="View more"
-                     android:textColor="@color/primary"
-                     android:textSize="14sp" />
+                     android:textAllCaps="false"
+                     android:textSize="12sp" />
                </RelativeLayout>
 
                <androidx.recyclerview.widget.RecyclerView
@@ -189,24 +206,27 @@
                <RelativeLayout
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:padding="12dp">
+                  android:orientation="horizontal">
 
                   <TextView
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="In Theater Now"
+                     android:layout_centerVertical="true"
+                     android:layout_marginStart="12dp"
+                     android:text="In Theatre"
                      android:textColor="@color/white"
                      android:textSize="16sp"
                      android:textStyle="bold" />
 
-                  <TextView
+                  <com.google.android.material.button.MaterialButton
+                     android:id="@+id/btn_more_now_playing"
+                     style="@style/Widget.MaterialComponents.Button.TextButton"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
                      android:text="View more"
-                     android:textColor="@color/primary"
-                     android:textSize="14sp" />
+                     android:textAllCaps="false"
+                     android:textSize="12sp" />
                </RelativeLayout>
 
                <androidx.recyclerview.widget.RecyclerView
