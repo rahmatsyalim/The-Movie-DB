@@ -6,12 +6,9 @@ package com.syalim.themoviedb.domain.model
  * rahmatsyalim@gmail.com
  */
 data class MovieItemEntity(
-   val adult: Boolean? = false,
    val id: Int,
-   val originalTitle: String? = "Unknown",
+   val title: String,
    val posterPath: String? = null,
    val backdropPath: String? = null,
-   val releaseDate: String? = "TBA",
-   val voteAverage: Double? = 0.0,
-   val overview: String? = "No description"
+   val releaseDate: String,
 )

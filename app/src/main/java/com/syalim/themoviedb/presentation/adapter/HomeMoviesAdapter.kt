@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.syalim.themoviedb.common.dateGetYear
 import com.syalim.themoviedb.common.setImage
 import com.syalim.themoviedb.common.setImageUrl
 import com.syalim.themoviedb.databinding.ItemMovieHomeBinding
@@ -40,7 +41,7 @@ class HomeMoviesAdapter : RecyclerView.Adapter<HomeMoviesAdapter.HomeMoviesViewH
 
       fun bind(item: MovieItemEntity) {
          binding.apply {
-            tvTitle.text = item.originalTitle
+            tvTitle.text = "${item.title} (${item.releaseDate.dateGetYear()})"
             item.posterPath?.let {
                ivPoster.setImage(it.setImageUrl())
             }

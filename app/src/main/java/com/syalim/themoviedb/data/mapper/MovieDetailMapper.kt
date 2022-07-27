@@ -13,15 +13,15 @@ object MovieDetailMapper : BaseMapper<MovieDetailDto, MovieDetailEntity>() {
       return MovieDetailEntity(
          adult = dto.adult,
          backdropPath = dto.backdropPath,
-         genres = dto.genres?.map { it?.name ?: "Unknown" },
+         genres = dto.genres.map { it.name },
          id = dto.id,
-         originalTitle = dto.originalTitle,
+         title = dto.title,
          overview = dto.overview,
          posterPath = dto.posterPath,
-         productionCountries = dto.productionCountries?.map { it?.name ?: "Unknown" },
          releaseDate = dto.releaseDate,
-         status = dto.status,
-         voteAverage = dto.voteAverage
+         voteAverage = dto.voteAverage,
+         runtime = dto.runtime,
+         tagline = dto.tagline
       )
    }
 }

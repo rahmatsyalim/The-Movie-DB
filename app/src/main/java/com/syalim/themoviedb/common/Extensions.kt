@@ -11,10 +11,18 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
-import com.syalim.themoviedb.common.Constants.HTTP_ERROR
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_400
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_401
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_404
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_405
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_406
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_422
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_500
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_501
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_502
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_503
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_504
+import com.syalim.themoviedb.common.Constants.HTTP_ERROR_ELSE
 import com.syalim.themoviedb.common.Constants.IMAGE_URL
 import retrofit2.HttpException
 
@@ -52,16 +60,24 @@ fun String.setImageUrl(): String {
 
 fun HttpException.getErrorMessage(): String {
    return when (this.code()) {
+      400 -> HTTP_ERROR_400
       401 -> HTTP_ERROR_401
       404 -> HTTP_ERROR_404
+      405 -> HTTP_ERROR_405
+      406 -> HTTP_ERROR_406
+      422 -> HTTP_ERROR_422
       500 -> HTTP_ERROR_500
-      else -> HTTP_ERROR
+      501 -> HTTP_ERROR_501
+      502 -> HTTP_ERROR_502
+      503 -> HTTP_ERROR_503
+      504 -> HTTP_ERROR_504
+      else -> HTTP_ERROR_ELSE
    }
 }
 
 fun String?.dateToViewDate(): String {
-   if (this == "0000-00-00" || this == null || this == "") {
-      return "Unknown"
+   return if (this == "0000-00-00" || this.isNullOrBlank()) {
+      "Unknown"
    } else {
       val values = this.split("-".toRegex()).toTypedArray()
       val year = values[0]
@@ -79,19 +95,42 @@ fun String?.dateToViewDate(): String {
          "11" -> "Nov"
          else -> "Des"
       }
-      val day = when (values[2]) {
-         "01" -> "1"
-         "02" -> "2"
-         "03" -> "3"
-         "04" -> "4"
-         "05" -> "5"
-         "06" -> "6"
-         "07" -> "7"
-         "08" -> "8"
-         "09" -> "9"
-         else -> values[2]
+      val day = values[2].addZeroInFront()
+      "$month $day, $year"
+   }
+}
+
+fun String?.dateGetYear(): String {
+   return if (this == "0000-00-00" || this.isNullOrBlank()) {
+      "Unknown"
+   } else {
+      val values = this.split("-".toRegex()).toTypedArray()
+      values[0]
+   }
+}
+
+fun Int?.convertToTimeDuration(): String {
+   var hour: Int
+   var minute: Int
+   var result = "Unknown Duration"
+   this?.let {
+      if (it >= 60) {
+         hour = it / 60
+         minute = it - hour * 60
+         result = "${hour}h ${minute}m"
+      } else {
+         minute = it
+         result = "${minute}m"
       }
-      return "$month $day, $year"
+   }
+   return result
+}
+
+fun String.addZeroInFront(): String {
+   return if (this.length == 1) {
+      "0$this"
+   } else {
+      this
    }
 }
 

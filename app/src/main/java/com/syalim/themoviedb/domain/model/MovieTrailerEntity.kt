@@ -6,6 +6,6 @@ package com.syalim.themoviedb.domain.model
  * rahmatsyalim@gmail.com
  */
 data class MovieTrailerEntity(
-   val key: String? = null,
-   val id: String? = null
+   val key: String,
+   val id: String
 )

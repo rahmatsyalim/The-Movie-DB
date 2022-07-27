@@ -10,6 +10,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.syalim.themoviedb.R
+import com.syalim.themoviedb.common.convertToTimeDuration
 import com.syalim.themoviedb.common.dateToViewDate
 import com.syalim.themoviedb.common.setImage
 import com.syalim.themoviedb.common.setImageUrl
@@ -120,21 +121,36 @@ class MovieDetailFragment :
                   binding.tvInfoDetail.isVisible = false
                   binding.fabTrailer.setOnClickListener {
                      binding.viewTrailer.isVisible = !binding.viewTrailer.isVisible
+                     with(binding.fabTrailer) {
+                        if (text == "Show Trailer") {
+                           text = "Hide Trailer"
+                           icon = resources.getDrawable(R.drawable.ic_arrow_circle_up, requireContext().theme)
+                        } else {
+                           text = "Show Trailer"
+                           icon = resources.getDrawable(R.drawable.ic_arrow_circle_down, requireContext().theme)
+                        }
+                     }
                   }
                   binding.fabFavorite.setOnClickListener {
                      // TODO: save to db
                      binding.fabFavorite.imageTintList = ColorStateList.valueOf(
                         resources.getColor(
-                           R.color.primary,
+                           R.color.red,
                            requireContext().theme
                         )
                      )
                   }
                   viewLifecycleOwner.lifecycleScope.launch {
-                     binding.topBar.title = data.originalTitle
-                     binding.tvTitle.text = data.originalTitle
-                     binding.tvReleaseDate.text = "Release : ${data.releaseDate.dateToViewDate()}"
-                     binding.tvGenre.text = data.genres?.joinToString(", ")
+                     binding.topBar.title = data.title
+                     binding.tvTitle.text = data.title
+                     binding.tvReleaseGenreDuration.text =
+                        "${data.releaseDate.dateToViewDate()} · " +
+                           "${data.genres.joinToString(", ")} · " +
+                           data.runtime.convertToTimeDuration()
+                     data.tagline?.let {
+                        binding.tvTagline.text = "\"$it\""
+                        binding.tvTagline.isVisible = true
+                     }
                      binding.tvDesc.text = data.overview
                      data.posterPath?.let {
                         binding.ivPoster.setImage(it.setImageUrl())
@@ -159,27 +175,25 @@ class MovieDetailFragment :
          viewModel.movieTrailerState.collectLatest { state ->
             State.Handle(state)(
                onSuccess = { data ->
-                  data.key?.let {
-                     binding.youtubePlayerView.addYouTubePlayerListener(object :
-                        AbstractYouTubePlayerListener() {
-                        override fun onReady(youTubePlayer: YouTubePlayer) {
-                           youTubePlayer.cueVideo(it, 0f)
-                        }
+                  binding.youtubePlayerView.addYouTubePlayerListener(object :
+                     AbstractYouTubePlayerListener() {
+                     override fun onReady(youTubePlayer: YouTubePlayer) {
+                        youTubePlayer.cueVideo(data.key, 0f)
+                     }
 
-                        override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
-                           super.onVideoId(youTubePlayer, videoId)
-                           binding.progressBarTrailer.isVisible = false
-                        }
+                     override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
+                        super.onVideoId(youTubePlayer, videoId)
+                        binding.progressBarTrailer.isVisible = false
+                     }
 
-                        override fun onError(
-                           youTubePlayer: YouTubePlayer,
-                           error: PlayerConstants.PlayerError
-                        ) {
-                           super.onError(youTubePlayer, error)
-                           binding.progressBarTrailer.isVisible = false
-                        }
-                     })
-                  }
+                     override fun onError(
+                        youTubePlayer: YouTubePlayer,
+                        error: PlayerConstants.PlayerError
+                     ) {
+                        super.onError(youTubePlayer, error)
+                        binding.progressBarTrailer.isVisible = false
+                     }
+                  })
                }
             )
          }

@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName
 
 data class MovieTrailerItemDto(
     @SerializedName("id")
-    val id: String? = null,
+    val id: String,
     @SerializedName("iso_3166_1")
     val iso31661: String? = null,
     @SerializedName("iso_639_1")
     val iso6391: String? = null,
     @SerializedName("key")
-    val key: String? = null,
+    val key: String,
     @SerializedName("name")
     val name: String? = null,
     @SerializedName("official")

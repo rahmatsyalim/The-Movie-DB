@@ -101,7 +101,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    }
 
    private fun setViewPagerUpcoming() {
-      val carouselAdapter = HomeCarouselAdapter(binding.vpUpcoming)
+      val carouselAdapter = HomeCarouselAdapter()
 
       with(binding.vpUpcoming) {
          adapter = carouselAdapter

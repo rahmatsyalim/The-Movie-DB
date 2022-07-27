@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.syalim.themoviedb.common.dateToViewDate
 import com.syalim.themoviedb.common.setImage
 import com.syalim.themoviedb.common.setImageUrl
@@ -17,7 +16,7 @@ import com.syalim.themoviedb.domain.model.MovieItemEntity
  * Created by Rahmat Syalim on 2022/07/18
  * rahmatsyalim@gmail.com
  */
-class HomeCarouselAdapter(private val viewPager: ViewPager2) :
+class HomeCarouselAdapter :
    RecyclerView.Adapter<HomeCarouselAdapter.CarouselViewHolder>() {
 
    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarouselViewHolder {
@@ -40,7 +39,7 @@ class HomeCarouselAdapter(private val viewPager: ViewPager2) :
          binding.apply {
             item.backdropPath?.let {
                ivBackdrop.setImage(it.setImageUrl())
-               tvTitle.text = item.originalTitle
+               tvTitle.text = item.title
                tvDate.text = item.releaseDate.dateToViewDate()
             }
          }

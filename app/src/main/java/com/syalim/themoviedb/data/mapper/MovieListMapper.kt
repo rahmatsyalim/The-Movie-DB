@@ -14,14 +14,11 @@ object MovieListMapper : BaseMapper<MovieListDto, MovieListEntity>() {
       return MovieListEntity(
          results = dto.results?.map {
             MovieItemEntity(
-               adult = it.adult,
                id = it.id,
-               originalTitle = it.originalTitle,
+               title = it.title,
                posterPath = it.posterPath,
                backdropPath = it.backdropPath,
                releaseDate = it.releaseDate,
-               voteAverage = it.voteAverage,
-               overview = it.overview,
             )
          }
       )

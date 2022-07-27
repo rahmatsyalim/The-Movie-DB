@@ -6,7 +6,7 @@ import com.syalim.themoviedb.data.remote.dto.genre.GenreDto
 
 data class MovieDetailDto(
     @SerializedName("adult")
-    val adult: Boolean?,
+    val adult: Boolean,
     @SerializedName("backdrop_path")
     val backdropPath: String?,
     @SerializedName("belongs_to_collection")
@@ -14,7 +14,7 @@ data class MovieDetailDto(
     @SerializedName("budget")
     val budget: Int?,
     @SerializedName("genres")
-    val genres: List<GenreDto?>?,
+    val genres: List<GenreDto>,
     @SerializedName("homepage")
     val homepage: String?,
     @SerializedName("id")
@@ -36,7 +36,7 @@ data class MovieDetailDto(
     @SerializedName("production_countries")
     val productionCountries: List<ProductionCountryDto?>?,
     @SerializedName("release_date")
-    val releaseDate: String?,
+    val releaseDate: String,
     @SerializedName("revenue")
     val revenue: Int?,
     @SerializedName("runtime")
@@ -48,7 +48,7 @@ data class MovieDetailDto(
     @SerializedName("tagline")
     val tagline: String?,
     @SerializedName("title")
-    val title: String?,
+    val title: String,
     @SerializedName("video")
     val video: Boolean?,
     @SerializedName("vote_average")

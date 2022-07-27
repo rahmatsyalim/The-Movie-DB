@@ -6,10 +6,10 @@ package com.syalim.themoviedb.domain.model
  * rahmatsyalim@gmail.com
  */
 data class ReviewItemEntity(
-   val author: String? = "Unknown",
-   val avatarPath: String? = "",
-   val rating: Double? = 0.0,
-   val content: String? = "",
+   val author: String,
+   val avatarPath: String? = null,
+   val rating: Double? = null,
+   val content: String,
    val id: String,
-   val updatedAt: String? = null,
+   val updatedAt: String,
 )

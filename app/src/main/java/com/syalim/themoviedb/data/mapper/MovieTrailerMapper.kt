@@ -16,7 +16,7 @@ object MovieTrailerMapper : BaseMapper<MovieTrailerListDto, MovieTrailerEntity>(
             it.type.equals("Trailer") && it.site.equals("YouTube")
          }
       } else {
-         MovieTrailerItemDto()
+         MovieTrailerItemDto(id = "", key = "")
       }
       return MovieTrailerEntity(
          key = item.key,
