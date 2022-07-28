@@ -1,12 +1,8 @@
 package com.syalim.themoviedb.presentation
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
-import android.view.View
-import androidx.activity.viewModels
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -24,9 +20,8 @@ class MainActivity : AppCompatActivity() {
          .findNavController()
    }
 
-   val progrssBar by lazy { binding.progressBarLayout }
-
-   val ivFiler by lazy { binding.ivFilter }
+   val menuTune: MenuItem? by lazy { binding.toolbar.menu.findItem(R.id.menu_tune) }
+   val menuSearch: MenuItem? by lazy { binding.toolbar.menu.findItem(R.id.menu_search) }
 
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
@@ -37,10 +32,7 @@ class MainActivity : AppCompatActivity() {
    }
 
    private fun setAppBar() {
-      val topBarLayout = binding.topBarLayout
-      val bottomBar = binding.bottomNavigation
-
-      bottomBar.setupWithNavController(navController)
+      binding.bottomNavigation.setupWithNavController(navController)
 
       val topLevelDest = setOf(
          R.id.home_fragment,
@@ -48,46 +40,21 @@ class MainActivity : AppCompatActivity() {
       )
 
       navController.addOnDestinationChangedListener { _, destination, _ ->
-         binding.tvTitle.text = destination.label
-         binding.ivFilter.isVisible = destination.id == R.id.genre_fragment
+
+         binding.toolbar.title = destination.label
+         menuSearch?.isVisible = destination.id == R.id.home_fragment
+         menuTune?.isVisible = destination.id == R.id.genre_fragment
 
          topLevelDest.apply {
             if (this.contains(destination.id)) {
-               topBarLayout.showWithAnimation()
-               bottomBar.showWithAnimation()
+               binding.topAppbar.setExpanded(true)
+               binding.bottomAppBar.performShow()
             } else {
-               topBarLayout.hideWithAnimation(-topBarLayout.height.toFloat())
-               bottomBar.hideWithAnimation(bottomBar.height.toFloat())
+               binding.topAppbar.setExpanded(false)
+               binding.bottomAppBar.performHide()
             }
          }
       }
-
-   }
-
-   private fun View.showWithAnimation() {
-      this.isVisible = true
-      this.animate()
-         .setDuration(300L)
-         .translationY(0f)
-         .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-               super.onAnimationEnd(animation)
-               this@showWithAnimation.clearAnimation()
-            }
-         })
-   }
-
-   private fun View.hideWithAnimation(translation: Float) {
-      this.animate()
-         .setDuration(300L)
-         .translationY(translation)
-         .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-               super.onAnimationEnd(animation)
-               this@hideWithAnimation.clearAnimation()
-               this@hideWithAnimation.isVisible = false
-            }
-         })
    }
 
 }

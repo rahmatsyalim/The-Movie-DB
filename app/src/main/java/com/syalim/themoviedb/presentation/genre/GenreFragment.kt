@@ -45,8 +45,8 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private lateinit var genreFilterAdapter: GenreFilterAdapter
 
-   private val ivFilter by lazy {
-      (requireActivity() as MainActivity).ivFiler
+   private val menuTune by lazy {
+      (requireActivity() as MainActivity).menuTune
    }
 
    private val pickedGenre: ArrayList<String> = arrayListOf()
@@ -75,11 +75,12 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
       moviesAdapter.retry()
 
-      ivFilter.setOnClickListener {
+      menuTune?.setOnMenuItemClickListener {
          setBottomSheetAkun()
          viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getGenre()
          }
+         return@setOnMenuItemClickListener false
       }
 
    }

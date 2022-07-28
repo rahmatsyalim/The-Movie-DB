@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
    xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:id="@+id/container"
    android:layout_width="match_parent"
    android:layout_height="match_parent">
 
@@ -13,7 +14,7 @@
       android:scaleType="centerCrop" />
 
    <com.google.android.material.appbar.AppBarLayout
-      android:id="@+id/top_bar_layout"
+      android:id="@+id/top_appbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@color/transparent"
@@ -274,7 +275,7 @@
       app:icon="@drawable/ic_favorite"
       app:iconPadding="6dp"
       app:iconTint="@color/white"
-      app:layout_anchor="@id/top_bar_layout"
+      app:layout_anchor="@id/top_appbar"
       app:layout_anchorGravity="end|bottom"
       app:rippleColor="@color/primary"
       app:tint="@color/white" />
@@ -297,7 +298,7 @@
       app:icon="@drawable/ic_arrow_circle_down"
       app:iconPadding="6dp"
       app:iconTint="@color/white"
-      app:layout_anchor="@id/top_bar_layout"
+      app:layout_anchor="@id/top_appbar"
       app:layout_anchorGravity="start|bottom"
       app:rippleColor="@color/primary"
       app:tint="@color/white" />

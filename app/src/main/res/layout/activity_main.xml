@@ -1,53 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
    xmlns:app="http://schemas.android.com/apk/res-auto"
    xmlns:tools="http://schemas.android.com/tools"
    android:layout_width="match_parent"
    android:layout_height="match_parent"
-   android:animateLayoutChanges="true"
    tools:context=".presentation.MainActivity">
 
    <com.google.android.material.appbar.AppBarLayout
-      android:id="@+id/top_bar_layout"
+      android:id="@+id/top_appbar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:layout_alignParentTop="true"
-      android:background="@color/black">
+      android:layout_height="wrap_content"
+      android:background="@color/black"
+      app:liftOnScroll="true">
 
-      <RelativeLayout
-         android:id="@+id/top_bar"
+      <com.google.android.material.appbar.MaterialToolbar
+         android:id="@+id/toolbar"
          android:layout_width="match_parent"
-         android:layout_height="?attr/actionBarSize"
-         android:paddingHorizontal="12dp">
+         android:layout_height="wrap_content"
+         app:layout_scrollFlags="scroll|enterAlways|snap"
+         app:logo="@drawable/ic_logo_top_bar"
+         app:logoAdjustViewBounds="true"
+         app:logoDescription="@string/app_name"
+         app:menu="@menu/menu_top_main"
+         app:titleCentered="true"
+         app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
+         app:titleTextColor="@color/white"
+         tools:ignore="RtlSymmetry" />
 
-         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_logo_top_bar" />
-
-         <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-         <ImageView
-            android:id="@+id/iv_filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="5dp"
-            android:src="@drawable/ic_filter_top"
-            app:tint="@color/white" />
-      </RelativeLayout>
    </com.google.android.material.appbar.AppBarLayout>
 
    <androidx.fragment.app.FragmentContainerView
@@ -55,34 +34,28 @@
       android:name="androidx.navigation.fragment.NavHostFragment"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@id/top_bar_layout"
+      android:layout_below="@id/top_appbar"
       app:defaultNavHost="true"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
       app:navGraph="@navigation/nav_main" />
 
-   <LinearLayout
-      android:id="@+id/progress_bar_layout"
+   <com.google.android.material.bottomappbar.BottomAppBar
+      android:id="@+id/bottom_app_bar"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_below="@id/top_bar_layout"
-      android:background="@color/black"
-      android:gravity="center"
-      android:visibility="gone">
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      app:contentInsetStart="0dp">
 
-      <com.google.android.material.progressindicator.CircularProgressIndicator
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:indeterminate="true" />
+      <com.google.android.material.bottomnavigation.BottomNavigationView
+         android:id="@+id/bottom_navigation"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         app:backgroundTint="@color/black"
+         app:itemIconSize="20dp"
+         app:itemIconTint="@drawable/selectable_ic_color"
+         app:itemTextColor="@drawable/selectable_ic_color"
+         app:menu="@menu/menu_bottom_main" />
 
-   </LinearLayout>
+   </com.google.android.material.bottomappbar.BottomAppBar>
 
-   <com.google.android.material.bottomnavigation.BottomNavigationView
-      android:id="@+id/bottom_navigation"
-      android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:layout_alignParentBottom="true"
-      app:backgroundTint="@color/black"
-      app:itemIconTint="@drawable/selectable_ic_color"
-      app:itemTextColor="@drawable/selectable_ic_color"
-      app:menu="@menu/menu_bottom_main" />
-
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
