@@ -26,6 +26,8 @@ import com.syalim.themoviedb.common.Constants.HTTP_ERROR_504
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_ELSE
 import com.syalim.themoviedb.common.Constants.IMAGE_URL
 import retrofit2.HttpException
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 
 /**
@@ -144,6 +146,16 @@ fun String.addZeroInFront(): String {
    } else {
       this
    }
+}
+
+fun Number.roundOneDecimal(): Double {
+   val decimalFormat = DecimalFormat("#.#")
+   decimalFormat.roundingMode = RoundingMode.CEILING
+   return decimalFormat.format(this).toDouble()
+}
+
+fun Number.toPercentInt(): Int {
+   return (this.roundOneDecimal() * 10).toInt()
 }
 
 fun Activity.getScreenHeight(): Int {

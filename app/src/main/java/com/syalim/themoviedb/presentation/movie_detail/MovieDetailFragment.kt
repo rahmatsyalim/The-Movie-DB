@@ -83,10 +83,12 @@ class MovieDetailFragment :
          onError = {
             binding.tvInfoReviews.isVisible = true
             binding.tvInfoReviews.text = it
+            binding.viewReviews.isVisible = true
          },
          onEmpty = {
             binding.tvInfoReviews.isVisible = true
-            binding.tvInfoReviews.text = "No reviews"
+            binding.tvInfoReviews.text = "No reviews."
+            binding.viewReviews.isVisible = true
          },
          onSuccess = {
             binding.tvInfoReviews.isVisible = false
@@ -159,12 +161,15 @@ class MovieDetailFragment :
                   }
                   binding.fabFavorite.setOnClickListener {
                      // TODO: save to db
-                     binding.fabFavorite.imageTintList = ColorStateList.valueOf(
-                        resources.getColor(
-                           R.color.red,
-                           requireContext().theme
+                     binding.fabFavorite.apply {
+                        iconTint = ColorStateList.valueOf(
+                           resources.getColor(
+                              R.color.red,
+                              requireContext().theme
+                           )
                         )
-                     )
+                        text = "Added to favorites"
+                     }
                   }
                   viewLifecycleOwner.lifecycleScope.launch {
                      binding.topBar.title = data.title
@@ -180,6 +185,11 @@ class MovieDetailFragment :
                         }
                      } else {
                         binding.tvTagline.isVisible = false
+                     }
+                     binding.viewVote.isVisible = true
+                     data.voteAverage?.let {
+                        binding.progressBarVoteAverage.progress = it.toPercentInt()
+                        binding.tvVoteAverage.text = it.roundOneDecimal().toString()
                      }
                      binding.tvDesc.text = data.overview
                      data.posterPath?.let {
