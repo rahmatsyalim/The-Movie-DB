@@ -10,6 +10,7 @@ import android.view.WindowInsets
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_400
@@ -24,6 +25,7 @@ import com.syalim.themoviedb.common.Constants.HTTP_ERROR_502
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_503
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_504
 import com.syalim.themoviedb.common.Constants.HTTP_ERROR_ELSE
+import com.syalim.themoviedb.common.Constants.IMAGE_BACKDROP_BIG_SIZE
 import com.syalim.themoviedb.common.Constants.IMAGE_URL
 import retrofit2.HttpException
 import java.math.RoundingMode
@@ -51,25 +53,36 @@ fun View.showSnackBar(message: String, indefinite: Boolean) {
    }.show()
 }
 
-fun ImageView.loadImage(uri: String) {
+fun ImageView.loadImage(uri: String, imageSize: String) {
    Glide
       .with(context)
-      .load(uri.setImageUrl())
+      .load(uri.setImageUrl(imageSize))
+      .diskCacheStrategy(DiskCacheStrategy.ALL)
       .error(resources.getDrawable(R.drawable.placeholder_image, context.theme))
       .placeholder(resources.getDrawable(R.drawable.placeholder_image, context.theme))
       .into(this)
 }
 
-fun ImageView.loadAvatarImage(uri: String) {
-   Glide.with(context)
-      .load(uri.setImageUrl())
+fun ImageView.loadProfileImage(uri: String, imageSize: String) {
+   Glide
+      .with(context)
+      .load(uri.setImageUrl(imageSize))
+      .diskCacheStrategy(DiskCacheStrategy.ALL)
       .error(resources.getDrawable(R.drawable.placeholder_avatar, context.theme))
       .placeholder(resources.getDrawable(R.drawable.placeholder_avatar, context.theme))
       .into(this)
 }
 
-fun String.setImageUrl(): String {
-   return IMAGE_URL + this
+fun ImageView.loadBackgroundImage(uri: String) {
+   Glide
+      .with(context)
+      .load(uri.setImageUrl(IMAGE_BACKDROP_BIG_SIZE))
+      .diskCacheStrategy(DiskCacheStrategy.ALL)
+      .into(this)
+}
+
+fun String.setImageUrl(imageSize: String): String {
+   return IMAGE_URL + imageSize + this
 }
 
 fun HttpException.getErrorMessage(): String {

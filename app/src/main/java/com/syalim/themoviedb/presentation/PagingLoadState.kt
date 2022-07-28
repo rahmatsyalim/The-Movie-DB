@@ -15,7 +15,7 @@ class PagingLoadState<T : Any, VH : RecyclerView.ViewHolder>(val adapter: Paging
       onLoading: ((Boolean) -> Unit)? = null,
       onError: ((String) -> Unit)? = null,
       onEmpty: (() -> Unit)? = null,
-      onSuccess: (() -> Unit)? = null
+      onLoaded: (() -> Unit)? = null
    ) {
       adapter.addLoadStateListener { loadState ->
          loadState.apply {
@@ -45,7 +45,7 @@ class PagingLoadState<T : Any, VH : RecyclerView.ViewHolder>(val adapter: Paging
             if (source.refresh is LoadState.NotLoading
                && adapter.itemCount > 0
             ) {
-               onSuccess?.invoke()
+               onLoaded?.invoke()
             }
          }
       }

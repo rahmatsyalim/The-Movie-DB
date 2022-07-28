@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.syalim.themoviedb.common.Constants.IMAGE_POSTER_THUMBNAIL_SIZE
 import com.syalim.themoviedb.common.dateGetYear
 import com.syalim.themoviedb.common.loadImage
 import com.syalim.themoviedb.databinding.ItemMovieBinding
@@ -42,7 +43,7 @@ class HomeMoviesAdapter : RecyclerView.Adapter<HomeMoviesAdapter.HomeMoviesViewH
          binding.apply {
             tvTitle.text = "${item.title} (${item.releaseDate.dateGetYear()})"
             item.posterPath?.let {
-               ivPoster.loadImage(it)
+               ivPoster.loadImage(it, IMAGE_POSTER_THUMBNAIL_SIZE)
             }
          }
          itemView.setOnClickListener {

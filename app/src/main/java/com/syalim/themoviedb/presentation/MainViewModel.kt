@@ -34,15 +34,15 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel() {
 
    private val _upcomingState: MutableStateFlow<State<List<MovieItemEntity>>> =
-      MutableStateFlow(State())
+      MutableStateFlow(State.Empty())
    private val _popularState: MutableStateFlow<State<List<MovieItemEntity>>> =
-      MutableStateFlow(State())
+      MutableStateFlow(State.Empty())
    private val _nowPlayingState: MutableStateFlow<State<List<MovieItemEntity>>> =
-      MutableStateFlow(State())
+      MutableStateFlow(State.Empty())
    private val _topRatedState: MutableStateFlow<State<List<MovieItemEntity>>> =
-      MutableStateFlow(State())
+      MutableStateFlow(State.Empty())
    private val _filterState: MutableStateFlow<State<List<GenreItemEntity>>> =
-      MutableStateFlow(State())
+      MutableStateFlow(State.Empty())
 
    val upcomingState: StateFlow<State<List<MovieItemEntity>>> get() = _upcomingState
    val popularState: StateFlow<State<List<MovieItemEntity>>> get() = _popularState

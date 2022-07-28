@@ -13,6 +13,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.common.*
+import com.syalim.themoviedb.common.Constants.IMAGE_POSTER_DETAIL_SIZE
 import com.syalim.themoviedb.databinding.FragmentMovieDetailBinding
 import com.syalim.themoviedb.presentation.PagingLoadState
 import com.syalim.themoviedb.presentation.State
@@ -46,40 +47,34 @@ class MovieDetailFragment :
          findNavController().navigateUp()
       }
 
-      viewLifecycleOwner.lifecycleScope.launch {
+      if (viewModel.detailPageState.value is State.Default){
          viewModel.loadDetails(id = arg.id)
       }
-
-      collectState()
-
-      collectDetailState()
-
-      collectTrailerState()
 
       setRecommendationMoviesRecyclerView()
 
       setReviewsRecyclerView()
 
-      reviewsLoadStateListener()
+      collectDetailPageState()
+
+      collectDetailState()
+
+      collectTrailerState()
 
       initYoutubePlayer()
 
    }
 
-   private fun collectState() {
+   private fun collectDetailPageState() {
       viewLifecycleOwner.lifecycleScope.launch {
-         viewModel.detailState.collect { state ->
-            State.Handle(state)(
-               onLoading = {
-                  if (!it) collectReviews()
-               }
-            )
+         viewModel.detailPageState.collectLatest { state ->
+            if (state is State.Loaded) collectReviews()
          }
       }
    }
 
-   private fun reviewsLoadStateListener() {
-      PagingLoadState(reviewsAdapter)(
+   private fun ReviewsPagerAdapter.setLoadStateListener() {
+      PagingLoadState(this)(
          onError = {
             binding.tvInfoReviews.isVisible = true
             binding.tvInfoReviews.text = it
@@ -90,7 +85,7 @@ class MovieDetailFragment :
             binding.tvInfoReviews.text = "No reviews."
             binding.viewReviews.isVisible = true
          },
-         onSuccess = {
+         onLoaded = {
             binding.tvInfoReviews.isVisible = false
             binding.viewReviews.isVisible = true
          }
@@ -100,6 +95,7 @@ class MovieDetailFragment :
    private fun setReviewsRecyclerView() {
       reviewsAdapter = ReviewsPagerAdapter()
       binding.rvReviews.adapter = reviewsAdapter
+      reviewsAdapter.setLoadStateListener()
    }
 
    private fun setRecommendationMoviesRecyclerView() {
@@ -130,7 +126,7 @@ class MovieDetailFragment :
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.recommendationMoviesState.collectLatest { state ->
             State.Handle(state)(
-               onSuccess = {
+               onLoaded = {
                   this@collectRecommendationMovies.data.submitList(it)
                   binding.viewRecommendationMovies.isVisible = true
                }
@@ -146,7 +142,7 @@ class MovieDetailFragment :
                onError = {
                   binding.root.showSnackBar(it, true)
                },
-               onSuccess = { data ->
+               onLoaded = { data ->
                   binding.fabTrailer.setOnClickListener {
                      binding.viewTrailer.isVisible = !binding.viewTrailer.isVisible
                      with(binding.fabTrailer) {
@@ -193,10 +189,10 @@ class MovieDetailFragment :
                      }
                      binding.tvDesc.text = data.overview
                      data.posterPath?.let {
-                        binding.ivPoster.loadImage(it)
+                        binding.ivPoster.loadImage(it, IMAGE_POSTER_DETAIL_SIZE)
                      }
                      data.backdropPath?.let {
-                        binding.ivBackdrop.loadImage(it)
+                        binding.ivBackground.loadBackgroundImage(it)
                      }
                      binding.shimmerMovieDetail.apply {
                         stopShimmer()
@@ -216,7 +212,7 @@ class MovieDetailFragment :
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.movieTrailerState.collectLatest { state ->
             State.Handle(state)(
-               onSuccess = { data ->
+               onLoaded = { data ->
                   binding.youtubePlayerView.addYouTubePlayerListener(object :
                      AbstractYouTubePlayerListener() {
                      override fun onReady(youTubePlayer: YouTubePlayer) {

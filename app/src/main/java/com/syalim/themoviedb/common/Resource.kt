@@ -14,10 +14,10 @@ sealed class Resource<T>(val data: T? = null, val message: String? = null, val s
       operator fun invoke(
          onSuccess: (T?) -> Unit,
          onError: (String?) -> Unit,
-         onLoading: (Boolean) -> Unit
+         onLoading: () -> Unit
       ) {
-         onLoading(resource is Loading)
-         onError(resource.message)
+         if (resource is Loading) onLoading()
+         if (resource is Error) onError(resource.message)
          if (resource is Success) onSuccess(resource.data)
       }
    }

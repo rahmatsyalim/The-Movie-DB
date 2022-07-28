@@ -3,9 +3,13 @@ package com.syalim.themoviedb.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.syalim.themoviedb.common.Constants.ERROR_NO_CONNECTION
 import com.syalim.themoviedb.common.Resource
 import com.syalim.themoviedb.common.getErrorMessage
-import com.syalim.themoviedb.data.mapper.*
+import com.syalim.themoviedb.data.mapper.GenreListMapper
+import com.syalim.themoviedb.data.mapper.MovieDetailMapper
+import com.syalim.themoviedb.data.mapper.MovieListMapper
+import com.syalim.themoviedb.data.mapper.MovieTrailerMapper
 import com.syalim.themoviedb.data.paging.data_source.MovieReviewPagingSource
 import com.syalim.themoviedb.data.paging.data_source.MoviesByGenrePagingSource
 import com.syalim.themoviedb.data.remote.network.MovieApi
@@ -36,63 +40,23 @@ class MovieRepositoryImpl @Inject constructor(
    }
 
    override fun getHomeUpcomingMovies(): Flow<Resource<List<MovieItemEntity>>> {
-      return flow {
-         emit(Resource.Loading())
-         try {
-            val response = movieApi.getUpcomingMovies(page = 1)
-            val result = MovieListMapper.convert(response).results
-            emit(Resource.Success(result))
-         } catch (e: HttpException) {
-            emit(Resource.Error(e.getErrorMessage()))
-         } catch (e: IOException) {
-            emit(Resource.Error("Couldn't reach server"))
-         }
-      }.flowOn(Dispatchers.IO)
+      return handleRequest { MovieListMapper.convert(movieApi.getUpcomingMovies(page = 1)).results }
+         .flowOn(Dispatchers.IO)
    }
 
    override fun getHomePopularMovies(): Flow<Resource<List<MovieItemEntity>>> {
-      return flow {
-         emit(Resource.Loading())
-         try {
-            val response = movieApi.getPopularMovies(page = 1)
-            val result = MovieListMapper.convert(response).results
-            emit(Resource.Success(result))
-         } catch (e: HttpException) {
-            emit(Resource.Error(e.getErrorMessage()))
-         } catch (e: IOException) {
-            emit(Resource.Error("Couldn't reach server"))
-         }
-      }.flowOn(Dispatchers.IO)
+      return handleRequest { MovieListMapper.convert(movieApi.getPopularMovies(page = 1)).results }
+         .flowOn(Dispatchers.IO)
    }
 
    override fun getHomeNowPlayingMovies(): Flow<Resource<List<MovieItemEntity>>> {
-      return flow {
-         emit(Resource.Loading())
-         try {
-            val response = movieApi.getNowPlayingMovies(page = 1)
-            val result = MovieListMapper.convert(response).results
-            emit(Resource.Success(result))
-         } catch (e: HttpException) {
-            emit(Resource.Error(e.getErrorMessage()))
-         } catch (e: IOException) {
-            emit(Resource.Error("Couldn't reach server"))
-         }
-      }.flowOn(Dispatchers.IO)
+      return handleRequest { MovieListMapper.convert(movieApi.getNowPlayingMovies(page = 1)).results }
+         .flowOn(Dispatchers.IO)
    }
 
    override fun getHomeTopRatedMovies(): Flow<Resource<List<MovieItemEntity>>> {
-      return flow {
-         emit(Resource.Loading())
-         try {
-            val response = movieApi.getTopRatedMovies(page = 1)
-            val result = MovieListMapper.convert(response).results
-            emit(Resource.Success(result))
-         } catch (e: HttpException) {
-            emit(Resource.Error(e.getErrorMessage()))
-         } catch (e: IOException) {
-            emit(Resource.Error("Couldn't reach server"))
-         }
-      }.flowOn(Dispatchers.IO)
+      return handleRequest { MovieListMapper.convert(movieApi.getTopRatedMovies(page = 1)).results }
+         .flowOn(Dispatchers.IO)
    }
 
    override fun getMoviesByGenre(genre: String?): Flow<PagingData<MovieItemEntity>> {
@@ -108,33 +72,13 @@ class MovieRepositoryImpl @Inject constructor(
    }
 
    override fun getMovieGenres(): Flow<Resource<List<GenreItemEntity>>> {
-      return flow {
-         emit(Resource.Loading())
-         try {
-            val response = movieApi.getMovieGenres()
-            val result = GenreListMapper.convert(response).genres
-            emit(Resource.Success(result))
-         } catch (e: HttpException) {
-            emit(Resource.Error(e.getErrorMessage()))
-         } catch (e: IOException) {
-            emit(Resource.Error("Couldn't reach server"))
-         }
-      }.flowOn(Dispatchers.IO)
+      return handleRequest { GenreListMapper.convert(movieApi.getMovieGenres()).genres }
+         .flowOn(Dispatchers.IO)
    }
 
    override fun getMovieDetail(id: String): Flow<Resource<MovieDetailEntity>> {
-      return flow {
-         emit(Resource.Loading())
-         try {
-            val response = movieApi.getMovieDetails(id = id)
-            val result = MovieDetailMapper.convert(response)
-            emit(Resource.Success(result))
-         } catch (e: HttpException) {
-            emit(Resource.Error(e.getErrorMessage()))
-         } catch (e: IOException) {
-            emit(Resource.Error("Couldn't reach server"))
-         }
-      }.flowOn(Dispatchers.IO)
+      return handleRequest { MovieDetailMapper.convert(movieApi.getMovieDetails(id = id)) }
+         .flowOn(Dispatchers.IO)
    }
 
    override fun getMovieReviews(id: String): Flow<PagingData<ReviewItemEntity>> {
@@ -150,33 +94,27 @@ class MovieRepositoryImpl @Inject constructor(
    }
 
    override fun getMovieTrailer(id: String): Flow<Resource<MovieTrailerEntity>> {
-      return flow {
-         emit(Resource.Loading())
-         try {
-            val response = movieApi.getMovieTrailer(id = id)
-            val result = MovieTrailerMapper.convert(response)
-            emit(Resource.Success(result))
-         } catch (e: HttpException) {
-            emit(Resource.Error(e.getErrorMessage()))
-         } catch (e: IOException) {
-            emit(Resource.Error("Couldn't reach server"))
-         }
-      }.flowOn(Dispatchers.IO)
+      return handleRequest { MovieTrailerMapper.convert(movieApi.getMovieTrailer(id = id)) }
+         .flowOn(Dispatchers.IO)
    }
 
    override fun getRecommendationMovies(id: String): Flow<Resource<List<MovieItemEntity>>> {
+      return handleRequest { MovieListMapper.convert(movieApi.getRecommendationMovies(id = id, page = 1)).results }
+         .flowOn(Dispatchers.IO)
+   }
+
+   private fun <T>handleRequest(request: suspend () -> T?): Flow<Resource<T>>{
       return flow {
          emit(Resource.Loading())
          try {
-            val response = movieApi.getRecommendationMovies(id = id, page = 1)
-            val result = MovieListMapper.convert(response).results
+            val result = request()
             emit(Resource.Success(result))
          } catch (e: HttpException) {
             emit(Resource.Error(e.getErrorMessage()))
          } catch (e: IOException) {
-            emit(Resource.Error("Couldn't reach server"))
+            emit(Resource.Error(ERROR_NO_CONNECTION))
          }
-      }.flowOn(Dispatchers.IO)
+      }
    }
 
 }

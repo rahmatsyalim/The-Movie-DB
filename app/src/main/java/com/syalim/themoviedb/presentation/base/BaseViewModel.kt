@@ -23,18 +23,18 @@ abstract class BaseViewModel : ViewModel() {
          Resource.Handle(result)(
             onLoading = {
                state.value = if (isFirstLoad) {
-                  State(isFirstLoading = it)
+                  State.FirstLoading()
                } else {
-                  State(isLoading = it)
+                  State.Loading()
                }
             },
             onError = {
-               state.value = State(errorMsg = it)
+               state.value = State.Error(it)
             },
             onSuccess = {
                state.value = it?.let {
-                  State(data = it)
-               } ?: State(isEmpty = true)
+                  State.Loaded(it)
+               } ?: State.Empty()
             }
          )
       }

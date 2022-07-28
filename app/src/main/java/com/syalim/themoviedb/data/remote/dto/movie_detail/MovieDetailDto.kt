@@ -12,7 +12,7 @@ data class MovieDetailDto(
     @SerializedName("belongs_to_collection")
     val belongsToCollection: Any?,
     @SerializedName("budget")
-    val budget: Int?,
+    val budget: Long?,
     @SerializedName("genres")
     val genres: List<GenreDto>,
     @SerializedName("homepage")
@@ -38,7 +38,7 @@ data class MovieDetailDto(
     @SerializedName("release_date")
     val releaseDate: String,
     @SerializedName("revenue")
-    val revenue: Int?,
+    val revenue: Long?,
     @SerializedName("runtime")
     val runtime: Int?,
     @SerializedName("spoken_languages")

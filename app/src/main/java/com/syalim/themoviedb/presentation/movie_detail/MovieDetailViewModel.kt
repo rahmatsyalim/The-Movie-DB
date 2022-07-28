@@ -34,31 +34,33 @@ class MovieDetailViewModel @Inject constructor(
    private val getRecommendationMoviesUseCase: GetRecommendationMoviesUseCase
 ) : BaseViewModel() {
 
+   private val _detailPageState: MutableStateFlow<State<Any>> = MutableStateFlow(State.Default())
+
    private val _movieDetailState: MutableStateFlow<State<MovieDetailEntity>> =
-      MutableStateFlow(State())
+      MutableStateFlow(State.Default())
    private val _movieTrailerState: MutableStateFlow<State<MovieTrailerEntity>> =
-      MutableStateFlow(State())
-   private val _detailState: MutableStateFlow<State<Any>> = MutableStateFlow(State())
+      MutableStateFlow(State.Default())
    private val _recommendationMoviesState: MutableStateFlow<State<List<MovieItemEntity>>> =
-      MutableStateFlow(State())
+      MutableStateFlow(State.Default())
+
+   val detailPageState: StateFlow<State<Any>> get() = _detailPageState
 
    val movieDetailState: StateFlow<State<MovieDetailEntity>> get() = _movieDetailState
    val movieTrailerState: StateFlow<State<MovieTrailerEntity>> get() = _movieTrailerState
-   val detailState: StateFlow<State<Any>> get() = _detailState
    val recommendationMoviesState: StateFlow<State<List<MovieItemEntity>>> get() = _recommendationMoviesState
 
    fun loadDetails(id: String) = viewModelScope.launch {
-      _detailState.emit(State(isLoading = true))
-      getMovieDetail(id)
       getMovieTrailer(id)
       getRecommendationMovies(id)
+      getMovieDetail(id)
       getMovieReview(id)
-      _detailState.emit(State(isLoading = false))
+      _detailPageState.value = State.Loaded("")
    }
 
    var movieReviews: Flow<PagingData<ReviewItemEntity>> = flowOf(PagingData.empty())
 
    private fun getMovieReview(id: String) {
+
       movieReviews = getMovieReviewsUseCase.invoke(id).cachedIn(viewModelScope)
    }
 

@@ -106,7 +106,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
                onLoading = {
                   bindingBottomSheet.progressBar.isVisible = it
                },
-               onSuccess = {
+               onLoaded = {
                   genreFilterAdapter.data.submitList(it)
                }
             )
@@ -172,7 +172,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
             binding.rvMovies.isVisible = false
             binding.shimmer.isVisible = false
          },
-         onSuccess = {
+         onLoaded = {
             binding.tvInfoGenre.isVisible = false
             binding.shimmer.apply {
                stopShimmer()

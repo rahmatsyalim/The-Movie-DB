@@ -6,7 +6,7 @@
    android:layout_height="match_parent">
 
    <ImageView
-      android:id="@+id/iv_backdrop"
+      android:id="@+id/iv_background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:adjustViewBounds="true"
@@ -271,7 +271,7 @@
       android:textAllCaps="false"
       android:textColor="@color/white"
       android:textSize="12sp"
-      android:visibility="visible"
+      android:visibility="gone"
       app:icon="@drawable/ic_favorite"
       app:iconPadding="6dp"
       app:iconTint="@color/white"
@@ -293,7 +293,7 @@
       android:textAllCaps="false"
       android:textColor="@color/white"
       android:textSize="12sp"
-      android:visibility="visible"
+      android:visibility="gone"
       app:collapsedSize="0dp"
       app:icon="@drawable/ic_arrow_circle_down"
       app:iconPadding="6dp"

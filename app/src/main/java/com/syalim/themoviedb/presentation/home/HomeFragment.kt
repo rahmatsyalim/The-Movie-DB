@@ -54,10 +54,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    private fun setRecyclerViewPopular() {
       val recyclerAdapter = HomeMoviesAdapter()
-      with(recyclerAdapter) {
-         binding.rvPopular.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-         binding.rvPopular.adapter = this
+      recyclerAdapter.apply {
          setOnItemClickListener {
             val bundle = Bundle().apply {
                putString("id", it.id.toString())
@@ -66,14 +63,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          }
          collectPopular()
       }
+      binding.rvPopular.apply {
+         layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+         adapter = recyclerAdapter
+      }
    }
 
    private fun setRecyclerViewNowPlaying() {
       val recyclerAdapter = HomeMoviesAdapter()
-      with(recyclerAdapter) {
-         binding.rvInTheatre.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-         binding.rvInTheatre.adapter = recyclerAdapter
+      recyclerAdapter.apply {
          setOnItemClickListener {
             val bundle = Bundle().apply {
                putString("id", it.id.toString())
@@ -82,14 +81,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          }
          collectNowPlaying()
       }
+      binding.rvInTheater.apply {
+         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+         adapter = recyclerAdapter
+      }
    }
 
    private fun setRecyclerViewTopRated() {
       val recyclerAdapter = HomeMoviesAdapter()
-      with(recyclerAdapter) {
-         binding.rvTopRated.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-         binding.rvTopRated.adapter = recyclerAdapter
+      recyclerAdapter.apply {
          setOnItemClickListener {
             val bundle = Bundle().apply {
                putString("id", it.id.toString())
@@ -98,29 +98,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          }
          collectTopRated()
       }
+      binding.rvTopRated.apply {
+         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+         adapter = recyclerAdapter
+      }
    }
 
    private fun setViewPagerUpcoming() {
       val carouselAdapter = HomeCarouselAdapter()
-
-      with(binding.vpUpcoming) {
-         adapter = carouselAdapter
+      carouselAdapter.apply {
+         setOnItemClickListener {
+            val bundle = Bundle().apply {
+               putString("id", it.id.toString())
+            }
+            findNavController().navigate(R.id.action_home_fragment_to_movie_detail_fragment, bundle)
+         }
+         collectUpcoming()
+      }
+      binding.vpUpcoming.apply {
          offscreenPageLimit = 3
          clipToPadding = false
          clipChildren = false
          getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+         setCarouselTransformer()
+         adapter = carouselAdapter
       }
-
-      carouselAdapter.setOnItemClickListener {
-         val bundle = Bundle().apply {
-            putString("id", it.id.toString())
-         }
-         findNavController().navigate(R.id.action_home_fragment_to_movie_detail_fragment, bundle)
-      }
-
-      setCarouselTransformer()
-
-      carouselAdapter.collectUpcoming()
 
    }
 
@@ -128,7 +130,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.popularState.collectLatest { state ->
             State.Handle(state)(
-               onSuccess = {
+               onLoaded = {
                   this@collectPopular.data.submitList(it)
                   binding.shimmerPopular.apply {
                      stopShimmer()
@@ -145,7 +147,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.nowPlayingState.collectLatest { state ->
             State.Handle(state)(
-               onSuccess = {
+               onLoaded = {
                   binding.shimmerNowPlaying.apply {
                      this@collectNowPlaying.data.submitList(it)
                      stopShimmer()
@@ -162,7 +164,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.topRatedState.collectLatest { state ->
             State.Handle(state)(
-               onSuccess = {
+               onLoaded = {
                   this@collectTopRated.data.submitList(it)
                   binding.shimmerTopRated.apply {
                      stopShimmer()
@@ -180,14 +182,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          viewModel.upcomingState.collectLatest { state ->
             State.Handle(state)(
                onLoading = {
-                  if (it) binding.swipeRefreshLayout.isRefreshing = true
+                  binding.swipeRefreshLayout.isRefreshing = it
                },
                onError = {
                   binding.root.showSnackBar(it, true)
                },
-               onSuccess = {
+               onLoaded = {
                   this@collectUpcoming.data.submitList(it)
-                  binding.swipeRefreshLayout.isRefreshing = false
                   binding.shimmerUpcoming.apply {
                      stopShimmer()
                      isVisible = false
@@ -204,15 +205,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       }
    }
 
-   private fun setCarouselTransformer() {
+   private fun ViewPager2.setCarouselTransformer() {
       val transformer = CompositePageTransformer()
       transformer.addTransformer(MarginPageTransformer(40))
       transformer.addTransformer { page, position ->
          val r = 1 - abs(position)
          page.scaleY = 0.85f + r * 0.14f
       }
-
-      binding.vpUpcoming.setPageTransformer(transformer)
+      this.setPageTransformer(transformer)
    }
 
    private var carouselJob: Job? = null
