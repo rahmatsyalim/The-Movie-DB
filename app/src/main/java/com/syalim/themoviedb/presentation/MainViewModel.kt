@@ -1,5 +1,8 @@
 package com.syalim.themoviedb.presentation
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.syalim.themoviedb.domain.model.GenreItemEntity
@@ -12,9 +15,10 @@ import com.syalim.themoviedb.domain.use_case.get_top_rated_movies_use_case.GetTo
 import com.syalim.themoviedb.domain.use_case.get_upcoming_movies_use_case.GetUpcomingMoviesUseCase
 import com.syalim.themoviedb.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 
@@ -23,6 +27,7 @@ import javax.inject.Inject
  * rahmatsyalim@gmail.com
  */
 
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class MainViewModel @Inject constructor(
    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
@@ -33,58 +38,62 @@ class MainViewModel @Inject constructor(
    private val getMovieGenreUseCase: GetMovieGenreUseCase
 ) : BaseViewModel() {
 
+   private val _homeScreenState: MutableStateFlow<State<Any>> = MutableStateFlow(State.Default())
    private val _upcomingState: MutableStateFlow<State<List<MovieItemEntity>>> =
-      MutableStateFlow(State.Empty())
+      MutableStateFlow(State.Default())
    private val _popularState: MutableStateFlow<State<List<MovieItemEntity>>> =
-      MutableStateFlow(State.Empty())
+      MutableStateFlow(State.Default())
    private val _nowPlayingState: MutableStateFlow<State<List<MovieItemEntity>>> =
-      MutableStateFlow(State.Empty())
+      MutableStateFlow(State.Default())
    private val _topRatedState: MutableStateFlow<State<List<MovieItemEntity>>> =
-      MutableStateFlow(State.Empty())
-   private val _filterState: MutableStateFlow<State<List<GenreItemEntity>>> =
-      MutableStateFlow(State.Empty())
+      MutableStateFlow(State.Default())
+   private val _filterGenreState: MutableStateFlow<State<List<GenreItemEntity>>> =
+      MutableStateFlow(State.Default())
 
+   val homeScreenState: StateFlow<State<Any>> get() = _homeScreenState
    val upcomingState: StateFlow<State<List<MovieItemEntity>>> get() = _upcomingState
    val popularState: StateFlow<State<List<MovieItemEntity>>> get() = _popularState
    val nowPlayingState: StateFlow<State<List<MovieItemEntity>>> get() = _nowPlayingState
    val topRatedState: StateFlow<State<List<MovieItemEntity>>> get() = _topRatedState
-   val filterState: StateFlow<State<List<GenreItemEntity>>> get() = _filterState
+   val filterGenreState: StateFlow<State<List<GenreItemEntity>>> get() = _filterGenreState
 
-   init {
-      loadMovies(true)
-   }
+   fun loadMovies(isFirstLoading: Boolean) = viewModelScope.launch(Dispatchers.IO) {
 
-   fun loadMovies(isFirstLoading: Boolean) = viewModelScope.launch {
+      _homeScreenState.value = State.Loading(isFirstLoading = isFirstLoading)
+
       getUpcomingMovies(isFirstLoading)
       getPopularMovies(isFirstLoading)
       getNowPlayingMovies(isFirstLoading)
       getTopRatedMovies(isFirstLoading)
+
+      _homeScreenState.value = State.Loaded()
+
    }
 
 
    private suspend fun getUpcomingMovies(isFirstLoading: Boolean) =
-      handleRequest(_upcomingState, getUpcomingMoviesUseCase(), isFirstLoading)
+      handleResult(_upcomingState, getUpcomingMoviesUseCase(), isFirstLoading)
 
    private suspend fun getPopularMovies(isFirstLoading: Boolean) =
-      handleRequest(_popularState, getPopularMoviesUseCase(), isFirstLoading)
+      handleResult(_popularState, getPopularMoviesUseCase(), isFirstLoading)
 
    private suspend fun getNowPlayingMovies(isFirstLoading: Boolean) =
-      handleRequest(_nowPlayingState, getNowPlayingMoviesUseCase(), isFirstLoading)
+      handleResult(_nowPlayingState, getNowPlayingMoviesUseCase(), isFirstLoading)
 
    private suspend fun getTopRatedMovies(isFirstLoading: Boolean) =
-      handleRequest(_topRatedState, getTopRatedMoviesUseCase(), isFirstLoading)
+      handleResult(_topRatedState, getTopRatedMoviesUseCase(), isFirstLoading)
 
-   suspend fun getGenre() =
-      handleRequest(_filterState, getMovieGenreUseCase())
+   suspend fun getGenre() = handleResult(_filterGenreState, getMovieGenreUseCase())
 
+   private val _currentSelectedGenre = MutableLiveData(emptyList<String>())
+   val currentSelectedGenre: LiveData<List<String>> get() = _currentSelectedGenre
 
-   var currentGenre: List<String> = emptyList()
-   private fun getGenreString() = currentGenre.joinToString(",")
-
-   var moviesByGenre = getMoviesByGenreUseCase.invoke(getGenreString()).cachedIn(viewModelScope)
-
-   fun getMoviesByGenre() {
-      moviesByGenre = getMoviesByGenreUseCase.invoke(getGenreString()).cachedIn(viewModelScope)
+   fun setCurrentGenre(genreList: List<String>) {
+      _currentSelectedGenre.value = genreList
    }
+
+   val moviesByGenre = currentSelectedGenre.asFlow().flatMapLatest {
+      getMoviesByGenreUseCase(it.joinToString(","))
+   }.cachedIn(viewModelScope)
 
 }

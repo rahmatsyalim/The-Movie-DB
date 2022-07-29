@@ -16,9 +16,11 @@ sealed class Resource<T>(val data: T? = null, val message: String? = null, val s
          onError: (String?) -> Unit,
          onLoading: () -> Unit
       ) {
-         if (resource is Loading) onLoading()
-         if (resource is Error) onError(resource.message)
-         if (resource is Success) onSuccess(resource.data)
+         when(resource){
+            is Loading -> onLoading.invoke()
+            is Error -> onError.invoke(resource.message)
+            is Success -> onSuccess.invoke(resource.data)
+         }
       }
    }
 }

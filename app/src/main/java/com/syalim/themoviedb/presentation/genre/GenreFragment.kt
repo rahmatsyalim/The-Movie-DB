@@ -24,8 +24,10 @@ import com.syalim.themoviedb.presentation.adapter.MoviesPagerAdapter
 import com.syalim.themoviedb.presentation.adapter.PagingLoadStateAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 
@@ -34,6 +36,7 @@ import kotlinx.coroutines.launch
  * rahmatsyalim@gmail.com
  */
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::inflate) {
 
@@ -43,13 +46,13 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
    private lateinit var moviesLoadStateAdapter: PagingLoadStateAdapter
 
-   private lateinit var genreFilterAdapter: GenreFilterAdapter
+   private val genreFilterAdapter = GenreFilterAdapter()
 
    private val menuTune by lazy {
       (requireActivity() as MainActivity).menuTune
    }
 
-   private val pickedGenre: ArrayList<String> = arrayListOf()
+   private val currentSelectedGenre: ArrayList<String> = arrayListOf()
 
    private val bindingBottomSheet by lazy {
       BottomSheetFilterBinding.inflate(
@@ -65,43 +68,45 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
       setMoviesRecyclerView()
 
+      setMoviesLoadStateListener()
+
       collectMoviesByGenre()
 
-      setMoviesLoadStateListener()
+      collectGenre()
+
+      setupMenuTune()
 
       binding.swipeRefreshLayout.setOnRefreshListener {
          moviesAdapter.refresh()
       }
 
-      moviesAdapter.retry()
+   }
 
+   private fun setupMenuTune() {
       menuTune?.setOnMenuItemClickListener {
-         setBottomSheetAkun()
-         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getGenre()
+         setBottomSheetFilter()
+         if (viewModel.filterGenreState.value is State.Default) {
+            viewLifecycleOwner.lifecycleScope.launch {
+               viewModel.getGenre()
+            }
          }
          return@setOnMenuItemClickListener false
       }
-
    }
 
    private var collectMoviesByGenreJob: Job? = null
-
    private fun collectMoviesByGenre() {
       collectMoviesByGenreJob?.cancel()
       collectMoviesByGenreJob = viewLifecycleOwner.lifecycleScope.launch {
-         viewModel.moviesByGenre.collectLatest { pagingData ->
+         viewModel.moviesByGenre.distinctUntilChanged().collectLatest { pagingData ->
             moviesAdapter.submitData(pagingData)
          }
       }
    }
 
-   private var collectGenreJob: Job? = null
-
    private fun collectGenre() {
-      collectGenreJob?.cancel()
-      collectGenreJob = viewLifecycleOwner.lifecycleScope.launch {
-         viewModel.filterState.collectLatest { state ->
+      viewLifecycleOwner.lifecycleScope.launch {
+         viewModel.filterGenreState.collectLatest { state ->
             State.Handle(state)(
                onLoading = {
                   bindingBottomSheet.progressBar.isVisible = it
@@ -118,9 +123,9 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
       moviesAdapter = MoviesPagerAdapter()
       moviesLoadStateAdapter = PagingLoadStateAdapter()
       val gridLayoutManager = GridLayoutManager(requireContext(), 3)
-      gridLayoutManager.spanSizeLookup =  object : GridLayoutManager.SpanSizeLookup() {
+      gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
          override fun getSpanSize(position: Int): Int {
-            return if (position == moviesAdapter.itemCount  && moviesLoadStateAdapter.itemCount > 0) {
+            return if (position == moviesAdapter.itemCount && moviesLoadStateAdapter.itemCount > 0) {
                3
             } else {
                1
@@ -142,18 +147,18 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
       }
    }
 
-   private fun setFilterRecyclerView(genre: List<String>?) {
-      genreFilterAdapter = GenreFilterAdapter(genre)
+   private fun setFilterRecyclerView(selectedGenre: List<String>?) {
+      genreFilterAdapter.selectedGenre = selectedGenre
       bindingBottomSheet.rvFilter.apply {
          layoutManager = LinearLayoutManager(requireContext())
          adapter = genreFilterAdapter
       }
       genreFilterAdapter.setOnItemClickListener { item, isChecked ->
          if (isChecked) {
-            pickedGenre.add(item.id.toString())
+            currentSelectedGenre.add(item.id.toString())
          }
          if (!isChecked) {
-            pickedGenre.remove(item.id.toString())
+            currentSelectedGenre.remove(item.id.toString())
          }
       }
    }
@@ -183,26 +188,24 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
       )
    }
 
-   private fun setBottomSheetAkun() {
+   private fun setBottomSheetFilter() {
       bottomSheetdialog.setContentView(bindingBottomSheet.root)
       bottomSheetdialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
       bottomSheetdialog.behavior.skipCollapsed = true
       bottomSheetdialog.behavior.maxHeight = requireActivity().getScreenHeight() - 150
 
-      for (i in viewModel.currentGenre) {
-         if (!pickedGenre.contains(i)) {
-            pickedGenre.add(i)
+      setFilterRecyclerView(viewModel.currentSelectedGenre.value)
+
+      viewModel.currentSelectedGenre.value?.let { genre ->
+         genre.forEach {
+            if (!currentSelectedGenre.contains(it)) {
+               currentSelectedGenre.add(it)
+            }
          }
       }
 
-      setFilterRecyclerView(viewModel.currentGenre)
-
-      collectGenre()
-
       bindingBottomSheet.btnFilter.setOnClickListener {
-         viewModel.currentGenre = pickedGenre
-         viewModel.getMoviesByGenre()
-         collectMoviesByGenre()
+         viewModel.setCurrentGenre(currentSelectedGenre)
          bottomSheetdialog.dismiss()
       }
 

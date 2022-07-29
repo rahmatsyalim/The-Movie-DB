@@ -59,7 +59,7 @@ fun ImageView.loadImage(uri: String, imageSize: String) {
       .load(uri.setImageUrl(imageSize))
       .diskCacheStrategy(DiskCacheStrategy.ALL)
       .error(resources.getDrawable(R.drawable.placeholder_image, context.theme))
-      .placeholder(resources.getDrawable(R.drawable.placeholder_image, context.theme))
+      .placeholder(resources.getDrawable(R.drawable.bg_image_ph, context.theme))
       .into(this)
 }
 
@@ -69,7 +69,7 @@ fun ImageView.loadProfileImage(uri: String, imageSize: String) {
       .load(uri.setImageUrl(imageSize))
       .diskCacheStrategy(DiskCacheStrategy.ALL)
       .error(resources.getDrawable(R.drawable.placeholder_avatar, context.theme))
-      .placeholder(resources.getDrawable(R.drawable.placeholder_avatar, context.theme))
+      .placeholder(resources.getDrawable(R.drawable.bg_image_ph, context.theme))
       .into(this)
 }
 

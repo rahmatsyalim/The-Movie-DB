@@ -38,6 +38,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    override fun init() {
 
+      if (viewModel.homeScreenState.value is State.Default) {
+         viewModel.loadMovies(isFirstLoading = true)
+      }
+
+      collectHomePageState()
+
       setViewPagerUpcoming()
 
       setRecyclerViewPopular()
@@ -47,9 +53,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       setRecyclerViewTopRated()
 
       binding.swipeRefreshLayout.setOnRefreshListener {
-         viewModel.loadMovies(false)
+         viewModel.loadMovies(isFirstLoading = false)
       }
 
+   }
+
+   private fun collectHomePageState() {
+      viewLifecycleOwner.lifecycleScope.launch {
+         viewModel.homeScreenState.collectLatest { state ->
+            State.Handle(state)(
+               onLoading = {
+                  binding.swipeRefreshLayout.isRefreshing = it
+               }
+            )
+         }
+      }
    }
 
    private fun setRecyclerViewPopular() {
@@ -130,6 +148,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.popularState.collectLatest { state ->
             State.Handle(state)(
+               onError = {
+                  binding.root.showSnackBar(it, true)
+               },
                onLoaded = {
                   this@collectPopular.data.submitList(it)
                   binding.shimmerPopular.apply {
@@ -147,6 +168,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.nowPlayingState.collectLatest { state ->
             State.Handle(state)(
+               onError = {
+                  binding.root.showSnackBar(it, true)
+               },
                onLoaded = {
                   binding.shimmerNowPlaying.apply {
                      this@collectNowPlaying.data.submitList(it)
@@ -164,6 +188,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.topRatedState.collectLatest { state ->
             State.Handle(state)(
+               onError = {
+                  binding.root.showSnackBar(it, true)
+               },
                onLoaded = {
                   this@collectTopRated.data.submitList(it)
                   binding.shimmerTopRated.apply {

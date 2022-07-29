@@ -41,7 +41,7 @@ interface MovieApi {
       @Query("page") page: Int
    ): MovieListDto
 
-   @GET("/3/movie/{id}/similar")
+   @GET("/3/movie/{id}/recommendations")
    suspend fun getRecommendationMovies(
       @Path("id") id: String,
       @Query("api_key") apiKey: String = BuildConfig.apiKey,

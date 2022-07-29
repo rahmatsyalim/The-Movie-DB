@@ -14,7 +14,10 @@ import com.syalim.themoviedb.domain.model.GenreItemEntity
  * Created by Rahmat Syalim on 2022/07/18
  * rahmatsyalim@gmail.com
  */
-class GenreFilterAdapter(private val genre: List<String>? = listOf()) : RecyclerView.Adapter<GenreFilterAdapter.GenreFilterViewHolder>() {
+class GenreFilterAdapter : RecyclerView.Adapter<GenreFilterAdapter
+.GenreFilterViewHolder>() {
+
+   var selectedGenre: List<String>? = listOf()
 
    inner class GenreFilterViewHolder(private val binding: ItemFilterBinding) :
       RecyclerView.ViewHolder(binding.root) {
@@ -23,7 +26,7 @@ class GenreFilterAdapter(private val genre: List<String>? = listOf()) : Recycler
             binding.ctGenre.apply {
                text = item.name
 
-               genre?.let {
+               selectedGenre?.let {
                   if (it.contains(item.id.toString())){
                      isChecked = true
                      setTextColor(resources.getColor(R.color.primary, context.theme))

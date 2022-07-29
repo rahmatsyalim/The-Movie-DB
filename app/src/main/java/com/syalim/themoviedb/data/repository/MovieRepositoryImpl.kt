@@ -15,10 +15,8 @@ import com.syalim.themoviedb.data.paging.data_source.MoviesByGenrePagingSource
 import com.syalim.themoviedb.data.remote.network.MovieApi
 import com.syalim.themoviedb.domain.model.*
 import com.syalim.themoviedb.domain.repository.MovieRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -41,22 +39,18 @@ class MovieRepositoryImpl @Inject constructor(
 
    override fun getHomeUpcomingMovies(): Flow<Resource<List<MovieItemEntity>>> {
       return handleRequest { MovieListMapper.convert(movieApi.getUpcomingMovies(page = 1)).results }
-         .flowOn(Dispatchers.IO)
    }
 
    override fun getHomePopularMovies(): Flow<Resource<List<MovieItemEntity>>> {
       return handleRequest { MovieListMapper.convert(movieApi.getPopularMovies(page = 1)).results }
-         .flowOn(Dispatchers.IO)
    }
 
    override fun getHomeNowPlayingMovies(): Flow<Resource<List<MovieItemEntity>>> {
       return handleRequest { MovieListMapper.convert(movieApi.getNowPlayingMovies(page = 1)).results }
-         .flowOn(Dispatchers.IO)
    }
 
    override fun getHomeTopRatedMovies(): Flow<Resource<List<MovieItemEntity>>> {
       return handleRequest { MovieListMapper.convert(movieApi.getTopRatedMovies(page = 1)).results }
-         .flowOn(Dispatchers.IO)
    }
 
    override fun getMoviesByGenre(genre: String?): Flow<PagingData<MovieItemEntity>> {
@@ -73,12 +67,10 @@ class MovieRepositoryImpl @Inject constructor(
 
    override fun getMovieGenres(): Flow<Resource<List<GenreItemEntity>>> {
       return handleRequest { GenreListMapper.convert(movieApi.getMovieGenres()).genres }
-         .flowOn(Dispatchers.IO)
    }
 
    override fun getMovieDetail(id: String): Flow<Resource<MovieDetailEntity>> {
       return handleRequest { MovieDetailMapper.convert(movieApi.getMovieDetails(id = id)) }
-         .flowOn(Dispatchers.IO)
    }
 
    override fun getMovieReviews(id: String): Flow<PagingData<ReviewItemEntity>> {
@@ -95,12 +87,10 @@ class MovieRepositoryImpl @Inject constructor(
 
    override fun getMovieTrailer(id: String): Flow<Resource<MovieTrailerEntity>> {
       return handleRequest { MovieTrailerMapper.convert(movieApi.getMovieTrailer(id = id)) }
-         .flowOn(Dispatchers.IO)
    }
 
    override fun getRecommendationMovies(id: String): Flow<Resource<List<MovieItemEntity>>> {
       return handleRequest { MovieListMapper.convert(movieApi.getRecommendationMovies(id = id, page = 1)).results }
-         .flowOn(Dispatchers.IO)
    }
 
    private fun <T>handleRequest(request: suspend () -> T?): Flow<Resource<T>>{

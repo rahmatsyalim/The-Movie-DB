@@ -6,6 +6,7 @@ import com.syalim.themoviedb.presentation.State
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 
 /**
@@ -14,28 +15,25 @@ import kotlinx.coroutines.flow.collectLatest
  */
 abstract class BaseViewModel : ViewModel() {
 
-   protected suspend fun <T> handleRequest(
+   protected suspend fun <T> handleResult(
       state: MutableStateFlow<State<T>>,
       dataFlow: Flow<Resource<T>>,
-      isFirstLoad: Boolean = false
+      isFirstLoading: Boolean = false
    ) =
-      dataFlow.collectLatest { result ->
-         Resource.Handle(result)(
-            onLoading = {
-               state.value = if (isFirstLoad) {
-                  State.FirstLoading()
-               } else {
-                  State.Loading()
+      dataFlow
+         .distinctUntilChanged()
+         .collectLatest { result ->
+            Resource.Handle(result)(
+               onLoading = {
+                  state.value = State.Loading(isFirstLoading)
+               },
+               onError = {
+                  state.value = State.Error(it)
+               },
+               onSuccess = {
+                  state.value = State.Loaded(it)
                }
-            },
-            onError = {
-               state.value = State.Error(it)
-            },
-            onSuccess = {
-               state.value = it?.let {
-                  State.Loaded(it)
-               } ?: State.Empty()
-            }
-         )
-      }
+            )
+         }
+
 }

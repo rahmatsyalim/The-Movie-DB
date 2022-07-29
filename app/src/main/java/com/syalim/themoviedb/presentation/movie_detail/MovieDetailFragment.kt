@@ -21,6 +21,7 @@ import com.syalim.themoviedb.presentation.adapter.HomeMoviesAdapter
 import com.syalim.themoviedb.presentation.adapter.ReviewsPagerAdapter
 import com.syalim.themoviedb.presentation.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -29,6 +30,8 @@ import kotlinx.coroutines.launch
  * Created by Rahmat Syalim on 2022/07/18
  * rahmatsyalim@gmail.com
  */
+
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MovieDetailFragment :
    BaseFragment<FragmentMovieDetailBinding>(FragmentMovieDetailBinding::inflate) {
@@ -47,28 +50,40 @@ class MovieDetailFragment :
          findNavController().navigateUp()
       }
 
-      if (viewModel.detailPageState.value is State.Default){
-         viewModel.loadDetails(id = arg.id)
+      if (viewModel.detailScreenState.value is State.Default) {
+         viewModel.loadDetails(id = arg.id, isFirstLoading = true)
+         viewModel.setMovieId(arg.id)
       }
 
       setRecommendationMoviesRecyclerView()
 
       setReviewsRecyclerView()
 
-      collectDetailPageState()
+      collectDetailScreenState()
 
       collectDetailState()
 
       collectTrailerState()
 
+      collectRecommendationMovies()
+
+      collectReviews()
+
       initYoutubePlayer()
 
    }
 
-   private fun collectDetailPageState() {
+   private fun collectDetailScreenState() {
       viewLifecycleOwner.lifecycleScope.launch {
-         viewModel.detailPageState.collectLatest { state ->
-            if (state is State.Loaded) collectReviews()
+         viewModel.detailScreenState.collectLatest { state ->
+            State.Handle(state)(
+               onError = {
+                  binding.root.showSnackBar(it, true)
+               },
+               onLoaded = {
+
+               }
+            )
          }
       }
    }
@@ -110,7 +125,6 @@ class MovieDetailFragment :
             }
             findNavController().navigate(R.id.action_movie_detail_fragment_self, bundle)
          }
-         collectRecommendationMovies()
       }
    }
 
@@ -122,12 +136,15 @@ class MovieDetailFragment :
       }
    }
 
-   private fun HomeMoviesAdapter.collectRecommendationMovies() {
+   private fun collectRecommendationMovies() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.recommendationMoviesState.collectLatest { state ->
             State.Handle(state)(
+               onError = {
+                  binding.root.showSnackBar(it, true)
+               },
                onLoaded = {
-                  this@collectRecommendationMovies.data.submitList(it)
+                  recommendationMoviesAdapter.data.submitList(it)
                   binding.viewRecommendationMovies.isVisible = true
                }
             )
@@ -212,6 +229,9 @@ class MovieDetailFragment :
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.movieTrailerState.collectLatest { state ->
             State.Handle(state)(
+               onError = {
+                  binding.root.showSnackBar(it, true)
+               },
                onLoaded = { data ->
                   binding.youtubePlayerView.addYouTubePlayerListener(object :
                      AbstractYouTubePlayerListener() {
@@ -241,4 +261,5 @@ class MovieDetailFragment :
    private fun initYoutubePlayer() {
       viewLifecycleOwner.lifecycle.addObserver(binding.youtubePlayerView)
    }
+
 }
