@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.syalim.themoviedb.common.Constants.IMAGE_BACKDROP_THUMBNAIL_SIZE
-import com.syalim.themoviedb.common.dateToViewDate
-import com.syalim.themoviedb.common.loadImage
+import com.syalim.themoviedb.utils.Constants.IMAGE_BACKDROP_THUMBNAIL_SIZE
+import com.syalim.themoviedb.utils.dateToViewDate
+import com.syalim.themoviedb.utils.loadImage
 import com.syalim.themoviedb.databinding.ItemCarouselBinding
 import com.syalim.themoviedb.domain.model.MovieItemEntity
 
@@ -37,11 +37,9 @@ class HomeCarouselAdapter :
       RecyclerView.ViewHolder(binding.root) {
       fun bind(item: MovieItemEntity) {
          binding.apply {
-            item.backdropPath?.let {
-               ivBackdrop.loadImage(it, IMAGE_BACKDROP_THUMBNAIL_SIZE)
-               tvTitle.text = item.title
-               tvDate.text = item.releaseDate.dateToViewDate()
-            }
+            ivBackdrop.loadImage(item.backdropPath, IMAGE_BACKDROP_THUMBNAIL_SIZE)
+            tvTitle.text = item.title
+            tvDate.text = item.releaseDate.dateToViewDate()
          }
          itemView.setOnClickListener {
             onItemClickListener?.let { it(item) }

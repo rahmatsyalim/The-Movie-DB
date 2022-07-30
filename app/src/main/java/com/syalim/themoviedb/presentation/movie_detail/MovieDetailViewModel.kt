@@ -11,8 +11,8 @@ import com.syalim.themoviedb.domain.use_case.get_movie_detail_use_case.GetMovieD
 import com.syalim.themoviedb.domain.use_case.get_movie_reviews_use_case.GetMovieReviewsUseCase
 import com.syalim.themoviedb.domain.use_case.get_movie_trailer_use_case.GetMovieTrailerUseCase
 import com.syalim.themoviedb.domain.use_case.get_recommendation_movies_use_case.GetRecommendationMoviesUseCase
-import com.syalim.themoviedb.presentation.State
-import com.syalim.themoviedb.presentation.base.BaseViewModel
+import com.syalim.themoviedb.presentation.common.State
+import com.syalim.themoviedb.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

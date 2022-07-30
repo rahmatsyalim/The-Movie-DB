@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.syalim.themoviedb.common.Constants.IMAGE_PROFILE_THUMBNAIL_SIZE
-import com.syalim.themoviedb.common.loadProfileImage
+import com.syalim.themoviedb.utils.Constants.IMAGE_PROFILE_THUMBNAIL_SIZE
+import com.syalim.themoviedb.utils.loadProfileImage
 import com.syalim.themoviedb.databinding.ItemReviewBinding
 import com.syalim.themoviedb.domain.model.ReviewItemEntity
 
@@ -24,9 +24,7 @@ class ReviewsPagerAdapter :
          binding.apply {
             tvName.text = item.author
             tvComments.text = item.content
-            item.avatarPath?.let {
-               ivPhoto.loadProfileImage(it, IMAGE_PROFILE_THUMBNAIL_SIZE)
-            }
+            ivPhoto.loadProfileImage(item.avatarPath, IMAGE_PROFILE_THUMBNAIL_SIZE)
          }
       }
    }

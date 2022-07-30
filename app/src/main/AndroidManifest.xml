@@ -3,8 +3,9 @@
    xmlns:tools="http://schemas.android.com/tools"
    package="com.syalim.themoviedb">
 
-   <uses-permission android:name="android.permission.INTERNET"/>
-   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+   <uses-permission android:name="android.permission.INTERNET" />
+   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
    <application
       android:name=".Application"
@@ -19,8 +20,9 @@
       tools:targetApi="31">
       <activity
          android:name=".presentation.MainActivity"
+         android:exported="true"
          android:screenOrientation="portrait"
-         android:exported="true">
+         tools:ignore="LockedOrientationActivity">
          <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 

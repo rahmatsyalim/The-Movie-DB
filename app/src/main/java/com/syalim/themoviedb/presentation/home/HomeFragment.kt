@@ -11,14 +11,15 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.syalim.themoviedb.R
-import com.syalim.themoviedb.common.showSnackBar
+import com.syalim.themoviedb.utils.showSnackBar
 import com.syalim.themoviedb.databinding.FragmentHomeBinding
 import com.syalim.themoviedb.presentation.MainViewModel
-import com.syalim.themoviedb.presentation.State
+import com.syalim.themoviedb.presentation.common.State
 import com.syalim.themoviedb.presentation.adapter.HomeCarouselAdapter
 import com.syalim.themoviedb.presentation.adapter.HomeMoviesAdapter
-import com.syalim.themoviedb.presentation.base.BaseFragment
+import com.syalim.themoviedb.presentation.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -31,6 +32,7 @@ import kotlin.math.abs
  * rahmatsyalim@gmail.com
  */
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
@@ -61,7 +63,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    private fun collectHomePageState() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.homeScreenState.collectLatest { state ->
-            State.Handle(state)(
+            state.handle(
                onLoading = {
                   binding.swipeRefreshLayout.isRefreshing = it
                }
@@ -147,7 +149,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    private fun HomeMoviesAdapter.collectPopular() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.popularState.collectLatest { state ->
-            State.Handle(state)(
+            state.handle(
                onError = {
                   binding.root.showSnackBar(it, true)
                },
@@ -167,7 +169,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    private fun HomeMoviesAdapter.collectNowPlaying() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.nowPlayingState.collectLatest { state ->
-            State.Handle(state)(
+            state.handle(
                onError = {
                   binding.root.showSnackBar(it, true)
                },
@@ -187,7 +189,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    private fun HomeMoviesAdapter.collectTopRated() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.topRatedState.collectLatest { state ->
-            State.Handle(state)(
+            state.handle(
                onError = {
                   binding.root.showSnackBar(it, true)
                },
@@ -207,7 +209,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
    private fun HomeCarouselAdapter.collectUpcoming() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.upcomingState.collectLatest { state ->
-            State.Handle(state)(
+            state.handle(
                onLoading = {
                   binding.swipeRefreshLayout.isRefreshing = it
                },

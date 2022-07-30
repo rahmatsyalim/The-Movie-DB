@@ -1,6 +1,8 @@
 package com.syalim.themoviedb.di
 
-import com.syalim.themoviedb.common.Constants.BASE_URL
+import com.google.gson.GsonBuilder
+import com.syalim.themoviedb.BuildConfig
+import com.syalim.themoviedb.utils.Constants.BASE_URL
 import com.syalim.themoviedb.data.remote.network.MovieApi
 import com.syalim.themoviedb.data.repository.MovieRepositoryImpl
 import com.syalim.themoviedb.domain.repository.MovieRepository
@@ -8,6 +10,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -27,22 +30,48 @@ object AppModule {
 
    @Provides
    @Singleton
-   fun provideMovieApi(): MovieApi {
+   fun provideRetrofit(client: OkHttpClient): Retrofit {
       return Retrofit.Builder()
          .baseUrl(BASE_URL)
-         .addConverterFactory(GsonConverterFactory.create())
-         .client(
-            OkHttpClient.Builder().apply {
-               addInterceptor(
-                  HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-               )
-            }
-               .connectTimeout(30, TimeUnit.SECONDS)
-               .readTimeout(30, TimeUnit.SECONDS)
-               .build()
-         )
+         .client(client)
+         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
          .build()
-         .create(MovieApi::class.java)
+   }
+
+   @Provides
+   @Singleton
+   fun provideOkhttpClient(headerInterceptor: Interceptor): OkHttpClient {
+      return OkHttpClient
+         .Builder()
+         .connectTimeout(30L, TimeUnit.SECONDS)
+         .readTimeout(30L, TimeUnit.SECONDS)
+         .writeTimeout(30L, TimeUnit.SECONDS)
+         .addInterceptor(headerInterceptor)
+         .apply {
+            if (!BuildConfig.isReleased.toBoolean()) {
+               addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+            }
+         }
+         .build()
+   }
+
+   @Provides
+   @Singleton
+   fun provideHeaderInterceptor(): Interceptor {
+      return Interceptor {
+         val httpUrl = it.request().url.newBuilder()
+            .addQueryParameter("api_key", BuildConfig.apiKey).build()
+         val requestBuilder = it.request().newBuilder()
+         // add headers here
+
+         it.proceed(requestBuilder.url(httpUrl).build())
+      }
+   }
+
+   @Provides
+   @Singleton
+   fun provideMovieApi(retrofit: Retrofit): MovieApi {
+      return retrofit.create(MovieApi::class.java)
    }
 
    @Provides

@@ -1,4 +1,4 @@
-package com.syalim.themoviedb.presentation.base
+package com.syalim.themoviedb.presentation.common
 
 import android.os.Bundle
 import android.view.LayoutInflater

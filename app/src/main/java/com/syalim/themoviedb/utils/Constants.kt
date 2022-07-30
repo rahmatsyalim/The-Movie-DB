@@ -1,4 +1,4 @@
-package com.syalim.themoviedb.common
+package com.syalim.themoviedb.utils
 
 
 /**
@@ -30,7 +30,7 @@ object Constants {
    const val HTTP_ERROR_502 = "Couldn't connect to the backend server."
    const val HTTP_ERROR_503 = "Service offline: This service is temporarily offline, try again later."
    const val HTTP_ERROR_504 = "Your request to the backend server timed out. Try again."
-   const val HTTP_ERROR_ELSE = "Unexpected network error"
+   const val HTTP_ERROR_UNEXPECTED = "Unexpected network error"
 
    // Paging
    const val START_PAGE_INDEX = 1

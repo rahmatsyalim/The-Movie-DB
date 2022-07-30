@@ -1,6 +1,5 @@
 package com.syalim.themoviedb.data.remote.network
 
-import com.syalim.themoviedb.BuildConfig
 import com.syalim.themoviedb.data.remote.dto.genre.GenreListDto
 import com.syalim.themoviedb.data.remote.dto.movie_detail.MovieDetailDto
 import com.syalim.themoviedb.data.remote.dto.movie_list.MovieListDto
@@ -19,38 +18,32 @@ interface MovieApi {
 
    @GET("/3/movie/popular")
    suspend fun getPopularMovies(
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
       @Query("page") page: Int
    ): MovieListDto
 
    @GET("/3/movie/now_playing")
    suspend fun getNowPlayingMovies(
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
       @Query("page") page: Int
    ): MovieListDto
 
    @GET("/3/movie/upcoming")
    suspend fun getUpcomingMovies(
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
       @Query("page") page: Int
    ): MovieListDto
 
    @GET("/3/movie/top_rated")
    suspend fun getTopRatedMovies(
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
       @Query("page") page: Int
    ): MovieListDto
 
    @GET("/3/movie/{id}/recommendations")
    suspend fun getRecommendationMovies(
       @Path("id") id: String,
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
       @Query("page") page: Int
    ): MovieListDto
 
    @GET("/3/discover/movie")
    suspend fun getMoviesByGenre(
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
       @Query("page") page: Int,
       @Query("with_genres") genres: String?
    ): MovieListDto
@@ -58,25 +51,21 @@ interface MovieApi {
    @GET("/3/movie/{id}")
    suspend fun getMovieDetails(
       @Path("id") id: String,
-      @Query("api_key") apiKey: String = BuildConfig.apiKey
    ): MovieDetailDto
 
    @GET("/3/genre/movie/list")
    suspend fun getMovieGenres(
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
    ): GenreListDto
 
    @GET("/3/movie/{id}/reviews")
    suspend fun getMovieReviews(
       @Path("id") id: String,
-      @Query("api_key") apiKey: String = BuildConfig.apiKey,
       @Query("page") page: Int
    ): ReviewListDto
 
    @GET("/3/movie/{id}/videos")
    suspend fun getMovieTrailer(
       @Path("id") id: String,
-      @Query("api_key") apiKey: String = BuildConfig.apiKey
    ): MovieTrailerListDto
 
 }

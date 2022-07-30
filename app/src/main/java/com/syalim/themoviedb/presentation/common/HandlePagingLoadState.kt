@@ -1,15 +1,19 @@
-package com.syalim.themoviedb.presentation
+package com.syalim.themoviedb.presentation.common
 
 import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.syalim.themoviedb.utils.Constants.ERROR_NO_CONNECTION
+import com.syalim.themoviedb.utils.getErrorMessage
+import retrofit2.HttpException
+import java.io.IOException
 
 
 /**
  * Created by Rahmat Syalim on 2022/07/24
  * rahmatsyalim@gmail.com
  */
-class PagingLoadState<T : Any, VH : RecyclerView.ViewHolder>(val adapter: PagingDataAdapter<T, VH>) {
+class HandlePagingLoadState<T : Any, VH : RecyclerView.ViewHolder>(val adapter: PagingDataAdapter<T, VH>) {
    operator fun invoke(
       onFirstLoading: ((Boolean) -> Unit)? = null,
       onLoading: ((Boolean) -> Unit)? = null,
@@ -18,7 +22,7 @@ class PagingLoadState<T : Any, VH : RecyclerView.ViewHolder>(val adapter: Paging
       onLoaded: (() -> Unit)? = null
    ) {
       adapter.addLoadStateListener { loadState ->
-         loadState.apply {
+         with(loadState) {
             onFirstLoading?.invoke(refresh is LoadState.Loading && adapter.itemCount == 0)
 
             onLoading?.invoke(refresh is LoadState.Loading && adapter.itemCount > 0)
@@ -28,11 +32,11 @@ class PagingLoadState<T : Any, VH : RecyclerView.ViewHolder>(val adapter: Paging
                   ?: source.prepend as? LoadState.Error
                   ?: source.refresh as? LoadState.Error
 
-            errorState?.error?.message?.let {
-               if (it.contains("Unable to resolve host")) {
-                  onError?.invoke("Couldn't reach server")
-               } else {
-                  onError?.invoke(it)
+            errorState?.error?.let { e ->
+               when (e) {
+                  is IOException -> e.message?.let { onError?.invoke(ERROR_NO_CONNECTION) }
+                  is HttpException -> onError?.invoke(e.getErrorMessage())
+                  else -> e.message?.let { onError?.invoke(it) }
                }
             }
 

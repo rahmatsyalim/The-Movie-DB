@@ -1,5 +1,6 @@
 package com.syalim.themoviedb.presentation.genre
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.core.view.isVisible
@@ -11,18 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syalim.themoviedb.R
-import com.syalim.themoviedb.common.getScreenHeight
-import com.syalim.themoviedb.common.showSnackBar
+import com.syalim.themoviedb.utils.showSnackBar
 import com.syalim.themoviedb.databinding.BottomSheetFilterBinding
 import com.syalim.themoviedb.databinding.FragmentGenreBinding
+import com.syalim.themoviedb.presentation.common.HandlePagingLoadState
 import com.syalim.themoviedb.presentation.MainActivity
 import com.syalim.themoviedb.presentation.MainViewModel
-import com.syalim.themoviedb.presentation.PagingLoadState
-import com.syalim.themoviedb.presentation.State
+import com.syalim.themoviedb.presentation.common.State
 import com.syalim.themoviedb.presentation.adapter.GenreFilterAdapter
 import com.syalim.themoviedb.presentation.adapter.MoviesPagerAdapter
 import com.syalim.themoviedb.presentation.adapter.PagingLoadStateAdapter
-import com.syalim.themoviedb.presentation.base.BaseFragment
+import com.syalim.themoviedb.presentation.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -52,6 +52,8 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
       (requireActivity() as MainActivity).menuTune
    }
 
+   private val toolbarHeight by lazy { (requireActivity() as MainActivity).toolbar.height }
+
    private val currentSelectedGenre: ArrayList<String> = arrayListOf()
 
    private val bindingBottomSheet by lazy {
@@ -62,7 +64,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
       )
    }
 
-   private val bottomSheetdialog by lazy { BottomSheetDialog(requireContext()) }
+   private val bottomSheetDialog by lazy { BottomSheetDialog(requireContext()) }
 
    override fun init() {
 
@@ -107,7 +109,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
    private fun collectGenre() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.filterGenreState.collectLatest { state ->
-            State.Handle(state)(
+            state.handle(
                onLoading = {
                   bindingBottomSheet.progressBar.isVisible = it
                },
@@ -163,8 +165,9 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
       }
    }
 
+   @SuppressLint("SetTextI18n")
    private fun setMoviesLoadStateListener() {
-      PagingLoadState(moviesAdapter).invoke(
+      HandlePagingLoadState(moviesAdapter)(
          onLoading = {
             binding.swipeRefreshLayout.isRefreshing = it
          },
@@ -189,10 +192,10 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
    }
 
    private fun setBottomSheetFilter() {
-      bottomSheetdialog.setContentView(bindingBottomSheet.root)
-      bottomSheetdialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-      bottomSheetdialog.behavior.skipCollapsed = true
-      bottomSheetdialog.behavior.maxHeight = requireActivity().getScreenHeight() - 150
+      bottomSheetDialog.setContentView(bindingBottomSheet.root)
+      bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+      bottomSheetDialog.behavior.skipCollapsed = true
+      bottomSheetDialog.behavior.maxHeight = binding.root.height - toolbarHeight
 
       setFilterRecyclerView(viewModel.currentSelectedGenre.value)
 
@@ -206,9 +209,9 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
 
       bindingBottomSheet.btnFilter.setOnClickListener {
          viewModel.setCurrentGenre(currentSelectedGenre)
-         bottomSheetdialog.dismiss()
+         bottomSheetDialog.dismiss()
       }
 
-      bottomSheetdialog.show()
+      bottomSheetDialog.show()
    }
 }

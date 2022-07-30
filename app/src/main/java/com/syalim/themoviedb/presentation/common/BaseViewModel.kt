@@ -1,8 +1,7 @@
-package com.syalim.themoviedb.presentation.base
+package com.syalim.themoviedb.presentation.common
 
 import androidx.lifecycle.ViewModel
-import com.syalim.themoviedb.common.Resource
-import com.syalim.themoviedb.presentation.State
+import com.syalim.themoviedb.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -23,7 +22,7 @@ abstract class BaseViewModel : ViewModel() {
       dataFlow
          .distinctUntilChanged()
          .collectLatest { result ->
-            Resource.Handle(result)(
+            result.handle(
                onLoading = {
                   state.value = State.Loading(isFirstLoading)
                },

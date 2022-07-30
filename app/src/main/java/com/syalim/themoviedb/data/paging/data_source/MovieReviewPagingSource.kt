@@ -2,7 +2,7 @@ package com.syalim.themoviedb.data.paging.data_source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.syalim.themoviedb.common.Constants
+import com.syalim.themoviedb.utils.Constants
 import com.syalim.themoviedb.data.mapper.ReviewListMapper
 import com.syalim.themoviedb.data.remote.network.MovieApi
 import com.syalim.themoviedb.domain.model.ReviewItemEntity

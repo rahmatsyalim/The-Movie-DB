@@ -20,8 +20,10 @@ class MainActivity : AppCompatActivity() {
          .findNavController()
    }
 
-   val menuTune: MenuItem? by lazy { binding.toolbar.menu.findItem(R.id.menu_tune) }
-   val menuSearch: MenuItem? by lazy { binding.toolbar.menu.findItem(R.id.menu_search) }
+   val toolbar by lazy { binding.toolbar }
+
+   val menuTune: MenuItem? by lazy { toolbar.menu.findItem(R.id.menu_tune) }
+   val menuSearch: MenuItem? by lazy { toolbar.menu.findItem(R.id.menu_search) }
 
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
       navController.addOnDestinationChangedListener { _, destination, _ ->
 
-         binding.toolbar.title = destination.label
+         toolbar.title = destination.label
          menuSearch?.isVisible = destination.id == R.id.home_fragment
          menuTune?.isVisible = destination.id == R.id.genre_fragment
 

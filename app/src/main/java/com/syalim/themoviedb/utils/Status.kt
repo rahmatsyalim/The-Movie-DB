@@ -1,4 +1,4 @@
-package com.syalim.themoviedb.common
+package com.syalim.themoviedb.utils
 
 
 /**

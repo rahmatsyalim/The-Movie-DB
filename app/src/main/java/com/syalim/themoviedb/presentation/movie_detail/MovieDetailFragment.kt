@@ -1,7 +1,9 @@
 package com.syalim.themoviedb.presentation.movie_detail
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,14 +14,14 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.syalim.themoviedb.R
-import com.syalim.themoviedb.common.*
-import com.syalim.themoviedb.common.Constants.IMAGE_POSTER_DETAIL_SIZE
+import com.syalim.themoviedb.utils.*
+import com.syalim.themoviedb.utils.Constants.IMAGE_POSTER_DETAIL_SIZE
 import com.syalim.themoviedb.databinding.FragmentMovieDetailBinding
-import com.syalim.themoviedb.presentation.PagingLoadState
-import com.syalim.themoviedb.presentation.State
+import com.syalim.themoviedb.presentation.common.HandlePagingLoadState
+import com.syalim.themoviedb.presentation.common.State
 import com.syalim.themoviedb.presentation.adapter.HomeMoviesAdapter
 import com.syalim.themoviedb.presentation.adapter.ReviewsPagerAdapter
-import com.syalim.themoviedb.presentation.base.BaseFragment
+import com.syalim.themoviedb.presentation.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -76,7 +78,7 @@ class MovieDetailFragment :
    private fun collectDetailScreenState() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.detailScreenState.collectLatest { state ->
-            State.Handle(state)(
+            state.handle(
                onError = {
                   binding.root.showSnackBar(it, true)
                },
@@ -88,8 +90,9 @@ class MovieDetailFragment :
       }
    }
 
+   @SuppressLint("SetTextI18n")
    private fun ReviewsPagerAdapter.setLoadStateListener() {
-      PagingLoadState(this)(
+      HandlePagingLoadState(this)(
          onError = {
             binding.tvInfoReviews.isVisible = true
             binding.tvInfoReviews.text = it
@@ -139,7 +142,7 @@ class MovieDetailFragment :
    private fun collectRecommendationMovies() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.recommendationMoviesState.collectLatest { state ->
-            State.Handle(state)(
+            state.handle(
                onError = {
                   binding.root.showSnackBar(it, true)
                },
@@ -152,10 +155,11 @@ class MovieDetailFragment :
       }
    }
 
+   @SuppressLint("SetTextI18n")
    private fun collectDetailState() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.movieDetailState.collectLatest { state ->
-            State.Handle(state)(
+            state.handle(
                onError = {
                   binding.root.showSnackBar(it, true)
                },
@@ -165,10 +169,17 @@ class MovieDetailFragment :
                      with(binding.fabTrailer) {
                         if (text == "Show Trailer") {
                            text = "Hide Trailer"
-                           icon = resources.getDrawable(R.drawable.ic_arrow_circle_up, requireContext().theme)
+                           icon = ResourcesCompat.getDrawable(
+                              resources, R.drawable.ic_arrow_circle_up, requireContext()
+                                 .theme
+                           )
                         } else {
                            text = "Show Trailer"
-                           icon = resources.getDrawable(R.drawable.ic_arrow_circle_down, requireContext().theme)
+                           icon = ResourcesCompat.getDrawable(
+                              resources, R.drawable.ic_arrow_circle_down,
+                              requireContext()
+                                 .theme
+                           )
                         }
                      }
                   }
@@ -205,11 +216,10 @@ class MovieDetailFragment :
                         binding.tvVoteAverage.text = it.roundOneDecimal().toString()
                      }
                      binding.tvDesc.text = data.overview
-                     data.posterPath?.let {
-                        binding.ivPoster.loadImage(it, IMAGE_POSTER_DETAIL_SIZE)
-                     }
-                     data.backdropPath?.let {
-                        binding.ivBackground.loadBackgroundImage(it)
+                     binding.ivPoster.loadImage(data.posterPath, IMAGE_POSTER_DETAIL_SIZE)
+                     binding.ivBackground.apply {
+                        layoutParams.height = binding.topAppbar.height
+                        loadBackgroundImage(data.backdropPath)
                      }
                      binding.shimmerMovieDetail.apply {
                         stopShimmer()
@@ -217,7 +227,6 @@ class MovieDetailFragment :
                      }
                      binding.fabFavorite.show()
                      binding.fabTrailer.show()
-                     binding.viewContainer.isVisible = true
                   }
                }
             )
@@ -228,7 +237,7 @@ class MovieDetailFragment :
    private fun collectTrailerState() {
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.movieTrailerState.collectLatest { state ->
-            State.Handle(state)(
+            state.handle(
                onError = {
                   binding.root.showSnackBar(it, true)
                },

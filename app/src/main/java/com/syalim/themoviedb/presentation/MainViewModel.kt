@@ -13,7 +13,8 @@ import com.syalim.themoviedb.domain.use_case.get_now_playing_movies_use_case.Get
 import com.syalim.themoviedb.domain.use_case.get_popular_movies_use_case.GetPopularMoviesUseCase
 import com.syalim.themoviedb.domain.use_case.get_top_rated_movies_use_case.GetTopRatedMoviesUseCase
 import com.syalim.themoviedb.domain.use_case.get_upcoming_movies_use_case.GetUpcomingMoviesUseCase
-import com.syalim.themoviedb.presentation.base.BaseViewModel
+import com.syalim.themoviedb.presentation.common.BaseViewModel
+import com.syalim.themoviedb.presentation.common.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow

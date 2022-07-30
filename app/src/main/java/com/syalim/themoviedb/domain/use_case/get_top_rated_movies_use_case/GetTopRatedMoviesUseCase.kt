@@ -1,6 +1,6 @@
 package com.syalim.themoviedb.domain.use_case.get_top_rated_movies_use_case
 
-import com.syalim.themoviedb.common.Resource
+import com.syalim.themoviedb.utils.Resource
 import com.syalim.themoviedb.domain.model.MovieItemEntity
 import com.syalim.themoviedb.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow

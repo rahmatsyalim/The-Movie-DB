@@ -2,7 +2,7 @@ package com.syalim.themoviedb.data.paging.data_source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.syalim.themoviedb.common.Constants.START_PAGE_INDEX
+import com.syalim.themoviedb.utils.Constants.START_PAGE_INDEX
 import com.syalim.themoviedb.data.mapper.MovieListMapper
 import com.syalim.themoviedb.data.remote.network.MovieApi
 import com.syalim.themoviedb.domain.model.MovieItemEntity

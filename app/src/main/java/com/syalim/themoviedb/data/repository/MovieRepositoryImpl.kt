@@ -3,9 +3,9 @@ package com.syalim.themoviedb.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.syalim.themoviedb.common.Constants.ERROR_NO_CONNECTION
-import com.syalim.themoviedb.common.Resource
-import com.syalim.themoviedb.common.getErrorMessage
+import com.syalim.themoviedb.utils.Constants.ERROR_NO_CONNECTION
+import com.syalim.themoviedb.utils.Resource
+import com.syalim.themoviedb.utils.getErrorMessage
 import com.syalim.themoviedb.data.mapper.GenreListMapper
 import com.syalim.themoviedb.data.mapper.MovieDetailMapper
 import com.syalim.themoviedb.data.mapper.MovieListMapper
@@ -30,7 +30,8 @@ class MovieRepositoryImpl @Inject constructor(
    private val movieApi: MovieApi
 ) : MovieRepository {
 
-   companion object {
+   private companion object {
+      // Paging config
       const val PAGE_SIZE = 20
       const val PREFETCH_DISTANCE = 4
       const val INIT_LOAD_SIZE = 1 * PAGE_SIZE
