@@ -8,7 +8,7 @@ package com.syalim.themoviedb.domain.model
 data class MovieItemEntity(
    val id: Int,
    val title: String,
-   val posterPath: String? = null,
-   val backdropPath: String? = null,
-   val releaseDate: String,
+   val posterPath: String?,
+   val backdropPath: String?,
+   val releaseDate: String?,
 )

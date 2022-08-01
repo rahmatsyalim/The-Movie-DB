@@ -134,8 +134,8 @@
                   android:layout_height="wrap_content"
                   android:clipToPadding="false"
                   android:nestedScrollingEnabled="false"
-                  android:paddingHorizontal="5dp"
-                  android:paddingVertical="5dp" />
+                  android:padding="3dp" />
+
             </LinearLayout>
 
             <com.facebook.shimmer.ShimmerFrameLayout
@@ -189,8 +189,7 @@
                   android:layout_height="wrap_content"
                   android:clipToPadding="false"
                   android:nestedScrollingEnabled="false"
-                  android:paddingHorizontal="5dp"
-                  android:paddingVertical="5dp" />
+                  android:padding="3dp" />
             </LinearLayout>
 
             <com.facebook.shimmer.ShimmerFrameLayout
@@ -244,8 +243,7 @@
                   android:layout_height="wrap_content"
                   android:clipToPadding="false"
                   android:nestedScrollingEnabled="false"
-                  android:paddingHorizontal="5dp"
-                  android:paddingVertical="5dp" />
+                  android:padding="3dp" />
             </LinearLayout>
 
          </LinearLayout>

@@ -13,6 +13,7 @@
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:orientation="vertical">
+
          <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer"
             android:layout_width="match_parent"
@@ -28,9 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            android:paddingHorizontal="5dp"
-            android:paddingTop="5dp"
+            android:paddingHorizontal="3dp"
             android:paddingBottom="?attr/actionBarSize"
+            android:paddingTop="3dp"
             android:visibility="gone" />
       </LinearLayout>
    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

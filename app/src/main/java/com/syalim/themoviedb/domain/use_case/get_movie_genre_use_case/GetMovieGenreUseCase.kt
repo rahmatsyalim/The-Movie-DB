@@ -1,8 +1,8 @@
 package com.syalim.themoviedb.domain.use_case.get_movie_genre_use_case
 
-import com.syalim.themoviedb.utils.Resource
 import com.syalim.themoviedb.domain.model.GenreItemEntity
 import com.syalim.themoviedb.domain.repository.MovieRepository
+import com.syalim.themoviedb.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

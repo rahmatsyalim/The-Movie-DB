@@ -3,20 +3,20 @@ package com.syalim.themoviedb.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.syalim.themoviedb.utils.Constants.ERROR_NO_CONNECTION
-import com.syalim.themoviedb.utils.Resource
-import com.syalim.themoviedb.utils.getErrorMessage
-import com.syalim.themoviedb.data.mapper.GenreListMapper
-import com.syalim.themoviedb.data.mapper.MovieDetailMapper
-import com.syalim.themoviedb.data.mapper.MovieListMapper
-import com.syalim.themoviedb.data.mapper.MovieTrailerMapper
+import com.syalim.themoviedb.data.mapper.mapToEntity
 import com.syalim.themoviedb.data.paging.data_source.MovieReviewPagingSource
 import com.syalim.themoviedb.data.paging.data_source.MoviesByGenrePagingSource
-import com.syalim.themoviedb.data.remote.network.MovieApi
+import com.syalim.themoviedb.data.remote.api.MovieApi
 import com.syalim.themoviedb.domain.model.*
 import com.syalim.themoviedb.domain.repository.MovieRepository
+import com.syalim.themoviedb.utils.Constants.NETWORK_ERROR_IO_EXCEPTION
+import com.syalim.themoviedb.utils.Resource
+import com.syalim.themoviedb.utils.Utils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onStart
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -30,7 +30,7 @@ class MovieRepositoryImpl @Inject constructor(
    private val movieApi: MovieApi
 ) : MovieRepository {
 
-   private companion object {
+   companion object {
       // Paging config
       const val PAGE_SIZE = 20
       const val PREFETCH_DISTANCE = 4
@@ -39,19 +39,19 @@ class MovieRepositoryImpl @Inject constructor(
    }
 
    override fun getHomeUpcomingMovies(): Flow<Resource<List<MovieItemEntity>>> {
-      return handleRequest { MovieListMapper.convert(movieApi.getUpcomingMovies(page = 1)).results }
+      return handleHttpRequest { movieApi.getUpcomingMovies(page = 1).mapToEntity() }
    }
 
    override fun getHomePopularMovies(): Flow<Resource<List<MovieItemEntity>>> {
-      return handleRequest { MovieListMapper.convert(movieApi.getPopularMovies(page = 1)).results }
+      return handleHttpRequest { movieApi.getPopularMovies(page = 1).mapToEntity() }
    }
 
    override fun getHomeNowPlayingMovies(): Flow<Resource<List<MovieItemEntity>>> {
-      return handleRequest { MovieListMapper.convert(movieApi.getNowPlayingMovies(page = 1)).results }
+      return handleHttpRequest { movieApi.getNowPlayingMovies(page = 1).mapToEntity() }
    }
 
    override fun getHomeTopRatedMovies(): Flow<Resource<List<MovieItemEntity>>> {
-      return handleRequest { MovieListMapper.convert(movieApi.getTopRatedMovies(page = 1)).results }
+      return handleHttpRequest { movieApi.getTopRatedMovies(page = 1).mapToEntity() }
    }
 
    override fun getMoviesByGenre(genre: String?): Flow<PagingData<MovieItemEntity>> {
@@ -62,16 +62,16 @@ class MovieRepositoryImpl @Inject constructor(
             prefetchDistance = PREFETCH_DISTANCE,
             initialLoadSize = INIT_LOAD_SIZE
          ),
-         pagingSourceFactory = { MoviesByGenrePagingSource(api = movieApi, genre = genre) }
+         pagingSourceFactory = { MoviesByGenrePagingSource(movieApi = movieApi, genre = genre) }
       ).flow
    }
 
    override fun getMovieGenres(): Flow<Resource<List<GenreItemEntity>>> {
-      return handleRequest { GenreListMapper.convert(movieApi.getMovieGenres()).genres }
+      return handleHttpRequest { movieApi.getMovieGenres().mapToEntity() }
    }
 
    override fun getMovieDetail(id: String): Flow<Resource<MovieDetailEntity>> {
-      return handleRequest { MovieDetailMapper.convert(movieApi.getMovieDetails(id = id)) }
+      return handleHttpRequest { movieApi.getMovieDetails(id = id).mapToEntity() }
    }
 
    override fun getMovieReviews(id: String): Flow<PagingData<ReviewItemEntity>> {
@@ -87,25 +87,24 @@ class MovieRepositoryImpl @Inject constructor(
    }
 
    override fun getMovieTrailer(id: String): Flow<Resource<MovieTrailerEntity>> {
-      return handleRequest { MovieTrailerMapper.convert(movieApi.getMovieTrailer(id = id)) }
+      return handleHttpRequest { movieApi.getMovieTrailer(id = id).mapToEntity() }
    }
 
    override fun getRecommendationMovies(id: String): Flow<Resource<List<MovieItemEntity>>> {
-      return handleRequest { MovieListMapper.convert(movieApi.getRecommendationMovies(id = id, page = 1)).results }
+      return handleHttpRequest { movieApi.getRecommendationMovies(id = id, page = 1).mapToEntity() }
    }
 
-   private fun <T>handleRequest(request: suspend () -> T?): Flow<Resource<T>>{
+   private fun <T> handleHttpRequest(request: suspend () -> T?): Flow<Resource<T>> {
       return flow {
-         emit(Resource.Loading())
          try {
             val result = request()
             emit(Resource.Success(result))
          } catch (e: HttpException) {
-            emit(Resource.Error(e.getErrorMessage()))
+            emit(Resource.Error(Utils.getHttpErrorMessage(e)))
          } catch (e: IOException) {
-            emit(Resource.Error(ERROR_NO_CONNECTION))
+            emit(Resource.Error(NETWORK_ERROR_IO_EXCEPTION))
          }
-      }
+      }.onStart { emit(Resource.Loading()) }.flowOn(Dispatchers.IO)
    }
 
 }

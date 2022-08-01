@@ -19,7 +19,7 @@
       android:theme="@style/Theme.TheMovieDb"
       tools:targetApi="31">
       <activity
-         android:name=".presentation.MainActivity"
+         android:name=".presentation.main.MainActivity"
          android:exported="true"
          android:screenOrientation="portrait"
          tools:ignore="LockedOrientationActivity">

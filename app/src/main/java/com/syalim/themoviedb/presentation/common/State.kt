@@ -9,7 +9,7 @@ sealed class State<T>(val data: T? = null, val message: String? = null, val isFi
    class Loading<T>(isFirstLoading: Boolean) : State<T>(isFirstLoading = isFirstLoading)
    class Error<T>(message: String?) : State<T>(message = message)
    class Loaded<T>(data: T? = null) : State<T>(data = data)
-   class Default<T> : State<T>()
+   class Idle<T> : State<T>()
 
    fun handle(
       onFirstLoading: ((Boolean) -> Unit)? = null,
@@ -17,15 +17,15 @@ sealed class State<T>(val data: T? = null, val message: String? = null, val isFi
       onError: ((String) -> Unit)? = null,
       onEmpty: (() -> Unit)? = null,
       onLoaded: ((T) -> Unit)? = null
-   ){
-      onFirstLoading?.invoke(this is Loading && this.isFirstLoading)
-      onLoading?.invoke(this is Loading && !this.isFirstLoading)
-      if (this is Error) onError?.invoke(this.message!!)
+   ) {
+      onFirstLoading?.invoke(this is Loading && isFirstLoading)
+      onLoading?.invoke(this is Loading && !isFirstLoading)
+      if (this is Error) onError?.invoke(message!!)
       if (this is Loaded) {
-         if(this.data == null || this.data == emptyList<T>()){
+         if (data == null || data == emptyList<T>()) {
             onEmpty?.invoke()
          } else {
-            onLoaded?.invoke(this.data)
+            onLoaded?.invoke(data)
          }
       }
    }

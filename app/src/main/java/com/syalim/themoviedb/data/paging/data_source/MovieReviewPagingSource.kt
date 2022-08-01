@@ -2,10 +2,10 @@ package com.syalim.themoviedb.data.paging.data_source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.syalim.themoviedb.utils.Constants
-import com.syalim.themoviedb.data.mapper.ReviewListMapper
-import com.syalim.themoviedb.data.remote.network.MovieApi
+import com.syalim.themoviedb.data.mapper.mapToEntity
+import com.syalim.themoviedb.data.remote.api.MovieApi
 import com.syalim.themoviedb.domain.model.ReviewItemEntity
+import com.syalim.themoviedb.utils.Constants
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -17,13 +17,12 @@ import java.io.IOException
 class MovieReviewPagingSource(
    private val movieApi: MovieApi,
    private val id: String
-): PagingSource<Int,ReviewItemEntity>() {
+) : PagingSource<Int, ReviewItemEntity>() {
 
    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ReviewItemEntity> {
       val currentKey = params.key ?: Constants.START_PAGE_INDEX
       return try {
-         val response = movieApi.getMovieReviews(page = currentKey, id = id)
-         val result = ReviewListMapper.convert(response).results
+         val result = movieApi.getMovieReviews(page = currentKey, id = id).mapToEntity()
          LoadResult.Page(
             data = result!!,
             prevKey = if (currentKey == Constants.START_PAGE_INDEX) null else currentKey - 1,

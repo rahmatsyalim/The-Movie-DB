@@ -7,5 +7,5 @@ package com.syalim.themoviedb.domain.model
  */
 data class GenreItemEntity(
    val id: Int,
-   val name: String? = "Unknown"
+   val name: String?
 )

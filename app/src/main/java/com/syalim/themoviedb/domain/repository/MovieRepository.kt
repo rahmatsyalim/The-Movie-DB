@@ -1,8 +1,8 @@
 package com.syalim.themoviedb.domain.repository
 
 import androidx.paging.PagingData
-import com.syalim.themoviedb.utils.Resource
 import com.syalim.themoviedb.domain.model.*
+import com.syalim.themoviedb.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 

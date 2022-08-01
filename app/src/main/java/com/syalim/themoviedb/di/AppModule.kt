@@ -2,10 +2,10 @@ package com.syalim.themoviedb.di
 
 import com.google.gson.GsonBuilder
 import com.syalim.themoviedb.BuildConfig
-import com.syalim.themoviedb.utils.Constants.BASE_URL
-import com.syalim.themoviedb.data.remote.network.MovieApi
+import com.syalim.themoviedb.data.remote.api.MovieApi
 import com.syalim.themoviedb.data.repository.MovieRepositoryImpl
 import com.syalim.themoviedb.domain.repository.MovieRepository
+import com.syalim.themoviedb.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
