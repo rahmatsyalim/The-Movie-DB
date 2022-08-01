@@ -169,27 +169,34 @@
          android:animateLayoutChanges="true"
          android:orientation="vertical">
 
-         <RelativeLayout
+         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/view_trailer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="24dp"
             android:paddingHorizontal="12dp"
             android:visibility="gone">
 
-            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-               android:id="@+id/youtube_player_view"
+            <WebView
+               android:id="@+id/web_view_embed_youtube"
                android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               app:autoPlay="false" />
+               android:layout_height="0dp"
+               app:layout_constraintDimensionRatio="16:9"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"/>
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                android:id="@+id/progress_bar_trailer"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_centerInParent="true"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
                android:indeterminate="true" />
-         </RelativeLayout>
+         </androidx.constraintlayout.widget.ConstraintLayout>
 
          <LinearLayout
             android:id="@+id/view_recommendation_movies"

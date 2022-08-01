@@ -4,16 +4,12 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.databinding.FragmentMovieDetailBinding
 import com.syalim.themoviedb.presentation.common.State
@@ -70,8 +66,6 @@ class MovieDetailFragment :
       collectRecommendationMovies()
 
       collectReviews()
-
-      initYoutubePlayer()
 
    }
 
@@ -170,17 +164,11 @@ class MovieDetailFragment :
                      with(binding.fabTrailer) {
                         if (text == "Show Trailer") {
                            text = "Hide Trailer"
-                           icon = ResourcesCompat.getDrawable(
-                              resources, R.drawable.ic_arrow_circle_up, requireContext()
-                                 .theme
-                           )
+                           icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_circle_up)
+
                         } else {
                            text = "Show Trailer"
-                           icon = ResourcesCompat.getDrawable(
-                              resources, R.drawable.ic_arrow_circle_down,
-                              requireContext()
-                                 .theme
-                           )
+                           icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_circle_down)
                         }
                      }
                   }
@@ -236,37 +224,27 @@ class MovieDetailFragment :
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.movieTrailerState.collectLatest { state ->
             state.handle(
+               onFirstLoading = {
+                  binding.progressBarTrailer.isVisible = it
+               },
+               onLoading = {
+                  binding.progressBarTrailer.isVisible = it
+               },
                onError = {
-                  binding.root.showSnackBar(it)
+                  Utils.setYoutubePlayerWebView(binding.webViewEmbedYoutube, "")
+               },
+               onEmpty = {
+                  Utils.setYoutubePlayerWebView(binding.webViewEmbedYoutube, "")
                },
                onLoaded = { data ->
-                  binding.youtubePlayerView.addYouTubePlayerListener(object :
-                     AbstractYouTubePlayerListener() {
-                     override fun onReady(youTubePlayer: YouTubePlayer) {
-                        data.key?.let { youTubePlayer.cueVideo(it, 0f) }
-                     }
-
-                     override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
-                        super.onVideoId(youTubePlayer, videoId)
-                        binding.progressBarTrailer.isVisible = false
-                     }
-
-                     override fun onError(
-                        youTubePlayer: YouTubePlayer,
-                        error: PlayerConstants.PlayerError
-                     ) {
-                        super.onError(youTubePlayer, error)
-                        binding.progressBarTrailer.isVisible = false
-                     }
-                  })
+                  binding.progressBarTrailer.isVisible = false
+                  data.key?.let {
+                     Utils.setYoutubePlayerWebView(binding.webViewEmbedYoutube, it)
+                  }
                }
             )
          }
       }
-   }
-
-   private fun initYoutubePlayer() {
-      viewLifecycleOwner.lifecycle.addObserver(binding.youtubePlayerView)
    }
 
 }

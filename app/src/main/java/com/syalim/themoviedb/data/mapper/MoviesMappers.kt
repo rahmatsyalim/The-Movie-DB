@@ -46,14 +46,18 @@ fun GenreListResponse.mapToEntity(): List<GenreItemEntity>? {
    }
 }
 
-fun MovieTrailerListResponse.mapToEntity(): MovieTrailerEntity {
-   val item = results?.first {
-      it.type.equals("Trailer") && it.site.equals("YouTube")
+fun MovieTrailerListResponse.mapToEntity(): MovieTrailerEntity? {
+   val item = if (!results.isNullOrEmpty()) {
+      results.first {
+         it?.site.equals("YouTube") && it?.type.equals("Trailer")
+      } ?: results.first { it?.site.equals("YouTube") }
+   } else null
+   return item?.let {
+      MovieTrailerEntity(
+         key = item.key,
+         id = item.id
+      )
    }
-   return MovieTrailerEntity(
-      key = item?.key,
-      id = item?.id
-   )
 }
 
 fun ReviewListResponse.mapToEntity(): List<ReviewItemEntity>? {

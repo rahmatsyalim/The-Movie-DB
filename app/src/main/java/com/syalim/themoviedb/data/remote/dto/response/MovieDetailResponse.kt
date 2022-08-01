@@ -35,7 +35,7 @@ data class MovieDetailResponse(
     @SerializedName("production_countries")
     val productionCountries: List<ProductionCountryResponse?>?,
     @SerializedName("release_date")
-    val releaseDate: String,
+    val releaseDate: String?,
     @SerializedName("revenue")
     val revenue: Long?,
     @SerializedName("runtime")
@@ -47,7 +47,7 @@ data class MovieDetailResponse(
     @SerializedName("tagline")
     val tagline: String?,
     @SerializedName("title")
-    val title: String,
+    val title: String?,
     @SerializedName("video")
     val video: Boolean?,
     @SerializedName("vote_average")

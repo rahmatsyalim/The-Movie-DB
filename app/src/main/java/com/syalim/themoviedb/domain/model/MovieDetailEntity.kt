@@ -10,10 +10,10 @@ data class MovieDetailEntity(
    val backdropPath: String?,
    val genres: List<String>,
    val id: Int,
-   val title: String,
+   val title: String?,
    val overview: String?,
    val posterPath: String?,
-   val releaseDate: String,
+   val releaseDate: String?,
    val voteAverage: Double?,
    val runtime: Int?,
    val tagline: String?

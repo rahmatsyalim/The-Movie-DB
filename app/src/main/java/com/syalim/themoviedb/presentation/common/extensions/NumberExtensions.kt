@@ -9,11 +9,11 @@ import java.text.DecimalFormat
  * rahmatsyalim@gmail.com
  */
 
-fun Int?.convertToTimeDuration(): String {
+fun Number?.convertToTimeDuration(): String {
    var hour: Int
    var minute: Int
-   var result = "Unknown Duration"
-   this?.let {
+   var result = "0m"
+   this?.toInt()?.let {
       if (it >= 60) {
          hour = it / 60
          minute = it - hour * 60

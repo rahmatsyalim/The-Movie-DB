@@ -1,9 +1,13 @@
 package com.syalim.themoviedb.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -93,6 +97,30 @@ class Utils {
                   onLoaded?.invoke()
                }
             }
+         }
+      }
+
+      @SuppressLint("SetJavaScriptEnabled")
+      fun setYoutubePlayerWebView(webView: WebView, videoId: String) {
+         val customWebViewClient = object : WebViewClient(){
+            override fun onPageFinished(view: WebView?, url: String?) {
+               view?.evaluateJavascript("setVideoIframe('$videoId')", null)
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+               return true
+            }
+         }
+
+         webView.apply {
+            webViewClient = customWebViewClient
+            settings.domStorageEnabled = true
+            settings.javaScriptEnabled = true
+            settings.useWideViewPort = true
+            settings.loadWithOverviewMode = true
+            setInitialScale(1)
+            setPadding(0, 0, 0, 0)
+            loadUrl("file:///android_asset/index.html")
          }
       }
 

@@ -7,7 +7,7 @@ data class MovieTrailerListResponse(
     @SerializedName("id")
     val id: Int?,
     @SerializedName("results")
-    val results: List<MovieTrailerItemResponse>?
+    val results: List<MovieTrailerItemResponse?>?
 )
 
 data class MovieTrailerItemResponse(
