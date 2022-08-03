@@ -48,7 +48,7 @@ object AppModule {
          .writeTimeout(30L, TimeUnit.SECONDS)
          .addInterceptor(headerInterceptor)
          .apply {
-            if (!BuildConfig.isReleased.toBoolean()) {
+            if (!BuildConfig.IS_RELEASE) {
                addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
             }
          }
@@ -60,7 +60,7 @@ object AppModule {
    fun provideHeaderInterceptor(): Interceptor {
       return Interceptor {
          val httpUrl = it.request().url.newBuilder()
-            .addQueryParameter("api_key", BuildConfig.apiKey).build()
+            .addQueryParameter("api_key", BuildConfig.API_KEY).build()
          val requestBuilder = it.request().newBuilder()
          // add headers here
 

@@ -2,6 +2,7 @@ package com.syalim.themoviedb
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 
 /**
@@ -10,4 +11,15 @@ import dagger.hilt.android.HiltAndroidApp
  */
 
 @HiltAndroidApp
-class Application: Application()
+class Application : Application() {
+
+   override fun onCreate() {
+      super.onCreate()
+
+      if (!BuildConfig.IS_RELEASE){
+         Timber.plant(Timber.DebugTree())
+      }
+
+   }
+
+}

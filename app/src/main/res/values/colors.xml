@@ -15,4 +15,5 @@
    <color name="transparent">#00000000</color>
    <color name="red">#FF0000</color>
    <color name="greyTransparent">#664A4A4A</color>
+   <color name="ic_launcher_background">#000000</color>
 </resources>

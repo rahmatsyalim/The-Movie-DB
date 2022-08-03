@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "TheMovieDb"
-include ':app'
+include (":app")

@@ -203,10 +203,7 @@ class MovieDetailFragment :
                      }
                      binding.tvDesc.text = data.overview
                      binding.ivPoster.loadImage(data.posterPath, IMAGE_POSTER_DETAIL_SIZE)
-                     binding.ivBackground.apply {
-                        layoutParams.height = binding.topAppbar.height
-                        loadBackgroundImage(data.backdropPath)
-                     }
+                     binding.ivBackground.loadBackgroundImage(data.backdropPath)
                      binding.shimmerMovieDetail.apply {
                         stopShimmer()
                         isVisible = false
