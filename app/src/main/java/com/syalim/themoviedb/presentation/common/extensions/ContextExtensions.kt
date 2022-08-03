@@ -1,7 +1,6 @@
 package com.syalim.themoviedb.presentation.common.extensions
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.widget.Toast
@@ -10,7 +9,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.FontRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import com.syalim.themoviedb.R
 
 
 /**

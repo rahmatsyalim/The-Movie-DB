@@ -51,9 +51,8 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          app:backgroundTint="@color/black"
-         app:itemIconSize="20dp"
-         app:itemIconTint="@drawable/selectable_ic_color"
-         app:itemTextColor="@drawable/selectable_ic_color"
+         app:itemIconTint="@drawable/bottom_nav_ic_color_selector"
+         app:itemTextColor="@drawable/bottom_nav_ic_color_selector"
          app:menu="@menu/menu_bottom_main" />
 
    </com.google.android.material.bottomappbar.BottomAppBar>

@@ -38,15 +38,15 @@ class MainActivity : AppCompatActivity() {
 
       val topLevelDest = setOf(
          R.id.home_fragment,
-         R.id.genre_fragment,
-         R.id.favorites_fragment
+         R.id.discover_fragment,
+         R.id.bookmarks_fragment
       )
 
       navController.addOnDestinationChangedListener { _, destination, _ ->
 
          toolbar.title = destination.label
-         menuSearch?.isVisible = destination.id == R.id.home_fragment
-         menuTune?.isVisible = destination.id == R.id.genre_fragment
+         menuSearch?.isVisible = destination.id == R.id.home_fragment || destination.id == R.id.discover_fragment
+         menuTune?.isVisible = destination.id == R.id.discover_fragment
 
          topLevelDest.apply {
             if (this.contains(destination.id)) {

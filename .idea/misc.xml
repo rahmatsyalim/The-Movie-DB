@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../../../layout/custom_preview.xml" value="0.10359905819038008" />
+        <entry key="app/src/main/res/drawable-v24/ic_genre_bottom.xml" value="0.1845" />
         <entry key="app/src/main/res/drawable-v24/ic_genre_not_selected.xml" value="0.1725" />
+        <entry key="app/src/main/res/drawable-v24/ic_home.xml" value="0.1845" />
         <entry key="app/src/main/res/drawable/bg_fading_border.xml" value="0.164" />
         <entry key="app/src/main/res/drawable/bg_fading_bottom.xml" value="0.164" />
         <entry key="app/src/main/res/drawable/bg_image_ph.xml" value="0.164" />
@@ -12,6 +14,8 @@
         <entry key="app/src/main/res/drawable/bg_rounded_top.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/bg_shimmer.xml" value="0.1625" />
         <entry key="app/src/main/res/drawable/bg_shimmer_ph.xml" value="0.1625" />
+        <entry key="app/src/main/res/drawable/bookmark-48px-fill.xml" value="0.1845" />
+        <entry key="app/src/main/res/drawable/bookmark-48px-outline.xml" value="0.1845" />
         <entry key="app/src/main/res/drawable/carousel_default_dot.xml" value="0.1585" />
         <entry key="app/src/main/res/drawable/carousel_dot_active.xml" value="0.1585" />
         <entry key="app/src/main/res/drawable/carousel_dot_inactive.xml" value="0.1585" />
@@ -19,10 +23,14 @@
         <entry key="app/src/main/res/drawable/carousel_selected_dot.xml" value="0.1585" />
         <entry key="app/src/main/res/drawable/circular_percent_bar_color.xml" value="0.1625" />
         <entry key="app/src/main/res/drawable/ic_arrow_drop_down.xml" value="0.1625" />
+        <entry key="app/src/main/res/drawable/ic_bookmark_active.xml" value="0.1845" />
+        <entry key="app/src/main/res/drawable/ic_bookmarks_bottom.xml" value="0.1845" />
+        <entry key="app/src/main/res/drawable/ic_bookmarks_fill.xml" value="0.1845" />
         <entry key="app/src/main/res/drawable/ic_check.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/ic_favorite.xml" value="0.1605" />
         <entry key="app/src/main/res/drawable/ic_favorite_fill.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/ic_filter_top.xml" value="0.1725" />
+        <entry key="app/src/main/res/drawable/ic_genre_bottom.xml" value="0.1845" />
         <entry key="app/src/main/res/drawable/ic_genre_not_selected.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/ic_genre_selected.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/ic_home_bottom.xml" value="0.1725" />
@@ -34,6 +42,7 @@
         <entry key="app/src/main/res/drawable/ic_search_top.xml" value="0.164" />
         <entry key="app/src/main/res/drawable/ic_tmdb_logo.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/ic_tune_top.xml" value="0.164" />
+        <entry key="app/src/main/res/drawable/movie-48px-outline.xml" value="0.1845" />
         <entry key="app/src/main/res/drawable/selectable_bottom_nav_icon.xml" value="0.1725" />
         <entry key="app/src/main/res/font/kjahdsk.xml" value="0.30092592592592593" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
@@ -51,7 +60,7 @@
         <entry key="app/src/main/res/layout/paging_footer.xml" value="0.2947916666666667" />
         <entry key="app/src/main/res/layout/progress_bar_layout.xml" value="0.29375" />
         <entry key="app/src/main/res/layout/shimmer_home_movie_list.xml" value="0.30885416666666665" />
-        <entry key="app/src/main/res/layout/shimmer_ph_genre_movie_list.xml" value="0.30885416666666665" />
+        <entry key="app/src/main/res/layout/shimmer_ph_genre_movie_list.xml" value="0.165" />
         <entry key="app/src/main/res/layout/shimmer_ph_home_movie_carousel.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/shimmer_ph_home_movie_list.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/shimmer_ph_home_movies_header.xml" value="0.30885416666666665" />

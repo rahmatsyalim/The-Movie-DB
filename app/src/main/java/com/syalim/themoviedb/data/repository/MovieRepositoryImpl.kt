@@ -4,8 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.syalim.themoviedb.data.mapper.mapToEntity
+import com.syalim.themoviedb.data.paging.data_source.DiscoverMoviesPagingSource
 import com.syalim.themoviedb.data.paging.data_source.MovieReviewPagingSource
-import com.syalim.themoviedb.data.paging.data_source.MoviesByGenrePagingSource
 import com.syalim.themoviedb.data.remote.api.MovieApi
 import com.syalim.themoviedb.domain.model.*
 import com.syalim.themoviedb.domain.repository.MovieRepository
@@ -54,7 +54,7 @@ class MovieRepositoryImpl @Inject constructor(
       return handleHttpRequest { movieApi.getTopRatedMovies(page = 1).mapToEntity() }
    }
 
-   override fun getMoviesByGenre(genre: String?): Flow<PagingData<MovieItemEntity>> {
+   override fun getDiscoverMovies(genre: String?): Flow<PagingData<MovieItemEntity>> {
       return Pager(
          config = PagingConfig(
             pageSize = PAGE_SIZE,
@@ -62,7 +62,7 @@ class MovieRepositoryImpl @Inject constructor(
             prefetchDistance = PREFETCH_DISTANCE,
             initialLoadSize = INIT_LOAD_SIZE
          ),
-         pagingSourceFactory = { MoviesByGenrePagingSource(movieApi = movieApi, genre = genre) }
+         pagingSourceFactory = { DiscoverMoviesPagingSource(movieApi = movieApi, genre = genre) }
       ).flow
    }
 

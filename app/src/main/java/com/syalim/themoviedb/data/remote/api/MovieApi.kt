@@ -39,7 +39,7 @@ interface MovieApi {
    ): MovieListResponse
 
    @GET("/3/discover/movie")
-   suspend fun getMoviesByGenre(
+   suspend fun getDiscoverMovies(
       @Query("page") page: Int,
       @Query("with_genres") genres: String?
    ): MovieListResponse

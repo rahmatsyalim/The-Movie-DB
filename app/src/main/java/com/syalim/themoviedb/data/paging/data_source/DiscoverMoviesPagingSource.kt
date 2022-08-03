@@ -14,7 +14,7 @@ import java.io.IOException
  * Created by Rahmat Syalim on 2022/07/18
  * rahmatsyalim@gmail.com
  */
-class MoviesByGenrePagingSource(
+class DiscoverMoviesPagingSource(
    private val movieApi: MovieApi,
    private val genre: String?
 ) : PagingSource<Int, MovieItemEntity>() {
@@ -22,7 +22,7 @@ class MoviesByGenrePagingSource(
    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieItemEntity> {
       val currentKey = params.key ?: START_PAGE_INDEX
       return try {
-         val result = movieApi.getMoviesByGenre(page = currentKey, genres = genre).mapToEntity()
+         val result = movieApi.getDiscoverMovies(page = currentKey, genres = genre).mapToEntity()
          LoadResult.Page(
             data = result!!,
             prevKey = if (currentKey == START_PAGE_INDEX) null else currentKey - 1,

@@ -27,7 +27,7 @@ fun View.show() {
 }
 
 fun View.showSnackBar(message: String) {
-   val font = ResourcesCompat.getFont(context, R.font.poppins_regular)
+   val font = context.getFontFrom(R.font.poppins_regular)
    Snackbar.make(
       rootView,
       message,

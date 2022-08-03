@@ -3,7 +3,6 @@ package com.syalim.themoviedb.presentation.main.movie_detail
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -156,21 +155,20 @@ class MovieDetailFragment :
                      with(binding.fabTrailer) {
                         if (text == "Show Trailer") {
                            text = "Hide Trailer"
-                           icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_circle_up)
+                           icon = requireContext().getDrawableFrom(R.drawable.ic_arrow_circle_up)
 
                         } else {
                            text = "Show Trailer"
-                           icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_circle_down)
+                           icon = requireContext().getDrawableFrom(R.drawable.ic_arrow_circle_down)
                         }
                      }
                   }
                   binding.fabFavorite.setOnClickListener {
                      // TODO: save to db
                      binding.fabFavorite.apply {
-                        iconTint = ColorStateList.valueOf(
-                           ContextCompat.getColor(requireContext(), R.color.red)
-                        )
-                        text = "Added to favorites"
+                        icon = requireContext().getDrawableFrom(R.drawable.ic_bookmark_active)
+                        iconTint = ColorStateList.valueOf(requireContext().getColorFrom(R.color.primary))
+                        text = "Bookmarked"
                      }
                   }
                   viewLifecycleOwner.lifecycleScope.launch {

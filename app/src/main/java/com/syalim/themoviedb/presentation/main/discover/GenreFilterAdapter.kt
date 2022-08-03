@@ -1,4 +1,4 @@
-package com.syalim.themoviedb.presentation.main.genre
+package com.syalim.themoviedb.presentation.main.discover
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

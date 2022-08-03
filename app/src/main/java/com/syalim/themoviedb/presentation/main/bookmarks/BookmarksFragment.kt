@@ -1,7 +1,7 @@
-package com.syalim.themoviedb.presentation.main.favorites
+package com.syalim.themoviedb.presentation.main.bookmarks
 
 import androidx.fragment.app.activityViewModels
-import com.syalim.themoviedb.databinding.FragmentFavoritesBinding
+import com.syalim.themoviedb.databinding.FragmentBookmarksBinding
 import com.syalim.themoviedb.presentation.common.base.BaseFragment
 import com.syalim.themoviedb.presentation.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,7 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class FavoritesFragment: BaseFragment<FragmentFavoritesBinding>(FragmentFavoritesBinding::inflate) {
+class BookmarksFragment: BaseFragment<FragmentBookmarksBinding>(FragmentBookmarksBinding::inflate) {
 
    private val viewModel: MainViewModel by activityViewModels()
 

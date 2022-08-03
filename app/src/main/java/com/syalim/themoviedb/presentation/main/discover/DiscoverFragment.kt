@@ -1,4 +1,4 @@
-package com.syalim.themoviedb.presentation.main.genre
+package com.syalim.themoviedb.presentation.main.discover
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -13,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.databinding.BottomSheetFilterBinding
-import com.syalim.themoviedb.databinding.FragmentGenreBinding
+import com.syalim.themoviedb.databinding.FragmentDiscoverBinding
 import com.syalim.themoviedb.presentation.common.State
 import com.syalim.themoviedb.presentation.common.base.BaseFragment
 import com.syalim.themoviedb.presentation.common.extensions.showSnackBar
@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::inflate) {
+class DiscoverFragment : BaseFragment<FragmentDiscoverBinding>(FragmentDiscoverBinding::inflate) {
 
    private val viewModel: MainViewModel by activityViewModels()
 
@@ -89,7 +89,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
          setBottomSheetFilter()
          if (viewModel.filterGenreState.value is State.Idle) {
             viewLifecycleOwner.lifecycleScope.launch {
-               viewModel.getGenre()
+               viewModel.getMovieGenre()
             }
          }
          return@setOnMenuItemClickListener false
@@ -100,7 +100,7 @@ class GenreFragment : BaseFragment<FragmentGenreBinding>(FragmentGenreBinding::i
    private fun collectMoviesByGenre() {
       collectMoviesByGenreJob?.cancel()
       collectMoviesByGenreJob = viewLifecycleOwner.lifecycleScope.launch {
-         viewModel.moviesByGenre.distinctUntilChanged().cancellable().collectLatest { pagingData ->
+         viewModel.discoverMovies.distinctUntilChanged().cancellable().collectLatest { pagingData ->
             moviesAdapter.submitData(pagingData)
          }
       }

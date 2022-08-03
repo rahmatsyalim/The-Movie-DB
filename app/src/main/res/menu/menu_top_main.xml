@@ -3,13 +3,13 @@
    xmlns:app="http://schemas.android.com/apk/res-auto">
 
    <item android:id="@+id/menu_search"
-      android:icon="@drawable/ic_search_top"
+      android:icon="@drawable/ic_search"
       app:showAsAction="ifRoom"
       android:title="Search" />
 
    <item
       android:id="@+id/menu_tune"
-      android:icon="@drawable/ic_tune_top"
+      android:icon="@drawable/ic_tune"
       app:showAsAction="ifRoom"
       android:title="Tune" />
 

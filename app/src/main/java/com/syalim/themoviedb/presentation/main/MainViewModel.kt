@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.syalim.themoviedb.domain.model.GenreItemEntity
 import com.syalim.themoviedb.domain.model.MovieItemEntity
+import com.syalim.themoviedb.domain.use_case.get_discover_movies_use_case.GetDiscoverMoviesUseCase
 import com.syalim.themoviedb.domain.use_case.get_movie_genre_use_case.GetMovieGenreUseCase
-import com.syalim.themoviedb.domain.use_case.get_movies_by_genre_use_case.GetMoviesByGenreUseCase
 import com.syalim.themoviedb.domain.use_case.get_now_playing_movies_use_case.GetNowPlayingMoviesUseCase
 import com.syalim.themoviedb.domain.use_case.get_popular_movies_use_case.GetPopularMoviesUseCase
 import com.syalim.themoviedb.domain.use_case.get_top_rated_movies_use_case.GetTopRatedMoviesUseCase
@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
    private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
    private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
-   private val getMoviesByGenreUseCase: GetMoviesByGenreUseCase,
+   private val getDiscoverMoviesUseCase: GetDiscoverMoviesUseCase,
    private val getMovieGenreUseCase: GetMovieGenreUseCase
 ) : BaseViewModel() {
 
@@ -85,7 +85,7 @@ class MainViewModel @Inject constructor(
    private suspend fun getTopRatedMovies(isFirstLoading: Boolean) =
       handleResource(_topRatedState, getTopRatedMoviesUseCase(), isFirstLoading)
 
-   suspend fun getGenre() = handleResource(_filterGenreState, getMovieGenreUseCase())
+   suspend fun getMovieGenre() = handleResource(_filterGenreState, getMovieGenreUseCase())
 
    private val _currentSelectedGenre = MutableLiveData(emptyList<String>())
    val currentSelectedGenre: LiveData<List<String>> get() = _currentSelectedGenre
@@ -94,8 +94,8 @@ class MainViewModel @Inject constructor(
       _currentSelectedGenre.value = genreList
    }
 
-   val moviesByGenre = currentSelectedGenre.asFlow().flatMapLatest {
-      getMoviesByGenreUseCase(it.joinToString(","))
+   val discoverMovies = currentSelectedGenre.asFlow().flatMapLatest {
+      getDiscoverMoviesUseCase(it.joinToString(","))
    }.cachedIn(viewModelScope)
 
 }

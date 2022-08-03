@@ -20,7 +20,7 @@ interface MovieRepository {
 
    fun getHomeTopRatedMovies(): Flow<Resource<List<MovieItemEntity>>>
 
-   fun getMoviesByGenre(genre: String?): Flow<PagingData<MovieItemEntity>>
+   fun getDiscoverMovies(genre: String?): Flow<PagingData<MovieItemEntity>>
 
    fun getMovieGenres(): Flow<Resource<List<GenreItemEntity>>>
 
