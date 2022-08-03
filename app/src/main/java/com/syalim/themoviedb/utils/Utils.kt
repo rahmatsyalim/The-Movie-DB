@@ -12,6 +12,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.syalim.themoviedb.utils.Constants.NETWORK_ERROR_UNEXPECTED
+import com.syalim.themoviedb.utils.Constants.YOUTUBE_PLAYER_HTML_FILE
 import org.json.JSONObject
 import retrofit2.HttpException
 import java.io.IOException
@@ -120,7 +121,7 @@ class Utils {
             settings.loadWithOverviewMode = true
             setInitialScale(1)
             setPadding(0, 0, 0, 0)
-            loadUrl("file:///android_asset/index.html")
+            loadUrl(YOUTUBE_PLAYER_HTML_FILE)
          }
       }
 

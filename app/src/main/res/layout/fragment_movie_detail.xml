@@ -182,20 +182,20 @@
                android:layout_width="match_parent"
                android:layout_height="0dp"
                app:layout_constraintDimensionRatio="16:9"
-               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
                app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintEnd_toEndOf="parent"/>
+               app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                android:id="@+id/progress_bar_trailer"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_centerInParent="true"
-               app:layout_constraintTop_toTopOf="parent"
+               android:indeterminate="true"
                app:layout_constraintBottom_toBottomOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toEndOf="parent"
-               android:indeterminate="true" />
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent" />
          </androidx.constraintlayout.widget.ConstraintLayout>
 
          <LinearLayout
@@ -317,11 +317,14 @@
       android:id="@+id/shimmer_movie_detail"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?attr/actionBarSize"
-      app:shimmer_base_alpha="0.2"
-      app:shimmer_tilt="0.5">
-
-      <include layout="@layout/shimmer_ph_movie_detail" />
+      android:layout_marginTop="?attr/actionBarSize">
+      <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical">
+         <include layout="@layout/shimmer_ph_movie_detail" />
+         <include layout="@layout/shimmer_ph_home_movie_list"/>
+      </LinearLayout>
 
    </com.facebook.shimmer.ShimmerFrameLayout>
 

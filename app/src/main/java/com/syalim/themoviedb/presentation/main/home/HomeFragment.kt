@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.databinding.FragmentHomeBinding
 import com.syalim.themoviedb.presentation.common.State
@@ -125,6 +126,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    private fun setViewPagerUpcoming() {
       val carouselAdapter = CarouselAdapter()
+      binding.vpUpcoming.apply {
+         offscreenPageLimit = 2
+         clipToPadding = false
+         clipChildren = false
+         getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+         setCarouselTransformer()
+         adapter = carouselAdapter
+      }
       carouselAdapter.apply {
          setOnItemClickListener {
             val bundle = Bundle().apply {
@@ -133,14 +142,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             findNavController().navigate(R.id.action_home_fragment_to_movie_detail_fragment, bundle)
          }
          collectUpcoming()
-      }
-      binding.vpUpcoming.apply {
-         offscreenPageLimit = 3
-         clipToPadding = false
-         clipChildren = false
-         getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-         setCarouselTransformer()
-         adapter = carouselAdapter
       }
 
    }
@@ -221,11 +222,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                      stopShimmer()
                      isVisible = false
                   }
-                  binding.viewUpcoming.isVisible = true
-
-                  carouselJob?.cancel()
-                  carouselJob = viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-                     binding.vpUpcoming.setImageCarousel(3000L)
+                  binding.viewUpcoming.apply {
+                     isVisible = true
+                  }
+                  binding.vpUpcoming.apply {
+                     setCarouselJob()
+                     setDots()
                   }
                }
             )
@@ -240,10 +242,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
          val r = 1 - abs(position)
          page.scaleY = 0.85f + r * 0.14f
       }
-      this.setPageTransformer(transformer)
+      setPageTransformer(transformer)
    }
-
-   private var carouselJob: Job? = null
 
    private suspend fun ViewPager2.setImageCarousel(interval: Long) {
       delay(interval)
@@ -255,6 +255,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       setCurrentItem(nextItem, true)
 
       setImageCarousel(interval)
+   }
+
+   private fun ViewPager2.setDots() {
+      TabLayoutMediator(binding.tabLayoutCarousel, this) { _, _ ->
+      }.attach()
+   }
+
+   private var carouselJob: Job? = null
+
+   private fun ViewPager2.setCarouselJob() {
+      carouselJob?.cancel()
+      carouselJob = viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+         setImageCarousel(3000L)
+      }
    }
 
 }

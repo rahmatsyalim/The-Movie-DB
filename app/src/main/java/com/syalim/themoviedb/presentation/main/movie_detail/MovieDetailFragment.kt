@@ -88,11 +88,6 @@ class MovieDetailFragment :
    private fun ReviewsPagerAdapter.setLoadStateListener() {
       Utils.handlePagingLoadState(
          this,
-         onError = {
-            binding.tvInfoReviews.isVisible = true
-            binding.tvInfoReviews.text = it
-            binding.viewReviews.isVisible = true
-         },
          onEmpty = {
             binding.tvInfoReviews.isVisible = true
             binding.tvInfoReviews.text = "No reviews."
@@ -138,9 +133,6 @@ class MovieDetailFragment :
       viewLifecycleOwner.lifecycleScope.launch {
          viewModel.recommendationMoviesState.collectLatest { state ->
             state.handle(
-               onError = {
-                  binding.root.showSnackBar(it)
-               },
                onLoaded = {
                   recommendationMoviesAdapter.data.submitList(it)
                   binding.viewRecommendationMovies.isVisible = true

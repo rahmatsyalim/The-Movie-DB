@@ -17,6 +17,8 @@ object Constants {
    const val IMAGE_BACKDROP_BIG_SIZE = "/w1280"
    const val IMAGE_PROFILE_THUMBNAIL_SIZE = "/w185"
 
+   const val YOUTUBE_PLAYER_HTML_FILE = "file:///android_asset/index.html"
+
    // Error Message
    const val NETWORK_ERROR_IO_EXCEPTION = "Couldn't reach server."
    const val NETWORK_ERROR_UNEXPECTED = "Unexpected network error."
