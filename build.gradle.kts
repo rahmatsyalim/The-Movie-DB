@@ -1,20 +1,20 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-import Utils.Companion.isStable
+import Utils.isStable
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 buildscript {
    dependencies {
-      classpath(BuildClasspath.navigationSafeArgs)
-      classpath(BuildClasspath.daggerHilt)
-      classpath(BuildClasspath.secretsGradle)
+      classpath(Libs.Navigation.safeArgsGradlePlugin)
+      classpath(Libs.DaggerHilt.gradlePlugin)
+      classpath(Libs.secretsGradlePlugin)
    }
 }
 
 plugins {
-   id(BuildPlugins.agpApplication) version Versions.agp apply false
-   id(BuildPlugins.agpLibrary) version Versions.agp apply false
-   id(BuildPlugins.kotlinAndroid) version Versions.kotlin apply false
-   id(BuildPlugins.benManesVersions) version Versions.benManesVersions apply true
+   id(Libs.Android.application) version Versions.android apply false
+   id(Libs.Android.library) version  Versions.android apply false
+   id(Libs.Kotlin.android) version Versions.kotlin apply false
+   id(Libs.benManesVersions) version Versions.benManes apply true
 }
 
 tasks.register("clean", Delete::class) {
