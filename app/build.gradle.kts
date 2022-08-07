@@ -8,14 +8,14 @@ plugins {
 }
 
 android {
-   compileSdk = 32
+   compileSdk = AppConfig.compileSdk
 
    defaultConfig {
-      applicationId = "com.syalim.themoviedb"
-      minSdk = 21
-      targetSdk = 32
-      versionCode = 1
-      versionName = "1.0.0"
+      applicationId = AppConfig.applicationId
+      minSdk = AppConfig.minSdk
+      targetSdk = AppConfig.targetSdk
+      versionCode = AppConfig.versionCode
+      versionName = AppConfig.versionName
 
       testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
       vectorDrawables {
@@ -49,52 +49,56 @@ android {
       viewBinding = true
    }
 
+   android.sourceSets.all {
+      java.srcDir("src/$name/kotlin")
+   }
+
 }
 
 dependencies {
 
-   implementation(Dependencies.Libs.coreKtx)
-   implementation(Dependencies.Libs.appcompat)
-   implementation(Dependencies.Libs.materialDesign)
-   implementation(Dependencies.Libs.constraintLayout)
-   implementation(Dependencies.Libs.navigationFragment)
-   implementation(Dependencies.Libs.navigationUi)
-   implementation(Dependencies.Libs.swipeRefreshLayout)
-   implementation(Dependencies.Libs.recyclerView)
-   implementation(Dependencies.Libs.paging3)
-   implementation(Dependencies.Libs.viewPager2)
-   implementation(Dependencies.Libs.coroutinesCore)
-   implementation(Dependencies.Libs.coroutinesAndroid)
-   implementation(Dependencies.Libs.lifecycleViewModel)
-   implementation(Dependencies.Libs.lifecycleLiveData)
-   implementation(Dependencies.Libs.hiltAndroid)
-   implementation(Dependencies.Libs.hiltNavigationFragment)
-   kapt(Dependencies.Libs.hiltCompiler)
-   implementation(Dependencies.Libs.room)
-   implementation(Dependencies.Libs.roomKtx)
-   kapt(Dependencies.Libs.roomCompiler)
-   implementation(Dependencies.Libs.retrofit)
-   implementation(Dependencies.Libs.gson)
-   implementation(Dependencies.Libs.okhttp)
-   implementation(Dependencies.Libs.okhttpLogging)
-   implementation(Dependencies.Libs.glide)
-   kapt(Dependencies.Libs.glideCompiler)
-   implementation(Dependencies.Libs.facebookShimmer)
-   implementation(Dependencies.Libs.timber)
+   implementation(Libs.coreKtx)
+   implementation(Libs.appcompat)
+   implementation(Libs.materialDesign)
+   implementation(Libs.constraintLayout)
+   implementation(Libs.navigationFragment)
+   implementation(Libs.navigationUi)
+   implementation(Libs.swipeRefreshLayout)
+   implementation(Libs.recyclerView)
+   implementation(Libs.paging3)
+   implementation(Libs.viewPager2)
+   implementation(Libs.coroutinesCore)
+   implementation(Libs.coroutinesAndroid)
+   implementation(Libs.lifecycleViewModel)
+   implementation(Libs.lifecycleLiveData)
+   implementation(Libs.hiltAndroid)
+   implementation(Libs.hiltNavigationFragment)
+   kapt(Libs.hiltCompiler)
+   implementation(Libs.room)
+   implementation(Libs.roomKtx)
+   kapt(Libs.roomCompiler)
+   implementation(Libs.retrofit)
+   implementation(Libs.gson)
+   implementation(Libs.okhttp)
+   implementation(Libs.okhttpLogging)
+   implementation(Libs.glide)
+   kapt(Libs.glideCompiler)
+   implementation(Libs.facebookShimmer)
+   implementation(Libs.timber)
 
-   testImplementation(Dependencies.TestLibs.junit)
-   testImplementation(Dependencies.TestLibs.truth)
-   testImplementation(Dependencies.TestLibs.archCore)
-   testImplementation(Dependencies.TestLibs.coroutines)
-   testImplementation(Dependencies.TestLibs.mockito)
+   testImplementation(TestLibs.junit)
+   testImplementation(TestLibs.truth)
+   testImplementation(TestLibs.archCore)
+   testImplementation(TestLibs.coroutines)
+   testImplementation(TestLibs.mockito)
 
-   androidTestImplementation(Dependencies.TestLibs.extJunit)
-   androidTestImplementation(Dependencies.TestLibs.espresso)
-   androidTestImplementation(Dependencies.TestLibs.truth)
-   androidTestImplementation(Dependencies.TestLibs.archCore)
-   androidTestImplementation(Dependencies.TestLibs.coroutines)
-   androidTestImplementation(Dependencies.TestLibs.mockito)
-   androidTestImplementation(Dependencies.TestLibs.hilt)
-   kaptAndroidTest(Dependencies.Libs.hiltCompiler)
+   androidTestImplementation(TestLibs.extJunit)
+   androidTestImplementation(TestLibs.espresso)
+   androidTestImplementation(TestLibs.truth)
+   androidTestImplementation(TestLibs.archCore)
+   androidTestImplementation(TestLibs.coroutines)
+   androidTestImplementation(TestLibs.mockito)
+   androidTestImplementation(TestLibs.hilt)
+   kaptAndroidTest(Libs.hiltCompiler)
 
 }

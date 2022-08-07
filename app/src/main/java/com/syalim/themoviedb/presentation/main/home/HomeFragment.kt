@@ -13,7 +13,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.databinding.FragmentHomeBinding
-import com.syalim.themoviedb.presentation.common.State
 import com.syalim.themoviedb.presentation.common.base.BaseFragment
 import com.syalim.themoviedb.presentation.common.extensions.showSnackBar
 import com.syalim.themoviedb.presentation.main.MainViewModel
@@ -40,7 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
    override fun init() {
 
-      if (viewModel.homeScreenState.value is State.Idle) {
+      viewModel.homeScreenState.value.onIdle {
          viewModel.loadMovies(isFirstLoading = true)
       }
 
@@ -55,7 +54,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
       setRecyclerViewTopRated()
 
       binding.swipeRefreshLayout.setOnRefreshListener {
-         viewModel.loadMovies(isFirstLoading = false)
+         viewModel.loadMovies()
       }
 
    }

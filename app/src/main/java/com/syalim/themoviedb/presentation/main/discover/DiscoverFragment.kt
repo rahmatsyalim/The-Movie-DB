@@ -21,7 +21,7 @@ import com.syalim.themoviedb.presentation.main.MainActivity
 import com.syalim.themoviedb.presentation.main.MainViewModel
 import com.syalim.themoviedb.presentation.main.MoviesPagerAdapter
 import com.syalim.themoviedb.presentation.main.PagingLoadStateAdapter
-import com.syalim.themoviedb.utils.Utils
+import com.syalim.themoviedb.utils.Utils.Companion.handlePagingLoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -167,8 +167,7 @@ class DiscoverFragment : BaseFragment<FragmentDiscoverBinding>(FragmentDiscoverB
 
    @SuppressLint("SetTextI18n")
    private fun setMoviesLoadStateListener() {
-      Utils.handlePagingLoadState(
-         moviesAdapter,
+      moviesAdapter.handlePagingLoadState(
          onLoading = {
             binding.swipeRefreshLayout.isRefreshing = it
          },

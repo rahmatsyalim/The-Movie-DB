@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
    private val getMovieGenreUseCase: GetMovieGenreUseCase
 ) : BaseViewModel() {
 
-   private val _homeScreenState: MutableStateFlow<State<Any>> = MutableStateFlow(State.Idle())
+   private val _homeScreenState: MutableStateFlow<State<Nothing>> = MutableStateFlow(State.Idle())
    private val _upcomingState: MutableStateFlow<State<List<MovieItemEntity>>> =
       MutableStateFlow(State.Idle())
    private val _popularState: MutableStateFlow<State<List<MovieItemEntity>>> =
@@ -52,14 +52,14 @@ class MainViewModel @Inject constructor(
    private val _filterGenreState: MutableStateFlow<State<List<GenreItemEntity>>> =
       MutableStateFlow(State.Idle())
 
-   val homeScreenState: StateFlow<State<Any>> get() = _homeScreenState
+   val homeScreenState: StateFlow<State<Nothing>> get() = _homeScreenState
    val upcomingState: StateFlow<State<List<MovieItemEntity>>> get() = _upcomingState
    val popularState: StateFlow<State<List<MovieItemEntity>>> get() = _popularState
    val nowPlayingState: StateFlow<State<List<MovieItemEntity>>> get() = _nowPlayingState
    val topRatedState: StateFlow<State<List<MovieItemEntity>>> get() = _topRatedState
    val filterGenreState: StateFlow<State<List<GenreItemEntity>>> get() = _filterGenreState
 
-   fun loadMovies(isFirstLoading: Boolean) = viewModelScope.launch {
+   fun loadMovies(isFirstLoading: Boolean = false) = viewModelScope.launch {
 
       _homeScreenState.value = State.Loading(isFirstLoading = isFirstLoading)
 

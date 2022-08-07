@@ -11,6 +11,12 @@ sealed class State<T>(val data: T? = null, val message: String? = null, val isFi
    class Loaded<T>(data: T? = null) : State<T>(data = data)
    class Idle<T> : State<T>()
 
+   fun onIdle(
+      block: () -> Unit
+   ) {
+      if (this is Idle) block()
+   }
+
    fun handle(
       onFirstLoading: ((Boolean) -> Unit)? = null,
       onLoading: ((Boolean) -> Unit)? = null,

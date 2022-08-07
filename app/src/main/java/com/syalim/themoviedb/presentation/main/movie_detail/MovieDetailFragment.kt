@@ -16,7 +16,8 @@ import com.syalim.themoviedb.presentation.common.base.BaseFragment
 import com.syalim.themoviedb.presentation.common.extensions.*
 import com.syalim.themoviedb.presentation.main.MoviesAdapter
 import com.syalim.themoviedb.utils.Constants.IMAGE_POSTER_DETAIL_SIZE
-import com.syalim.themoviedb.utils.Utils
+import com.syalim.themoviedb.utils.Utils.Companion.handlePagingLoadState
+import com.syalim.themoviedb.utils.Utils.Companion.setYoutubePlayerWebView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -85,8 +86,7 @@ class MovieDetailFragment :
 
    @SuppressLint("SetTextI18n")
    private fun ReviewsPagerAdapter.setLoadStateListener() {
-      Utils.handlePagingLoadState(
-         this,
+      handlePagingLoadState(
          onEmpty = {
             binding.tvInfoReviews.isVisible = true
             binding.tvInfoReviews.text = "No reviews."
@@ -218,15 +218,15 @@ class MovieDetailFragment :
                   binding.progressBarTrailer.isVisible = it
                },
                onError = {
-                  Utils.setYoutubePlayerWebView(binding.webViewEmbedYoutube, "")
+                  setYoutubePlayerWebView(binding.webViewEmbedYoutube, "")
                },
                onEmpty = {
-                  Utils.setYoutubePlayerWebView(binding.webViewEmbedYoutube, "")
+                  setYoutubePlayerWebView(binding.webViewEmbedYoutube, "")
                },
                onLoaded = { data ->
                   binding.progressBarTrailer.isVisible = false
                   data.key?.let {
-                     Utils.setYoutubePlayerWebView(binding.webViewEmbedYoutube, it)
+                     setYoutubePlayerWebView(binding.webViewEmbedYoutube, it)
                   }
                }
             )

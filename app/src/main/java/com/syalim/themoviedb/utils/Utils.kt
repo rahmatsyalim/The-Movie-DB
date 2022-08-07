@@ -26,7 +26,8 @@ class Utils {
 
    companion object {
 
-      fun internetIsAvailable(context: Context): Boolean {
+      @Suppress("DEPRECATION")
+      fun isInternetAvailable(context: Context): Boolean {
          val connectivityManager = context.getSystemService(
             Context.CONNECTIVITY_SERVICE
          ) as ConnectivityManager
@@ -59,19 +60,18 @@ class Utils {
          }
       }
 
-      fun <T : Any, VH : RecyclerView.ViewHolder> handlePagingLoadState(
-         adapter: PagingDataAdapter<T, VH>,
+      fun <T : Any, VH : RecyclerView.ViewHolder> PagingDataAdapter<T,VH>.handlePagingLoadState(
          onFirstLoading: ((Boolean) -> Unit)? = null,
          onLoading: ((Boolean) -> Unit)? = null,
          onError: ((String) -> Unit)? = null,
          onEmpty: (() -> Unit)? = null,
          onLoaded: (() -> Unit)? = null
       ) {
-         adapter.addLoadStateListener { loadState ->
+         addLoadStateListener { loadState ->
             with(loadState) {
-               onFirstLoading?.invoke(refresh is LoadState.Loading && adapter.itemCount == 0)
+               onFirstLoading?.invoke(refresh is LoadState.Loading && itemCount == 0)
 
-               onLoading?.invoke(refresh is LoadState.Loading && adapter.itemCount > 0)
+               onLoading?.invoke(refresh is LoadState.Loading && itemCount > 0)
 
                val errorState =
                   source.append as? LoadState.Error
@@ -88,12 +88,12 @@ class Utils {
 
                if (source.append is LoadState.NotLoading
                   && source.append.endOfPaginationReached
-                  && adapter.itemCount == 0
+                  && itemCount == 0
                ) {
                   onEmpty?.invoke()
                }
                if (source.refresh is LoadState.NotLoading
-                  && adapter.itemCount > 0
+                  && itemCount > 0
                ) {
                   onLoaded?.invoke()
                }
