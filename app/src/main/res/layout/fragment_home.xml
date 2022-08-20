@@ -10,11 +10,11 @@
       android:layout_height="match_parent">
 
       <androidx.core.widget.NestedScrollView
-         android:id="@+id/view_container_home"
+         android:id="@+id/views_container"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:clipToPadding="false"
-         android:paddingBottom="?attr/actionBarSize">
+         android:paddingBottom="@dimen/space_actionBar">
 
          <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:orientation="vertical">
 
             <com.facebook.shimmer.ShimmerFrameLayout
-               android:id="@+id/shimmer_upcoming"
+               android:id="@+id/shimmer_in_theater"
                android:layout_width="match_parent"
                android:layout_height="wrap_content">
 
@@ -30,14 +30,14 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-               android:id="@+id/view_upcoming"
+               android:id="@+id/in_theater_container"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:orientation="vertical"
                android:visibility="gone">
 
                <RelativeLayout
-                  android:id="@+id/view_upcoming_title"
+                  android:id="@+id/in_theater_title_container"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="horizontal"
@@ -45,40 +45,38 @@
                   app:layout_constraintTop_toTopOf="parent">
 
                   <TextView
-                     android:layout_width="wrap_content"
+                     android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:layout_centerVertical="true"
-                     android:layout_marginStart="12dp"
-                     android:text="Upcoming"
-                     android:textColor="@color/white"
-                     android:textSize="16sp"
+                     android:layout_marginStart="@dimen/space_regular"
+                     android:layout_toStartOf="@id/btn_more_in_theater"
+                     android:text="@string/in_theater"
+                     android:textSize="@dimen/text_large"
                      android:textStyle="bold" />
 
                   <com.google.android.material.button.MaterialButton
-                     android:id="@+id/btn_more_upcoming"
+                     android:id="@+id/btn_more_in_theater"
                      style="@style/Widget.MaterialComponents.Button.TextButton"
-                     android:layout_width="wrap_content"
+                     android:layout_width="50dp"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
-                     android:fontFamily="@font/poppins_regular"
-                     android:letterSpacing="0"
-                     android:text="View more"
-                     android:textAllCaps="false"
-                     android:textSize="12sp" />
+                     app:icon="@drawable/ic_arrow_forward"
+                     app:iconGravity="textStart"
+                     app:iconTint="@color/text_muted" />
 
                </RelativeLayout>
 
                <androidx.viewpager2.widget.ViewPager2
-                  android:id="@+id/vp_upcoming"
+                  android:id="@+id/vp_in_theater"
                   android:layout_width="0dp"
                   android:layout_height="0dp"
                   android:nestedScrollingEnabled="false"
-                  android:paddingHorizontal="32dp"
-                  android:paddingVertical="18dp"
+                  android:paddingHorizontal="@dimen/space_large"
+                  android:paddingBottom="@dimen/space_medium"
                   app:layout_constraintDimensionRatio="16:9"
                   app:layout_constraintEnd_toEndOf="parent"
                   app:layout_constraintStart_toStartOf="parent"
-                  app:layout_constraintTop_toBottomOf="@id/view_upcoming_title">
+                  app:layout_constraintTop_toBottomOf="@id/in_theater_title_container">
 
                </androidx.viewpager2.widget.ViewPager2>
 
@@ -87,7 +85,7 @@
                   android:layout_width="match_parent"
                   android:layout_height="6dp"
                   android:background="@color/transparent"
-                  app:layout_constraintBottom_toBottomOf="@id/vp_upcoming"
+                  app:layout_constraintBottom_toBottomOf="@id/vp_in_theater"
                   app:tabBackground="@drawable/carousel_dot_selector"
                   app:tabGravity="center"
                   app:tabIndicatorHeight="0dp"
@@ -104,7 +102,7 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <LinearLayout
-               android:id="@+id/view_popular"
+               android:id="@+id/popular_container"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:orientation="vertical"
@@ -112,30 +110,27 @@
 
                <RelativeLayout
                   android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal">
+                  android:layout_height="wrap_content">
 
                   <TextView
-                     android:layout_width="wrap_content"
+                     android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:layout_centerVertical="true"
-                     android:layout_marginStart="12dp"
-                     android:text="Popular"
-                     android:textColor="@color/white"
-                     android:textSize="16sp"
+                     android:layout_marginStart="@dimen/space_regular"
+                     android:layout_toStartOf="@id/btn_more_popular"
+                     android:text="@string/popular"
+                     android:textSize="@dimen/text_large"
                      android:textStyle="bold" />
 
                   <com.google.android.material.button.MaterialButton
                      android:id="@+id/btn_more_popular"
                      style="@style/Widget.MaterialComponents.Button.TextButton"
-                     android:layout_width="wrap_content"
+                     android:layout_width="50dp"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
-                     android:fontFamily="@font/poppins_regular"
-                     android:letterSpacing="0"
-                     android:text="View more"
-                     android:textAllCaps="false"
-                     android:textSize="12sp" />
+                     app:icon="@drawable/ic_arrow_forward"
+                     app:iconGravity="textStart"
+                     app:iconTint="@color/text_muted" />
                </RelativeLayout>
 
                <androidx.recyclerview.widget.RecyclerView
@@ -144,7 +139,7 @@
                   android:layout_height="wrap_content"
                   android:clipToPadding="false"
                   android:nestedScrollingEnabled="false"
-                  android:padding="3dp" />
+                  android:padding="@dimen/space_tiny" />
 
             </LinearLayout>
 
@@ -157,7 +152,7 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <LinearLayout
-               android:id="@+id/view_top_rated"
+               android:id="@+id/top_rated_container"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:orientation="vertical"
@@ -165,30 +160,27 @@
 
                <RelativeLayout
                   android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal">
+                  android:layout_height="wrap_content">
 
                   <TextView
-                     android:layout_width="wrap_content"
+                     android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:layout_centerVertical="true"
-                     android:layout_marginStart="12dp"
-                     android:text="Top Rated"
-                     android:textColor="@color/white"
+                     android:layout_marginStart="@dimen/space_regular"
+                     android:layout_toStartOf="@id/btn_more_top_rated"
+                     android:text="@string/top_rated"
                      android:textSize="16sp"
                      android:textStyle="bold" />
 
                   <com.google.android.material.button.MaterialButton
                      android:id="@+id/btn_more_top_rated"
                      style="@style/Widget.MaterialComponents.Button.TextButton"
-                     android:layout_width="wrap_content"
+                     android:layout_width="50dp"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
-                     android:fontFamily="@font/poppins_regular"
-                     android:letterSpacing="0"
-                     android:text="View more"
-                     android:textAllCaps="false"
-                     android:textSize="12sp" />
+                     app:icon="@drawable/ic_arrow_forward"
+                     app:iconGravity="textStart"
+                     app:iconTint="@color/text_muted" />
                </RelativeLayout>
 
                <androidx.recyclerview.widget.RecyclerView
@@ -197,11 +189,11 @@
                   android:layout_height="wrap_content"
                   android:clipToPadding="false"
                   android:nestedScrollingEnabled="false"
-                  android:padding="3dp" />
+                  android:padding="@dimen/space_tiny" />
             </LinearLayout>
 
             <com.facebook.shimmer.ShimmerFrameLayout
-               android:id="@+id/shimmer_now_playing"
+               android:id="@+id/shimmer_upcoming"
                android:layout_width="match_parent"
                android:layout_height="wrap_content">
 
@@ -209,7 +201,7 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <LinearLayout
-               android:id="@+id/view_now_playing"
+               android:id="@+id/upcoming_container"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:orientation="vertical"
@@ -217,39 +209,36 @@
 
                <RelativeLayout
                   android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal">
+                  android:layout_height="wrap_content">
 
                   <TextView
-                     android:layout_width="wrap_content"
+                     android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:layout_centerVertical="true"
-                     android:layout_marginStart="12dp"
-                     android:text="In Theater"
-                     android:textColor="@color/white"
-                     android:textSize="16sp"
+                     android:layout_marginStart="@dimen/space_regular"
+                     android:layout_toStartOf="@id/btn_more_upcoming"
+                     android:text="@string/upcoming"
+                     android:textSize="@dimen/text_large"
                      android:textStyle="bold" />
 
                   <com.google.android.material.button.MaterialButton
-                     android:id="@+id/btn_more_now_playing"
+                     android:id="@+id/btn_more_upcoming"
                      style="@style/Widget.MaterialComponents.Button.TextButton"
-                     android:layout_width="wrap_content"
+                     android:layout_width="50dp"
                      android:layout_height="wrap_content"
                      android:layout_alignParentEnd="true"
-                     android:fontFamily="@font/poppins_regular"
-                     android:letterSpacing="0"
-                     android:text="View more"
-                     android:textAllCaps="false"
-                     android:textSize="12sp" />
+                     app:icon="@drawable/ic_arrow_forward"
+                     app:iconGravity="textStart"
+                     app:iconTint="@color/text_muted" />
                </RelativeLayout>
 
                <androidx.recyclerview.widget.RecyclerView
-                  android:id="@+id/rv_in_theater"
+                  android:id="@+id/rv_upcoming"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:clipToPadding="false"
                   android:nestedScrollingEnabled="false"
-                  android:padding="3dp" />
+                  android:padding="@dimen/space_tiny" />
             </LinearLayout>
 
          </LinearLayout>

@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <color name="primary">#FF3CBEC9</color>
-   <color name="secondary">#FFFFFFFF</color>
+   <color name="brand_aqua">#09B4E4</color>
+   <color name="brand_aqua_variant">#076078</color>
+   <color name="brand_aqua_marine">#8ECEA2</color>
+   <color name="brand_aqua_marine_variant">#4B6A55</color>
 
-   <color name="purple_200">#FFBB86FC</color>
-   <color name="purple_500">#FF6200EE</color>
-   <color name="purple_700">#FF3700B3</color>
-   <color name="teal_200">#FF03DAC5</color>
-   <color name="teal_700">#FF018786</color>
-   <color name="black">#FF000000</color>
-   <color name="white">#FFFFFFFF</color>
-   <color name="light_grey">#ECECEC</color>
+   <color name="brand_dark">#202020</color>
+   <color name="brand_white">#FFFFFFFF</color>
+   <color name="brand_light_red">#F44336</color>
+
+   <color name="light_grey">#B3B3B3</color>
    <color name="grey">#4A4A4A</color>
    <color name="darker_grey">#292929</color>
    <color name="transparent">#00000000</color>
    <color name="red">#FF0000</color>
-   <color name="greyTransparent">#664A4A4A</color>
-   <color name="ic_launcher_background">#000000</color>
+   <color name="transparent_grey">#664A4A4A</color>
+   <color name="transparent_darker_grey">#66292929</color>
+
+   <color name="text_muted">#ACABAB</color>
+   <color name="text_normal">#F6F6F6</color>
+
 </resources>

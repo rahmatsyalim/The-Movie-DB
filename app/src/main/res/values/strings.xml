@@ -1,7 +1,46 @@
 <resources>
    <string name="app_name">The Movie DB</string>
 
+   <!-- features -->
    <string name="home">Home</string>
    <string name="discover">Discover</string>
    <string name="bookmarks">Bookmarks</string>
+
+   <!-- feature contents -->
+   <string name="in_theater">In Theater</string>
+   <string name="upcoming">Upcoming</string>
+   <string name="popular">Popular</string>
+   <string name="top_rated">Top Rated</string>
+   <string name="reviews">Reviews</string>
+   <string name="recommendations">Recommendations</string>
+
+   <!-- actions -->
+   <string name="search">Search</string>
+   <string name="tune">Tune</string>
+   <string name="show_trailer">Show Trailer</string>
+   <string name="hide_trailer">Hide Trailer</string>
+   <string name="bookmark">Bookmark</string>
+   <string name="bookmarked">Bookmarked</string>
+   <string name="reload">Reload</string>
+   <string name="filter">Filter</string>
+
+   <!-- no data messages -->
+   <string name="no_data_movie_reviews">No Reviews.</string>
+   <string name="no_data_movies">No movies found.</string>
+   <string name="no_data_trailer">No trailer.</string>
+   <string name="no_data_overview">No overview.</string>
+
+   <!-- error messages -->
+   <string name="error_net_io_operation">Could not reach server.</string>
+   <string name="error_unexpected">Unexpected error.</string>
+
+   <!-- failed messages -->
+   <string name="failed_db_insert_movie_bookmark">Bookmark failed.</string>
+
+   <!-- connectivity state -->
+   <string name="no_internet_con">No internet connection.</string>
+
+   <!-- success messages -->
+   <string name="success_db_insert_movie_bookmark">Added to bookmark.</string>
+
 </resources>

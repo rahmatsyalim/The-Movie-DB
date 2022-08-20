@@ -4,7 +4,7 @@
    android:id="@+id/shimmer_ph_home_movie_list"
    android:layout_width="match_parent"
    android:layout_height="wrap_content"
-   android:layout_marginBottom="12dp"
+   android:layout_marginBottom="@dimen/space_regular"
    android:orientation="vertical">
 
    <include layout="@layout/shimmer_ph_home_movies_header"/>
@@ -13,7 +13,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:padding="5dp">
+      android:padding="@dimen/space_tiny">
 
       <include layout="@layout/shimmer_ph_item_movie" />
 

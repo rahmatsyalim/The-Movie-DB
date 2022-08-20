@@ -21,6 +21,13 @@ android {
       vectorDrawables {
          useSupportLibrary = true
       }
+
+      kapt {
+         arguments {
+            arg("room.schemaLocation", "$projectDir/db_schemas")
+         }
+      }
+
    }
 
    buildTypes {
@@ -28,11 +35,20 @@ android {
          isMinifyEnabled = true
          isShrinkResources = true
          proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-         buildConfigField("boolean", "IS_RELEASE","true")
+         buildConfigField("boolean", "IS_RELEASE", "true")
       }
       getByName("debug") {
          applicationIdSuffix = ".debug"
-         buildConfigField("boolean","IS_RELEASE", "false")
+         buildConfigField("boolean", "IS_RELEASE", "false")
+      }
+      create("pre-release") {
+         signingConfig = signingConfigs.getByName("debug")
+         isDebuggable = false
+         isMinifyEnabled = true
+         isShrinkResources = true
+         applicationIdSuffix = ".pre_release"
+         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+         buildConfigField("boolean", "IS_RELEASE", "true")
       }
    }
 
@@ -60,13 +76,15 @@ dependencies {
    implementation(Libs.coreKtx)
    implementation(Libs.appcompat)
    implementation(Libs.constraintLayout)
+   implementation(Libs.coordinatorLayout)
    implementation(Libs.material)
    implementation(Libs.swipeRefreshLayout)
    implementation(Libs.recyclerView)
-   implementation(Libs.paging3)
    implementation(Libs.viewPager2)
    implementation(Libs.Navigation.fragmentKtx)
    implementation(Libs.Navigation.uiKtx)
+   implementation(Libs.Paging3.runtime)
+   implementation(Libs.workManager)
    implementation(Libs.Lifecycle.viewModel)
    implementation(Libs.Lifecycle.liveData)
    implementation(Libs.Coroutines.core)
@@ -81,8 +99,7 @@ dependencies {
    implementation(Libs.Retrofit2.gson)
    implementation(Libs.Okhttp3.okhttp)
    implementation(Libs.Okhttp3.logging)
-   implementation(Libs.Glide.glide)
-   kapt(Libs.Glide.compiler)
+   implementation(Libs.Coil.coilBase)
    implementation(Libs.facebookShimmer)
    implementation(Libs.timber)
 

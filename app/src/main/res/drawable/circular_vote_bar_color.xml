@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list
-
-   xmlns:android="http://schemas.android.com/apk/res/android">
-
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
    <item>
       <shape
          android:shape="ring"
-         android:thicknessRatio="10"
+         android:thicknessRatio="9"
          android:useLevel="false">
-         <solid android:color="@color/grey" />
+         <solid android:color="@color/transparent_grey" />
       </shape>
-
    </item>
    <item>
       <rotate
@@ -18,13 +14,12 @@
          android:toDegrees="270">
          <shape
             android:shape="ring"
-            android:thicknessRatio="10"
+            android:thicknessRatio="9"
             android:useLevel="true">
             <gradient
-               android:endColor="@color/grey"
-               android:startColor="@color/primary" />
+               android:endColor="@color/brand_aqua_marine"
+               android:startColor="@color/brand_aqua" />
          </shape>
       </rotate>
    </item>
-
 </layer-list>

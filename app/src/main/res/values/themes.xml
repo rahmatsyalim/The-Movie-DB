@@ -2,73 +2,96 @@
    <!-- Base application theme. -->
    <style name="Theme.TheMovieDb" parent="Theme.MaterialComponents.Light.NoActionBar">
       <!-- Primary brand color. -->
-      <item name="colorPrimary">@color/primary</item>
-      <item name="colorPrimaryVariant">@color/black</item>
-      <item name="colorOnPrimary">@color/white</item>
+      <item name="colorPrimary">@color/brand_aqua</item>
+      <item name="colorPrimaryVariant">@color/brand_aqua_variant</item>
+      <item name="colorOnPrimary">@color/brand_white</item>
       <!-- Secondary brand color. -->
-      <item name="colorSecondary">@color/teal_200</item>
-      <item name="colorSecondaryVariant">@color/teal_700</item>
-      <item name="colorOnSecondary">@color/black</item>
-      <!-- Status bar color. -->
-      <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+      <item name="colorSecondary">@color/brand_aqua_marine</item>
+      <item name="colorSecondaryVariant">@color/brand_aqua_marine_variant</item>
+      <item name="colorOnSecondary">@color/brand_white</item>
+      <!-- Color error -->
+      <item name="colorError">@color/brand_light_red</item>
+      <item name="colorOnError">@color/brand_white</item>
+      <!-- Components surface colors such as cards, sheets, and menus. -->
+      <item name="colorSurface">@color/brand_dark</item>
+      <item name="colorOnSurface">@color/brand_aqua</item>
+      <!-- Color behind all screen -->
+      <item name="android:colorBackground">@color/brand_dark</item>
+      <item name="colorOnBackground">@color/grey</item>
       <!-- Customize your theme here. -->
       <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+      <item name="android:statusBarColor">@color/brand_dark</item>
+      <item name="android:navigationBarColor">@color/brand_dark</item>
 
-      <item name="bottomSheetDialogTheme">@style/BottomSheetDialogStyle</item>
-
-      <item name="android:windowBackground">?attr/colorPrimaryVariant</item>
-      <item name="android:navigationBarColor">?attr/colorPrimaryVariant</item>
-
-      <item name="android:textViewStyle">@style/PoppinsTextStyle</item>
-   </style>
-
-   <style name="PoppinsTextStyle" parent="android:Widget.TextView">
       <item name="fontFamily">@font/poppins_regular</item>
+      <item name="android:textViewStyle">@style/TheMovieDb.Style.Textview</item>
+      <item name="materialButtonStyle">@style/TheMovieDb.Style.Buttons</item>
    </style>
 
-   <style name="ShapeAppearanceOverlay.CornerSize5Percent" parent="">
-      <item name="cornerSize">5%</item>
+   <!-- Text Style -->
+   <style name="TheMovieDb.Style.Textview" parent="android:Widget.TextView">
+      <item name="android:textColor">@color/text_normal</item>
+      <item name="android:textSize">@dimen/text_regular</item>
    </style>
 
-   <style name="ShapeAppearanceOverlay.CornerSize10Percent" parent="">
-      <item name="cornerSize">10%</item>
+   <!-- Buttons Style -->
+   <style name="TheMovieDb.Style.Buttons" parent="Widget.MaterialComponents.Button">
+      <item name="android:textSize">@dimen/text_regular</item>
+      <item name="textAllCaps">false</item>
+      <item name="lineSpacing">0dp</item>
    </style>
 
-   <style name="ShapeAppearanceOverlay.CornerSize50Percent" parent="">
+   <!-- region ShapeAppearanceOverlay -->
+   <style name="TheMovieDb.ShapeAppearanceOverlay.Corner6dp" parent="">
+      <item name="cornerFamily">rounded</item>
+      <item name="cornerSize">6dp</item>
+   </style>
+
+   <style name="TheMovieDb.ShapeAppearanceOverlay.CornerTop12dp" parent="">
+      <item name="cornerFamily">rounded</item>
+      <item name="cornerSizeTopRight">12dp</item>
+      <item name="cornerSizeTopLeft">12dp</item>
+   </style>
+
+   <style name="TheMovieDb.ShapeAppearanceOverlay.Corner50Percent" parent="">
+      <item name="cornerFamily">rounded</item>
       <item name="cornerSize">50%</item>
    </style>
+   <!-- endregion -->
 
-   <!--BottomSheet style-->
-   <style name="BottomSheetDialogStyle" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
-      <item name="bottomSheetStyle">@style/BottomSheetOverlay</item>
-   </style>
-
-   <style name="BottomSheetOverlay" parent="Widget.MaterialComponents.BottomSheet">
-      <item name="shapeAppearanceOverlay">@style/BottomSheetShapeAppearanceOverlay</item>
-   </style>
-
-   <style name="BottomSheetShapeAppearanceOverlay" parent="">
-      <item name="cornerFamilyTopRight">rounded</item>
-      <item name="cornerFamilyTopLeft">rounded</item>
-      <item name="cornerSizeTopRight">20dp</item>
-      <item name="cornerSizeTopLeft">20dp</item>
-   </style>
-
-   <style name="TextAppearance.ToolbarTitle" parent="android:TextAppearance">
-      <item name="android:textColor">@color/white</item>
-      <item name="android:textSize">16sp</item>
+   <!-- region Toolbar tittle -->
+   <style name="TheMovieDb.TextAppearance.ToolbarTitle" parent="android:TextAppearance">
+      <item name="android:textColor">@color/brand_white</item>
+      <item name="android:textSize">@dimen/text_large</item>
       <item name="android:textStyle">bold</item>
    </style>
 
-   <style name="TextAppearance.ToolbarTitle.Collapsed" parent="android:TextAppearance">
-      <item name="android:textColor">@color/white</item>
-      <item name="android:textSize">14sp</item>
+   <style name="TheMovieDb.TextAppearance.ToolbarTitle.Collapsed" parent="android:TextAppearance">
+      <item name="android:textColor">@color/brand_white</item>
+      <item name="android:textSize">@dimen/text_large</item>
       <item name="android:textStyle">bold</item>
    </style>
 
-   <style name="TextAppearance.ToolbarTitle.Expanded" parent="android:TextAppearance">
+   <style name="TheMovieDb.TextAppearance.ToolbarTitle.Expanded" parent="android:TextAppearance">
       <item name="android:textColor">@color/transparent</item>
-      <item name="android:textSize">14sp</item>
+      <item name="android:textSize">@dimen/text_large</item>
+      <item name="android:textStyle">bold</item>
    </style>
+   <!-- endregion -->
+
+   <!-- region ExtendedFloatingActionButton -->
+   <style name="TheMovieDb.Style.ExtendedFloatingActionButton" parent="">
+      <item name="shapeAppearanceOverlay">@style/TheMovieDb.ShapeAppearanceOverlay.Corner6dp</item>
+      <item name="android:letterSpacing">0</item>
+      <item name="android:textColor">@color/brand_white</item>
+      <item name="android:textSize">@dimen/text_regular</item>
+      <item name="textAllCaps">false</item>
+      <item name="iconTint">@color/brand_white</item>
+      <item name="iconPadding">6dp</item>
+      <item name="backgroundTint">@color/transparent</item>
+      <item name="rippleColor">@color/brand_aqua</item>
+      <item name="android:outlineProvider">none</item>
+   </style>
+   <!-- endregion -->
 
 </resources>

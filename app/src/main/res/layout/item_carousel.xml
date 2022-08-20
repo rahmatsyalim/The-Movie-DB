@@ -1,36 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
    xmlns:app="http://schemas.android.com/apk/res-auto"
    android:layout_width="match_parent"
-   android:layout_height="match_parent">
+   android:layout_height="match_parent"
+   app:cardElevation="0dp"
+   app:shapeAppearanceOverlay="@style/TheMovieDb.ShapeAppearanceOverlay.Corner6dp">
 
-   <com.google.android.material.imageview.ShapeableImageView
-      android:id="@+id/iv_backdrop"
+   <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:scaleType="centerCrop"
-      app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CornerSize5Percent" />
+      android:layout_height="match_parent">
 
-   <TextView
-      android:id="@+id/tv_title"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_above="@id/tv_date"
-      android:gravity="center_horizontal"
-      android:maxLines="2"
-      android:paddingHorizontal="12dp"
-      android:textColor="@color/white"
-      android:textSize="14sp"
-      android:textStyle="bold" />
+      <ImageView
+         android:id="@+id/iv_backdrop"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:scaleType="centerCrop" />
 
-   <TextView
-      android:id="@+id/tv_date"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignParentBottom="true"
-      android:gravity="center"
-      android:textColor="@color/white"
-      android:textSize="12sp"
-      android:textStyle="italic" />
+      <LinearLayout
+         android:id="@+id/tv_container"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:background="@color/transparent_darker_grey"
+         android:orientation="vertical"
+         android:paddingHorizontal="@dimen/space_regular"
+         android:paddingVertical="@dimen/space_small"
+         android:visibility="gone">
 
-</RelativeLayout>
+         <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:maxLines="2"
+            android:textStyle="bold" />
+
+         <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/text_muted"
+            android:textSize="@dimen/text_small"
+            android:textStyle="italic" />
+      </LinearLayout>
+
+   </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

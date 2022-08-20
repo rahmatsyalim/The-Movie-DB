@@ -3,10 +3,7 @@
    xmlns:app="http://schemas.android.com/apk/res-auto"
    android:layout_width="match_parent"
    android:layout_height="wrap_content"
-   android:background="?attr/selectableItemBackground"
-   android:clickable="true"
-   android:focusable="true"
-   android:padding="3dp">
+   android:padding="@dimen/space_tiny">
 
    <com.google.android.material.imageview.ShapeableImageView
       android:id="@+id/iv_poster"
@@ -16,16 +13,51 @@
       app:layout_constraintDimensionRatio="2:3"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CornerSize5Percent" />
+      app:shapeAppearanceOverlay="@style/TheMovieDb.ShapeAppearanceOverlay.Corner6dp" />
 
-   <TextView
-      android:id="@+id/tv_title"
+   <LinearLayout
+      android:id="@+id/title_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:gravity="center_horizontal"
-      android:lines="2"
-      android:maxLines="2"
-      android:textColor="@color/white"
-      android:textSize="12sp"
-      app:layout_constraintTop_toBottomOf="@id/iv_poster" />
+      android:layout_marginTop="@dimen/space_tiny"
+      android:orientation="vertical"
+      app:layout_constraintTop_toBottomOf="@id/iv_poster">
+
+      <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center"
+         android:orientation="horizontal">
+
+         <RatingBar
+            android:id="@+id/rating_vote_average"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:progressBackgroundTint="@color/light_grey"
+            android:progressTint="@color/brand_aqua_marine"
+            android:rating="3"
+            android:scaleX="0.9"
+            android:scaleY="0.9" />
+
+         <TextView
+            android:id="@+id/tv_vote_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_muted"
+            android:textSize="@dimen/text_small"
+            android:textStyle="bold" />
+      </LinearLayout>
+
+      <TextView
+         android:id="@+id/tv_title"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:ellipsize="end"
+         android:scrollHorizontally="true"
+         android:gravity="center_horizontal"
+         android:maxLines="2" />
+   </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

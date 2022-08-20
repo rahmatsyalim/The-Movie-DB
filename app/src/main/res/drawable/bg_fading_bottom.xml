@@ -6,6 +6,6 @@
       android:endColor="@color/transparent"
       android:centerColor="@color/transparent"
       android:centerY="0.3"
-      android:startColor="@color/black"
+      android:startColor="@color/brand_dark"
       android:type="linear" />
 </shape>

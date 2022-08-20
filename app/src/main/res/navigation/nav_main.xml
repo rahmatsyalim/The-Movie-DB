@@ -6,7 +6,7 @@
 
    <fragment
       android:id="@+id/home_fragment"
-      android:name="com.syalim.themoviedb.presentation.main.home.HomeFragment"
+      android:name="com.syalim.themoviedb.presentation.home.HomeFragment"
       android:label="@string/home">
       <action
          android:id="@+id/action_home_fragment_to_movie_detail_fragment"
@@ -18,7 +18,7 @@
    </fragment>
    <fragment
       android:id="@+id/discover_fragment"
-      android:name="com.syalim.themoviedb.presentation.main.discover.DiscoverFragment"
+      android:name="com.syalim.themoviedb.presentation.discover.DiscoverFragment"
       android:label="@string/discover">
       <action
          android:id="@+id/action_genre_fragment_to_movie_detail_fragment"
@@ -30,7 +30,7 @@
    </fragment>
    <fragment
       android:id="@+id/movie_detail_fragment"
-      android:name="com.syalim.themoviedb.presentation.main.movie_detail.MovieDetailFragment"
+      android:name="com.syalim.themoviedb.presentation.movie_detail.MovieDetailFragment"
       android:label="">
       <argument
          android:name="id"
@@ -45,7 +45,7 @@
    </fragment>
    <fragment
       android:id="@+id/bookmarks_fragment"
-      android:name="com.syalim.themoviedb.presentation.main.bookmarks.BookmarksFragment"
+      android:name="com.syalim.themoviedb.presentation.bookmarks.BookmarksFragment"
       android:label="@string/bookmarks" >
       <action
          android:id="@+id/action_bookmarksFragment_to_movie_detail_fragment"
