@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
    xmlns:app="http://schemas.android.com/apk/res-auto"
-   android:id="@+id/container"
+   xmlns:tools="http://schemas.android.com/tools"
    android:layout_width="match_parent"
    android:layout_height="match_parent">
 
@@ -24,7 +24,7 @@
          app:titleCollapseMode="fade">
 
          <RelativeLayout
-            android:id="@+id/view_detail"
+            android:id="@+id/detail_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
@@ -35,72 +35,22 @@
                android:layout_width="match_parent"
                android:layout_height="match_parent"
                android:adjustViewBounds="true"
-               android:alpha="0.4"
+               android:alpha="0.2"
                android:contentDescription="@string/app_name"
                android:scaleType="centerCrop" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:background="@drawable/bg_fading_bottom"
-               android:paddingHorizontal="@dimen/space_regular"
-               android:paddingTop="@dimen/space_actionBar"
-               android:paddingBottom="@dimen/space_regular">
-
-               <LinearLayout
-                  android:id="@+id/view_title"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:paddingHorizontal="@dimen/space_regular"
-                  app:layout_constraintEnd_toStartOf="@id/view_vote"
-                  app:layout_constraintStart_toStartOf="parent"
-                  app:layout_constraintTop_toTopOf="parent">
-
-                  <TextView
-                     android:id="@+id/tv_title"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:maxLines="2"
-                     android:textSize="@dimen/text_large"
-                     android:textStyle="bold" />
-
-                  <TextView
-                     android:id="@+id/tv_release_genre_duration"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content" />
-               </LinearLayout>
-
-               <RelativeLayout
-                  android:id="@+id/view_vote"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  app:layout_constraintEnd_toEndOf="parent"
-                  app:layout_constraintTop_toTopOf="parent">
-
-                  <ProgressBar
-                     android:id="@+id/progress_bar_vote_average"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:indeterminateOnly="false"
-                     android:progressDrawable="@drawable/circular_vote_bar_color" />
-
-                  <TextView
-                     android:id="@+id/tv_vote_average"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_centerInParent="true"
-                     android:textSize="@dimen/text_large"
-                     android:textStyle="bold" />
-               </RelativeLayout>
+               android:background="@drawable/bg_detail_fading_bottom"
+               android:orientation="vertical"
+               android:paddingTop="@dimen/dimen_actionBar">
 
                <androidx.constraintlayout.widget.ConstraintLayout
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:layout_marginTop="@dimen/space_large"
-                  app:layout_constraintBottom_toBottomOf="parent"
-                  app:layout_constraintStart_toStartOf="parent"
-                  app:layout_constraintTop_toBottomOf="@id/view_title">
+                  android:padding="@dimen/dimen_regular"
+                  app:layout_constraintTop_toTopOf="parent">
 
                   <com.google.android.material.imageview.ShapeableImageView
                      android:id="@+id/iv_poster"
@@ -110,32 +60,130 @@
                      app:layout_constraintDimensionRatio="2:3"
                      app:layout_constraintStart_toStartOf="parent"
                      app:layout_constraintTop_toTopOf="parent"
-                     app:shapeAppearanceOverlay="@style/TheMovieDb.ShapeAppearanceOverlay.Corner6dp" />
+                     app:shapeAppearanceOverlay="@style/TheMovieDb.ShapeAppearanceOverlay.CornerSmall" />
 
-                  <TextView
-                     android:id="@+id/tv_tagline"
+                  <LinearLayout
                      android:layout_width="0dp"
-                     android:layout_height="wrap_content"
-                     android:layout_marginStart="@dimen/space_regular"
-                     android:textStyle="italic"
+                     android:layout_height="match_parent"
+                     android:layout_marginStart="@dimen/dimen_regular"
+                     android:orientation="vertical"
                      app:layout_constraintEnd_toEndOf="parent"
                      app:layout_constraintStart_toEndOf="@id/iv_poster"
-                     app:layout_constraintTop_toTopOf="parent" />
+                     app:layout_constraintTop_toTopOf="parent">
 
-                  <TextView
-                     android:id="@+id/tv_desc"
-                     android:layout_width="0dp"
-                     android:layout_height="wrap_content"
-                     android:layout_marginStart="@dimen/space_regular"
-                     android:layout_marginTop="@dimen/space_regular"
-                     android:ellipsize="end"
-                     android:maxLines="16"
-                     app:layout_constraintEnd_toEndOf="parent"
-                     app:layout_constraintStart_toEndOf="@id/iv_poster"
-                     app:layout_constraintTop_toBottomOf="@id/tv_tagline" />
+                     <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="3"
+                        android:textSize="@dimen/text_large"
+                        android:textStyle="bold" />
 
+                     <TextView
+                        android:id="@+id/tv_status_releaseDate_duration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                     <TextView
+                        android:id="@+id/tv_tagline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_regular"
+                        android:textStyle="italic" />
+
+                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_regular"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:orientation="vertical">
+
+                           <com.google.android.material.button.MaterialButton
+                              style="@style/TheMovieDb.Styles.MaterialTextButton"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="@string/trailer"
+                              android:textSize="@dimen/text_regular"
+                              app:icon="@drawable/ic_play_trailer"
+                              app:iconGravity="top" />
+
+                           <com.google.android.material.button.MaterialButton
+                              style="@style/TheMovieDb.Styles.MaterialTextButton"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="@string/overview"
+                              android:textSize="@dimen/text_regular"
+                              app:icon="@drawable/ic_overview"
+                              app:iconGravity="top" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                           android:id="@+id/vote_container"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:gravity="center_horizontal"
+                           android:orientation="vertical">
+
+                           <TextView
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="@string/user_score" />
+
+                           <RelativeLayout
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              app:layout_constraintEnd_toEndOf="parent"
+                              app:layout_constraintTop_toTopOf="parent">
+
+                              <ProgressBar
+                                 android:id="@+id/progress_bar_vote_average"
+                                 android:layout_width="60dp"
+                                 android:layout_height="60dp"
+                                 android:indeterminateOnly="false"
+                                 android:progress="70"
+                                 android:progressDrawable="@drawable/circular_vote_bar_color"
+                                 tools:ignore="TooDeepLayout" />
+
+                              <TextView
+                                 android:id="@+id/tv_vote_average"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                                 android:layout_centerInParent="true"
+                                 android:textSize="@dimen/text_large"
+                                 android:textStyle="bold" />
+
+                           </RelativeLayout>
+
+                           <TextView
+                              android:id="@+id/tv_vote_count"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                     </LinearLayout>
+
+                  </LinearLayout>
                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+
+               <HorizontalScrollView
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:scrollbars="none">
+
+                  <com.google.android.material.chip.ChipGroup
+                     android:id="@+id/chip_group_genre"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:paddingHorizontal="@dimen/text_regular"
+                     android:paddingVertical="@dimen/dimen_regular"
+                     app:chipSpacing="@dimen/dimen_small" />
+               </HorizontalScrollView>
+            </LinearLayout>
          </RelativeLayout>
 
          <com.facebook.shimmer.ShimmerFrameLayout
@@ -144,7 +192,7 @@
             android:layout_height="match_parent"
             android:visibility="gone">
 
-            <include layout="@layout/shimmer_ph_movie_detail" />
+            <include layout="@layout/placeholder_movie_detail" />
 
          </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -152,7 +200,7 @@
             android:id="@+id/top_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:contentInsetEnd="@dimen/space_large"
+            app:contentInsetEnd="@dimen/dimen_large"
             app:contentInsetStartWithNavigation="0dp"
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_arrow_back"
@@ -162,104 +210,51 @@
    </com.google.android.material.appbar.AppBarLayout>
 
    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-      android:id="@+id/fab_trailer"
-      style="@style/TheMovieDb.Style.ExtendedFloatingActionButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/space_regular"
-      android:text="@string/show_trailer"
-      android:translationY="30dp"
-      android:visibility="gone"
-      app:collapsedSize="0dp"
-      app:icon="@drawable/ic_play_trailer"
-      app:layout_anchor="@id/top_appbar"
-      app:layout_anchorGravity="start|bottom" />
-
-   <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
       android:id="@+id/fab_bookmark"
       style="@style/TheMovieDb.Style.ExtendedFloatingActionButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/space_regular"
+      android:layout_marginEnd="@dimen/dimen_regular"
       android:text="@string/bookmark"
-      android:translationY="@dimen/space_huge"
+      android:translationY="@dimen/dimen_large"
       app:icon="@drawable/ic_bookmark_default"
       app:layout_anchor="@id/top_appbar"
-      app:layout_anchorGravity="end|bottom" />
+      app:layout_anchorGravity="bottom|end" />
 
    <androidx.core.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_below="@id/top_bar"
       android:clipToPadding="false"
-      android:paddingTop="60dp"
-      android:paddingBottom="@dimen/space_huge"
+      android:paddingBottom="@dimen/dimen_actionBar"
       app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
       <LinearLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
+         android:layout_marginTop="40dp"
          android:orientation="vertical">
-
-         <!-- region WebView Youtube -->
-         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/view_trailer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/space_large"
-            android:paddingHorizontal="@dimen/space_regular"
-            android:visibility="gone">
-
-            <TextView
-               android:id="@+id/tv_info_trailer"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginTop="@dimen/space_large"
-               android:visibility="gone"
-               app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toTopOf="parent" />
-
-            <WebView
-               android:id="@+id/web_view_youtube"
-               android:layout_width="match_parent"
-               android:layout_height="0dp"
-               android:layerType="hardware"
-               android:scrollbars="none"
-               android:visibility="gone"
-               app:layout_constraintDimensionRatio="16:9"
-               app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-               android:id="@+id/web_view_progress"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:indeterminate="true"
-               android:visibility="gone"
-               app:layout_constraintBottom_toBottomOf="parent"
-               app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toTopOf="parent"
-               app:trackThickness="2dp" />
-
-         </androidx.constraintlayout.widget.ConstraintLayout>
-         <!-- endregion -->
-
          <!-- region Recommendations -->
-         <LinearLayout
-            android:id="@+id/view_recommendation_movies"
+         <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_recommendations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_large"
+            android:visibility="gone">
+
+            <include layout="@layout/placeholder_movies_horizontal" />
+         </com.facebook.shimmer.ShimmerFrameLayout>
+
+         <LinearLayout
+            android:id="@+id/recommendations_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:padding="@dimen/space_regular"
+               android:padding="@dimen/dimen_regular"
                android:text="@string/recommendations"
                android:textColor="@color/brand_white"
                android:textSize="@dimen/text_large"
@@ -271,7 +266,7 @@
                android:layout_height="wrap_content"
                android:clipToPadding="false"
                android:nestedScrollingEnabled="false"
-               android:padding="@dimen/space_tiny" />
+               android:padding="@dimen/dimen_tiny" />
          </LinearLayout>
          <!-- endregion -->
 
@@ -280,13 +275,14 @@
             android:id="@+id/view_reviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_regular"
             android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:padding="12dp"
+               android:padding="@dimen/dimen_regular"
                android:text="@string/reviews"
                android:textColor="@color/brand_white"
                android:textSize="@dimen/text_large"
@@ -297,7 +293,7 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_gravity="center_horizontal"
-               android:layout_marginTop="@dimen/space_large"
+               android:layout_marginTop="@dimen/dimen_large"
                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -305,7 +301,8 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:nestedScrollingEnabled="false"
-               android:paddingHorizontal="@dimen/space_regular"
+               android:paddingHorizontal="@dimen/dimen_regular"
+               android:visibility="gone"
                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
          </LinearLayout>

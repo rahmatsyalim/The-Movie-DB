@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content">
+
+   <RelativeLayout
+      android:id="@+id/in_theater_title_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <TextView
+         android:id="@+id/tv_title"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_centerVertical="true"
+         android:layout_marginStart="@dimen/dimen_regular"
+         android:layout_toStartOf="@id/btn_more"
+         android:text="@string/in_theater"
+         android:textSize="@dimen/text_large"
+         android:textStyle="bold" />
+
+      <com.google.android.material.button.MaterialButton
+         android:id="@+id/btn_more"
+         style="@style/Widget.Material3.Button.IconButton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentEnd="true"
+         app:icon="@drawable/ic_arrow_forward"
+         app:iconTint="@color/text_semi_muted" />
+
+   </RelativeLayout>
+
+   <androidx.viewpager2.widget.ViewPager2
+      android:id="@+id/viewPager"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:clipChildren="false"
+      android:clipToPadding="false"
+      android:nestedScrollingEnabled="false"
+      android:paddingHorizontal="@dimen/dimen_large"
+      android:paddingBottom="@dimen/dimen_medium"
+      app:layout_constraintDimensionRatio="16:9"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/in_theater_title_container">
+
+   </androidx.viewpager2.widget.ViewPager2>
+
+   <com.google.android.material.tabs.TabLayout
+      android:id="@+id/tab_layout"
+      android:layout_width="match_parent"
+      android:layout_height="6dp"
+      android:background="@color/transparent"
+      app:layout_constraintBottom_toBottomOf="@id/viewPager"
+      app:tabBackground="@drawable/bg_carousel_dot_selector"
+      app:tabGravity="center"
+      app:tabIndicatorHeight="0dp"
+      app:tabMaxWidth="8dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

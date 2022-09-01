@@ -1,28 +1,31 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
-buildscript {
-   dependencies {
-      classpath(Libs.Navigation.safeArgsGradlePlugin)
-      classpath(Libs.DaggerHilt.gradlePlugin)
-      classpath(Libs.secretsGradlePlugin)
-   }
-}
-
 plugins {
-   id(Libs.Android.application) version Versions.android apply false
-   id(Libs.Android.library) version Versions.android apply false
-   id(Libs.Kotlin.android) version Versions.kotlin apply false
-   id(Libs.benManesVersions) version Versions.benManes apply true
+   alias(libs.plugins.android.application) apply false
+   alias(libs.plugins.android.library) apply false
+   alias(libs.plugins.secrets) apply false
+   alias(libs.plugins.kotlin.android) apply false
+   alias(libs.plugins.kotlin.jvm) apply false
+   alias(libs.plugins.hilt) apply false
+   alias(libs.plugins.androidx.navigation.safeargs) apply false
+   alias(libs.plugins.ben.manes.versions) apply true
 }
 
 tasks.register("clean", Delete::class) {
    delete(rootProject.buildDir)
 }
 
-tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
-   rejectVersionIf {
-      candidate.version.isStable().not()
+fun String.isNonStable(): Boolean {
+   val stableKeyword = listOf("RELEASE", "FINAL", "GA").any {
+      toUpperCase(java.util.Locale.ROOT).contains(it)
    }
-   checkForGradleUpdate = false
+   val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+   val isStable = stableKeyword || regex.matches(this)
+   return isStable.not()
+}
+
+tasks.withType<DependencyUpdatesTask> {
+   rejectVersionIf {
+      candidate.version.isNonStable()
+   }
 }

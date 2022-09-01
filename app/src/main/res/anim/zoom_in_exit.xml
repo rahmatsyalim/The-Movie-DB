@@ -7,8 +7,8 @@
       android:toXScale="110%"
       android:toYScale="110%"
       android:pivotX="50%"
-      android:pivotY="50%"/>
+      android:pivotY="50%" />
    <alpha
       android:fromAlpha="1"
-      android:toAlpha="0"/>
+      android:toAlpha="0" />
 </set>

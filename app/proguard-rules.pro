@@ -20,4 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.syalim.themoviedb.data.source.remote.dto.response.* { *; }
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}

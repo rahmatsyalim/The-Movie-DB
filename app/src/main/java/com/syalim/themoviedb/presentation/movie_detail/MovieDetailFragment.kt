@@ -2,32 +2,19 @@ package com.syalim.themoviedb.presentation.movie_detail
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.syalim.themoviedb.R
 import com.syalim.themoviedb.databinding.FragmentMovieDetailBinding
-import com.syalim.themoviedb.domain.model.Movie
-import com.syalim.themoviedb.domain.model.MovieDetail
-import com.syalim.themoviedb.domain.model.MovieReview
-import com.syalim.themoviedb.domain.model.MovieTrailer
-import com.syalim.themoviedb.presentation.MoviesAdapter
-import com.syalim.themoviedb.presentation.PagingLoadStateAdapter
-import com.syalim.themoviedb.presentation.common.CoilImageLoader
-import com.syalim.themoviedb.presentation.common.CoilImageLoader.Companion.BACKDROP
-import com.syalim.themoviedb.presentation.common.CoilImageLoader.Companion.POSTER_DETAIL
-import com.syalim.themoviedb.presentation.common.ContentState
-import com.syalim.themoviedb.presentation.common.utils.*
+import com.syalim.themoviedb.presentation.utils.CoilImageLoader
+import com.syalim.themoviedb.presentation.utils.ext.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,7 +24,6 @@ import javax.inject.Inject
  * rahmatsyalim@gmail.com
  */
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MovieDetailFragment : Fragment(R.layout.fragment_movie_detail) {
 
@@ -48,10 +34,10 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_detail) {
    private val arg by navArgs<MovieDetailFragmentArgs>()
 
    @Inject
-   lateinit var reviewsAdapter: ReviewsPagerAdapter
+   lateinit var reviewsAdapter: MovieReviewsAdapter
 
    @Inject
-   lateinit var recommendationMoviesAdapter: MoviesAdapter
+   lateinit var recommendationMoviesAdapter: MovieDetailRecommendationsAdapter
 
    @Inject
    lateinit var coilImageLoader: CoilImageLoader
@@ -59,195 +45,165 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_detail) {
    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
       super.onViewCreated(view, savedInstanceState)
 
-      setTopBar()
-
-      setRecommendationRecyclerView()
-
-      setReviewsRecyclerView()
-
-      collectDetailState()
+      initUi()
 
    }
 
-   private fun setTopBar() {
+   private fun MovieDetailUiState.updateState() {
+      onInitial {
+         viewModel.onFetchMovieDetail(arg.id)
+         binding.shimmerDetail.start()
+         binding.shimmerRecommendations.start()
+      }
+      onFinish(
+         onSuccess = { updateDetail(isBookmarked) },
+         onFailure = {
+            binding.root.showSnackBar(getThrownMessage(requireContext()))
+            viewModel.onErrorShown()
+         }
+      )
+   }
+
+   private fun initUi() {
+      setupTopBar()
+      setupRecommendations()
+      setupReviews()
+      viewLifecycleOwner.lifecycleScope.launch {
+         viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            launch {
+               viewModel.movieDetailUiState.collect { it.updateState() }
+            }
+         }
+      }
+   }
+
+   private fun setupTopBar() {
       binding.topBar.setNavigationOnClickListener {
          findNavController().navigateUp()
       }
    }
 
-   private var shimmerJob: Job? = null
-
-   private fun collectDetailState() {
-      viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-         viewModel.movieDetailState.collect { states ->
-            when (states) {
-               is MovieDetailUiState.Default -> viewModel.updateUiEvents(
-                  MovieDetailEvent.LoadContents(arg.id, false)
-               )
-               is MovieDetailUiState.Contents -> {
-                  states.detailData.renderDetail()
-                  states.trailerData.renderTrailer()
-                  states.recommendationData.renderRecommendations()
-                  launch { states.reviewsData.renderReviews() }
-                  if (states.isLoading) startShimmerLoading()
-                  if (!states.isLoading && states.error == null) launch { stopShimmerLoading() }
-                  states.error?.let {
-                     binding.root.showSnackBar(it.getThrownMessage(requireContext()))
-                  }
-               }
-            }
-         }
-      }
-   }
-
-   private suspend fun stopShimmerLoading() {
-      binding.shimmerDetail.apply {
-         if (isVisible) {
-            delay(1000L)
-            stopShimmer()
-            hideView()
-            binding.viewDetail.showView()
-         } else {
-            binding.viewDetail.showView()
-         }
-      }
-   }
-
-   private fun startShimmerLoading() {
-      binding.shimmerDetail.apply {
-         if (!isVisible) {
-            showView()
-            startShimmer()
-         }
-      }
-   }
-
    // region Detail
-   private fun ContentState<MovieDetail>.renderDetail() {
-      onSuccess {
-         binding.topBar.title = extras.titleWithYear
-         binding.tvTitle.text = title
-         binding.tvReleaseGenreDuration.text = extras.releaseDateGenresRuntime
-         binding.tvTagline.apply { extras.taglineWithQuote?.let { text = it } ?: hideView() }
-         binding.progressBarVoteAverage.progress = extras.voteAveragePercent
-         binding.tvVoteAverage.text = extras.voteAveragePercent.toString()
-         binding.tvDesc.text = overview ?: getString(R.string.no_data_overview)
-         coilImageLoader
-            .imageUrl(posterPath, POSTER_DETAIL)
-            .loadInto(binding.ivPoster)
-         coilImageLoader
-            .imageUrl(backdropPath, BACKDROP)
-            .loadInto(binding.ivBackground)
-         binding.fabBookmark.apply {
-            if (extras.isBookmarked) {
-               icon = requireContext().getDrawableFrom(R.drawable.ic_bookmark_active)
-               iconTint = requireContext().getColorStateListFrom(R.color.brand_aqua)
-               text = getString(R.string.bookmarked)
-               setOnClickListener {
-                  // TODO: remove from bookmark
-                  icon = requireContext().getDrawableFrom(R.drawable.ic_bookmark_default)
-                  iconTint = requireContext().getColorStateListFrom(R.color.brand_white)
-                  text = getString(R.string.bookmark)
-               }
-            } else {
-               setOnClickListener {
-                  // TODO: bookmark
-                  icon = requireContext().getDrawableFrom(R.drawable.ic_bookmark_active)
-                  iconTint = requireContext().getColorStateListFrom(R.color.brand_aqua)
-                  text = getString(R.string.bookmarked)
-               }
+   private fun com.syalim.themoviedb.domain.movie.model.MovieDetail.updateDetail(isBookmarked: Boolean) {
+      binding.topBar.title = title
+      binding.tvTitle.text = title
+      binding.tvStatusReleaseDateDuration.text = statusReleaseDateDuration
+      binding.tvTagline.apply { tagline?.let { text = it } ?: isGone() }
+      binding.progressBarVoteAverage.progress = voteAveragePercent
+      binding.tvVoteAverage.text = voteAverage.toString()
+      binding.tvVoteCount.text = voteCount
+      coilImageLoader
+         .imageUrl(posterPath)
+         .loadPosterInto(binding.ivPoster)
+      coilImageLoader
+         .imageUrl(backdropPath)
+         .loadBackgroundInto(binding.ivBackground)
+      binding.chipGroupGenre.apply {
+         if (childCount == 0) {
+            genres.forEach {
+               addStaticChip(requireContext(), it)
             }
          }
       }
+      binding.fabBookmark.apply {
+         if (isBookmarked) {
+            icon = requireContext().getDrawableFrom(R.drawable.ic_bookmark_active)
+            text = getString(R.string.bookmarked)
+            setOnClickListener {
+               viewModel.onBookmark(arg.id)
+               icon = requireContext().getDrawableFrom(R.drawable.ic_bookmark_default)
+               text = getString(R.string.bookmark)
+            }
+         } else {
+            setOnClickListener {
+               viewModel.onBookmark(arg.id)
+               icon = requireContext().getDrawableFrom(R.drawable.ic_bookmark_active)
+               text = getString(R.string.bookmarked)
+            }
+         }
+      }
+
+      recommendations.updateRecommendations()
+
+      binding.shimmerDetail.delayedStop(viewLifecycleOwner.lifecycleScope) {
+         binding.detailContainer.isVisible()
+         reviews.updateReviews()
+      }
    }
-   // endregion
+   //endregion
 
    // region Trailer
-   private fun ContentState<MovieTrailer>.renderTrailer() {
-      onSuccess {
-         binding.fabTrailer.showView()
-         binding.webViewYoutube.showView()
-         val youtubePlayer = YoutubePlayer.Builder(requireActivity())
-            .webView(binding.webViewYoutube)
-            .videoId(key)
-            .onLoading { binding.webViewProgress.isVisible = it }
-         var webViewLoaded = false
-         binding.fabTrailer.setOnFabTrailerClickListener(
-            onShow = {
-               binding.viewTrailer.showView()
-               if (!webViewLoaded) {
-                  youtubePlayer.load()
-                  webViewLoaded = true
-               }
-            },
-            onHide = { binding.viewTrailer.hideView() }
-         )
-      }
-   }
-
-   private fun ExtendedFloatingActionButton.setOnFabTrailerClickListener(
-      onShow: () -> Unit, onHide: () -> Unit
-   ) {
-      setOnClickListener {
-         if (text == getString(R.string.show_trailer)) {
-            text = getString(R.string.hide_trailer)
-            icon = requireContext().getDrawableFrom(R.drawable.ic_hide_trailer)
-            onShow.invoke()
-         } else {
-            text = getString(R.string.show_trailer)
-            icon = requireContext().getDrawableFrom(R.drawable.ic_play_trailer)
-            onHide.invoke()
-         }
-      }
+   private fun updateTrailer(key: String?) {
+      val youtubePlayer = YoutubePlayer.Builder(requireActivity())
+//         .webView(binding.webViewYoutube)
+//         .videoId(key)
+//         .onLoading { binding.webViewProgress.isVisible = it }
+      var webViewLoaded = false
+//      binding.fabTrailer.apply {
+//         setOnClickListener {
+//            if (text == getString(R.string.show_trailer)) {
+//               text = getString(R.string.hide_trailer)
+//               icon = requireContext().getDrawableFrom(R.drawable.ic_hide_trailer)
+//               binding.viewTrailer.showView()
+//               if (!webViewLoaded) {
+//                  youtubePlayer.load()
+//                  webViewLoaded = true
+//               }
+//            } else {
+//               text = getString(R.string.show_trailer)
+//               icon = requireContext().getDrawableFrom(R.drawable.ic_play_trailer)
+//               binding.viewTrailer.hideView()
+//            }
+//         }
+//      }
+//      binding.fabTrailer.showView()
+//      binding.webViewYoutube.showView()
    }
    // endregion
 
    // region Recommendations
-   private fun setRecommendationRecyclerView() {
+   private fun setupRecommendations() {
       binding.rvRecommendationMovies.apply {
          layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
          adapter = recommendationMoviesAdapter.apply {
             onItemClickListener = {
-               val bundle = Bundle().apply {
-                  putString("id", it.id.toString())
-               }
-               findNavController().navigate(R.id.action_movie_detail_fragment_self, bundle)
+               findNavController().navigate(
+                  R.id.action_movie_detail_fragment_self,
+                  Bundle().apply { putString("id", it.id.toString()) }
+               )
             }
          }
       }
    }
 
-   private fun ContentState<List<Movie>>.renderRecommendations() {
-      onSuccess {
+   private fun List<com.syalim.themoviedb.domain.movie.model.Movie>.updateRecommendations() {
+      if (isEmpty()) {
+         binding.shimmerRecommendations.delayedStop(viewLifecycleOwner.lifecycleScope)
+      } else {
          recommendationMoviesAdapter.submitData(this)
-         binding.viewRecommendationMovies.showView()
+         binding.shimmerRecommendations.delayedStop(viewLifecycleOwner.lifecycleScope) {
+            binding.recommendationsContainer.isVisible()
+         }
       }
    }
    // endregion
 
    // region Reviews
-   private fun setReviewsRecyclerView() {
-      binding.rvReviews.adapter = reviewsAdapter.apply {
-         addLoadStateListener { loadState ->
-            loadState.setListener(
-               itemCount,
-               onEmpty = {
-                  binding.tvInfoReviews.apply {
-                     text = getString(R.string.no_data_movie_reviews)
-                     showView()
-                  }
-                  binding.viewReviews.showView()
-               },
-               onExist = {
-                  binding.viewReviews.showView()
-               }
-            )
-         }
-      }.withLoadStateFooter(PagingLoadStateAdapter(reviewsAdapter::retry))
+   private fun setupReviews() {
+      binding.rvReviews.adapter = reviewsAdapter
    }
 
-   private suspend fun PagingData<MovieReview>.renderReviews() {
-      reviewsAdapter.submitData(this)
+   private fun List<com.syalim.themoviedb.domain.movie.model.MovieReview>.updateReviews() {
+      if (isEmpty()) {
+         binding.tvInfoReviews.apply {
+            text = getString(R.string.no_reviews)
+            isVisible()
+         }
+      } else {
+         reviewsAdapter.submitData(this)
+         binding.rvReviews.isVisible()
+      }
+      binding.viewReviews.isVisible()
    }
    // endregion
 

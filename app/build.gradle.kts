@@ -1,120 +1,82 @@
 plugins {
-   id("com.android.application")
-   kotlin("android")
-   kotlin("kapt")
+   id("themoviedb.android.application")
    id("dagger.hilt.android.plugin")
    id("androidx.navigation.safeargs.kotlin")
-   id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+   kotlin("kapt")
 }
 
 android {
-   compileSdk = 32
-
+   compileSdk = AndroidConfigs.compileSdk
    defaultConfig {
-      applicationId = "com.syalim.themoviedb"
-      minSdk = 21
-      targetSdk = 32
-      versionCode = 1
-      versionName = "1.0.0"
-
-      testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+      applicationId = AndroidConfigs.applicationId
+      minSdk = AndroidConfigs.minSdk
+      targetSdk = AndroidConfigs.targetSdk
+      versionCode = AndroidConfigs.versionCode
+      versionName = AndroidConfigs.versionName
+      testInstrumentationRunner = AndroidConfigs.androidJunitRunner
       vectorDrawables {
          useSupportLibrary = true
       }
-
-      kapt {
-         arguments {
-            arg("room.schemaLocation", "$projectDir/db_schemas")
-         }
-      }
-
    }
 
    buildTypes {
       getByName("release") {
          isMinifyEnabled = true
-         isShrinkResources = true
          proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-         buildConfigField("boolean", "IS_RELEASE", "true")
       }
+
       getByName("debug") {
          applicationIdSuffix = ".debug"
-         buildConfigField("boolean", "IS_RELEASE", "false")
       }
+
       create("pre-release") {
-         signingConfig = signingConfigs.getByName("debug")
-         isDebuggable = false
-         isMinifyEnabled = true
-         isShrinkResources = true
          applicationIdSuffix = ".pre_release"
+         isMinifyEnabled = true
+         isDebuggable = false
+         signingConfig = signingConfigs.getByName("debug")
          proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-         buildConfigField("boolean", "IS_RELEASE", "true")
       }
-   }
-
-   compileOptions {
-      sourceCompatibility = JavaVersion.VERSION_11
-      targetCompatibility = JavaVersion.VERSION_11
-   }
-
-   kotlinOptions {
-      jvmTarget = JavaVersion.VERSION_11.toString()
    }
 
    buildFeatures {
       viewBinding = true
    }
 
-   android.sourceSets.all {
-      java.srcDir("src/$name/kotlin")
+   hilt {
+      enableAggregatingTask = true
    }
 
 }
 
 dependencies {
+   implementation(projects.core.common)
+   implementation(projects.data.repository)
+   implementation(projects.domain.movie)
+   implementation(projects.domain.connectivity)
 
-   implementation(Libs.coreKtx)
-   implementation(Libs.appcompat)
-   implementation(Libs.constraintLayout)
-   implementation(Libs.coordinatorLayout)
-   implementation(Libs.material)
-   implementation(Libs.swipeRefreshLayout)
-   implementation(Libs.recyclerView)
-   implementation(Libs.viewPager2)
-   implementation(Libs.Navigation.fragmentKtx)
-   implementation(Libs.Navigation.uiKtx)
-   implementation(Libs.Paging3.runtime)
-   implementation(Libs.workManager)
-   implementation(Libs.Lifecycle.viewModel)
-   implementation(Libs.Lifecycle.liveData)
-   implementation(Libs.Coroutines.core)
-   implementation(Libs.Coroutines.android)
-   implementation(Libs.DaggerHilt.hilt)
-   implementation(Libs.hiltNavigationFragment)
-   kapt(Libs.DaggerHilt.compiler)
-   implementation(Libs.Room.runtime)
-   implementation(Libs.Room.ktx)
-   kapt(Libs.Room.compiler)
-   implementation(Libs.Retrofit2.retrofit)
-   implementation(Libs.Retrofit2.gson)
-   implementation(Libs.Okhttp3.okhttp)
-   implementation(Libs.Okhttp3.logging)
-   implementation(Libs.Coil.coilBase)
-   implementation(Libs.facebookShimmer)
-   implementation(Libs.timber)
+   implementation(libs.androidx.core.ktx)
+   implementation(libs.androidx.appcompat)
+   implementation(libs.androidx.constraintlayout)
+   implementation(libs.material)
+   implementation(libs.androidx.swiperefreshlayout)
+   implementation(libs.androidx.recyclerview)
+   implementation(libs.androidx.viewpager2)
+   implementation(libs.androidx.navigation.fragment.ktx)
+   implementation(libs.androidx.navigation.ui.ktx)
+   implementation(libs.androidx.paging.runtime.ktx)
+   implementation(libs.androidx.lifecycle.viewmodel.ktx)
+   implementation(libs.androidx.lifecycle.livedata.ktx)
+   implementation(libs.kotlinx.coroutines.android)
+   implementation(libs.hilt.android)
+   kapt(libs.hilt.android.compiler)
+   implementation(libs.hilt.ext.navigation)
+   implementation(libs.coil.base)
+   implementation(libs.facebook.shimmer)
 
-   testImplementation(Libs.Test.junit)
-   testImplementation(Libs.Test.truth)
-   testImplementation(Libs.Test.archCore)
-   testImplementation(Libs.Test.coroutines)
-   testImplementation(Libs.Test.mockito)
-   androidTestImplementation(Libs.Test.extJunit)
-   androidTestImplementation(Libs.Test.espresso)
-   androidTestImplementation(Libs.Test.truth)
-   androidTestImplementation(Libs.Test.archCore)
-   androidTestImplementation(Libs.Test.coroutines)
-   androidTestImplementation(Libs.Test.mockito)
-   androidTestImplementation(Libs.Test.hilt)
-   kaptAndroidTest(Libs.DaggerHilt.compiler)
+   testImplementation(libs.junit4)
+   testImplementation(libs.truth)
+   androidTestImplementation(libs.androidx.test.ext)
+   androidTestImplementation(libs.androidx.test.espresso.core)
+   androidTestImplementation(libs.truth)
 
 }

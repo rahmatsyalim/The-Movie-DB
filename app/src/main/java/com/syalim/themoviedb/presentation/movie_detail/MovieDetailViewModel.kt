@@ -1,18 +1,10 @@
 package com.syalim.themoviedb.presentation.movie_detail
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import com.syalim.themoviedb.domain.use_case.movie_detail.*
-import com.syalim.themoviedb.presentation.common.utils.asContentState
+import com.syalim.themoviedb.domain.movie.usecase.movie_detail.GetMovieDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 
@@ -21,50 +13,42 @@ import javax.inject.Inject
  * rahmatsyalim@gmail.com
  */
 
-@ExperimentalCoroutinesApi
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
-   private val getMovieDetailUseCase: GetMovieDetailUseCase,
-   private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
-   private val getMovieTrailerUseCase: GetMovieTrailerUseCase,
-   private val getRecommendationMoviesUseCase: GetRecommendationMoviesUseCase
+   private val getMovieDetailUseCase: GetMovieDetailUseCase
 ) : ViewModel() {
 
-   private val movieDetailEventLoadContents = MutableLiveData<MovieDetailEvent.LoadContents>()
+   private val _movieDetailUiState = MutableStateFlow(MovieDetailUiState())
+   val movieDetailUiState: StateFlow<MovieDetailUiState> get() = _movieDetailUiState
 
-   fun updateUiEvents(event: MovieDetailEvent) {
-      when (event) {
-         is MovieDetailEvent.LoadContents -> movieDetailEventLoadContents.postValue(event)
-         is MovieDetailEvent.Bookmark -> {
-
+   fun onFetchMovieDetail(id: String) =
+      getMovieDetailUseCase.invoke(id)
+         .onStart { _movieDetailUiState.update { it.copy(isInitial = false, isLoading = true) } }
+         .onEach { result ->
+            _movieDetailUiState.update {
+               when (result) {
+                  is com.syalim.themoviedb.core.common.Result.Success -> it.copy(data = result.data)
+                  is com.syalim.themoviedb.core.common.Result.Failure -> it.copy(
+                     error = result.cause,
+                     data = result.data
+                  )
+               }
+            }
          }
-      }
+         .onCompletion { _movieDetailUiState.update { it.copy(isLoading = false) } }
+         .launchIn(viewModelScope)
+
+
+   fun onBookmark(id: String) {
+
    }
 
-   val movieDetailState = movieDetailEventLoadContents.asFlow().flatMapLatest { event ->
-      combine(
-         getMovieDetailUseCase.invoke(event.id),
-         getMovieTrailerUseCase.invoke(event.id),
-         getRecommendationMoviesUseCase.invoke(event.id),
-         getMovieReviewsUseCase.invoke(event.id).cachedIn(viewModelScope),
-      ) { detail, trailer, recommendations, reviews ->
-         MovieDetailUiState.Contents(
-            detail.asContentState(),
-            trailer.asContentState(),
-            recommendations.asContentState(),
-            reviews
-         )
-      }
-   }.stateIn(
-      viewModelScope,
-      SharingStarted.Lazily,
-      MovieDetailUiState.Default
-   )
+   fun onRemoveBookmark(id: String) {
 
-   private fun refresh() {
-      movieDetailEventLoadContents.value?.let { params ->
-         movieDetailEventLoadContents.postValue(MovieDetailEvent.LoadContents(params.id, true))
-      }
+   }
+
+   fun onErrorShown() {
+      _movieDetailUiState.update { it.copy(error = null) }
    }
 
 }

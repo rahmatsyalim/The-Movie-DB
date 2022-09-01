@@ -3,6 +3,7 @@ pluginManagement {
       gradlePluginPortal()
       google()
       mavenCentral()
+      includeBuild("build-logic")
    }
 }
 dependencyResolutionManagement {
@@ -12,5 +13,13 @@ dependencyResolutionManagement {
       mavenCentral()
    }
 }
-rootProject.name = "TheMovieDb"
+rootProject.name = "themoviedb"
+
 include(":app")
+include(":core:common")
+include(":data:repository")
+include(":data:local")
+include(":data:remote")
+include(":data:connectivity")
+include(":domain:movie")
+include(":domain:connectivity")

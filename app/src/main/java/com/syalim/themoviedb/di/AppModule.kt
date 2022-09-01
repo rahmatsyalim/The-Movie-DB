@@ -26,10 +26,10 @@ object AppModule {
    @Singleton
    fun provideCoilImageLoader(
       @ApplicationContext context: Context,
-      @IoDispatcher dispatcher: CoroutineDispatcher
+      @com.syalim.themoviedb.core.common.IoDispatcher ioDispatcher: CoroutineDispatcher
    ): ImageLoader {
       return ImageLoader.Builder(context)
-         .dispatcher(dispatcher)
+         .dispatcher(ioDispatcher)
          .allowHardware(true)
          .crossfade(true)
          .memoryCache {
@@ -40,7 +40,7 @@ object AppModule {
          }
          .diskCache {
             DiskCache.Builder()
-               .cleanupDispatcher(dispatcher)
+               .cleanupDispatcher(ioDispatcher)
                .directory(context.cacheDir.resolve("cache/images"))
                .maxSizePercent(0.1)
                .build()
