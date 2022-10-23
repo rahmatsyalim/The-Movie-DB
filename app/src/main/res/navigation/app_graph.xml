@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:id="@+id/app_graph"
+   app:startDestination="@id/home">
+
+   <fragment
+      android:id="@+id/home"
+      android:name="com.syalim.themoviedb.ui.HomeFragment"
+      android:label="" />
+   <fragment
+      android:id="@+id/bookmarks"
+      android:name="com.syalim.themoviedb.feature.bookmarks.ui.BookmarksFragment"
+      android:label="" />
+   <fragment
+      android:id="@+id/movie_detail"
+      android:name="com.syalim.themoviedb.feature.movies.ui.detail.MovieDetailFragment"
+      android:label="" />
+   <fragment
+      android:id="@+id/movie_search"
+      android:name="com.syalim.themoviedb.feature.movies.ui.search.MovieSearchFragment"
+      android:label="" />
+   <fragment
+      android:id="@+id/tv_show_detail"
+      android:name="com.syalim.themoviedb.feature.tvshows.ui.detail.TvShowDetailFragment"
+      android:label="" />
+   <fragment
+      android:id="@+id/tv_show_search"
+      android:name="com.syalim.themoviedb.feature.tvshows.ui.search.TvShowsSearchFragment"
+      android:label="" />
+   <fragment
+      android:id="@+id/discover_movies"
+      android:name="com.syalim.themoviedb.feature.movies.ui.discover.DiscoverMoviesFragment"
+      android:label="" />
+   <fragment
+      android:id="@+id/movies_by_category"
+      android:name="com.syalim.themoviedb.feature.movies.ui.movies_by_category.MoviesByCategoryFragment"
+      android:label="" />
+   <fragment
+      android:id="@+id/discover_tv_shows"
+      android:name="com.syalim.themoviedb.feature.tvshows.ui.discover.DiscoverTvShowsFragment"
+      android:label="" />
+   <fragment
+      android:id="@+id/tv_shows_by_category"
+      android:name="com.syalim.themoviedb.feature.tvshows.ui.tvshow_by_category.TvShowsByCategoryFragment"
+      android:label="" />
+
+</navigation>

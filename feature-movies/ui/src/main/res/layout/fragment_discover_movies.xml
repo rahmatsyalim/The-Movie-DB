@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:transitionGroup="true">
+
+   <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/top_appbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:liftOnScrollTargetViewId="@id/rv_movies">
+
+      <com.google.android.material.appbar.MaterialToolbar
+         android:id="@+id/toolbar"
+         android:layout_width="match_parent"
+         android:layout_height="@dimen/dimen_actionBar"
+         app:contentInsetEnd="16dp"
+         app:contentInsetStartWithNavigation="0dp"
+         app:layout_scrollFlags="scroll|enterAlways|snap"
+         app:navigationIcon="@drawable/ic_arrow_back"
+         app:titleCentered="true" />
+
+   </com.google.android.material.appbar.AppBarLayout>
+
+   <include
+      android:id="@+id/include_filter_button"
+      layout="@layout/floating_button_filter" />
+
+   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:id="@+id/swipe_refresh_layout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+      <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+
+         <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_discover"
+            style="@style/Widget.Custom.Facebook.Shimmer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <include layout="@layout/placeholder_movies_tvshows_vertical" />
+
+         </com.facebook.shimmer.ShimmerFrameLayout>
+
+         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_movies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/dimen_tiny"
+            android:paddingTop="@dimen/dimen_tiny"
+            android:paddingBottom="@dimen/dimen_actionBar"
+            android:visibility="gone" />
+
+         <TextView
+            android:id="@+id/tv_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone" />
+
+      </RelativeLayout>
+   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

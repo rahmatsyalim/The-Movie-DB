@@ -12,7 +12,7 @@ import java.util.*
 
 object NumberFormatter {
 
-   fun toMovieDuration(runtime: Int?): String? {
+   fun toStringDuration(runtime: Int?): String? {
       val hour: Int
       val minute: Int
       return if (runtime != null) {
@@ -26,7 +26,7 @@ object NumberFormatter {
       } else null
    }
 
-   fun toSimpleCount(count: Int): String {
+   fun toStringSimpleCount(count: Int): String {
       return if (count < 1_000) {
          count.toString()
       } else if (count >= 1_000_000) {
@@ -38,7 +38,7 @@ object NumberFormatter {
 
    private fun Int.simpleCount(divider: Int, label: String): String {
       val parent = div(divider)
-      val child = toOneDecimal(minus(parent * divider).toDouble().div(divider))
+      val child = toDoubleOneDecimal(minus(parent * divider).toDouble().div(divider))
       return if (child > 0) {
          (parent + child).toString() + label
       } else {
@@ -46,7 +46,7 @@ object NumberFormatter {
       }
    }
 
-   fun toOneDecimal(number: Double): Double = DecimalFormat("#.#").format(number).toDouble()
+   fun toDoubleOneDecimal(number: Double): Double = DecimalFormat("#.#").format(number).toDouble()
 
    private fun toOneDecimalRounded(number: Double): Double {
       val decimalFormat = DecimalFormat("#.#")
@@ -54,11 +54,11 @@ object NumberFormatter {
       return decimalFormat.format(number).toDouble()
    }
 
-   fun toNominalFormat(number: Int): String {
+   fun toStringNominal(number: Int): String {
       return String.format(Locale.US, "%,d", number).replace(',', '.')
    }
 
-   fun toPercent(number: Double): Int = (toOneDecimalRounded(number) * 10).toInt()
+   fun toIntPercent(number: Double): Int = (toOneDecimalRounded(number) * 10).toInt()
 
-   fun toRateOf5(number: Double): Float = toOneDecimalRounded(number.div(2)).toFloat()
+   fun toFloatRateOf5(number: Double): Float = toOneDecimalRounded(number.div(2)).toFloat()
 }

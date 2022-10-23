@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <dimen name="text_small">10sp</dimen>
+
+   <dimen name="dimen_rounded_50percent">50%</dimen>
+   <dimen name="dimen_rounded_small">6dp</dimen>
+   <dimen name="dimen_rounded_regular">12dp</dimen>
+
+   <dimen name="dimen_tiny">3dp</dimen>
+   <dimen name="dimen_small">6dp</dimen>
+   <dimen name="dimen_regular">12dp</dimen>
+   <dimen name="dimen_medium">18dp</dimen>
+   <dimen name="dimen_large">24dp</dimen>
+   <dimen name="dimen_extra_large">30dp</dimen>
+   <dimen name="dimen_actionBar">56dp</dimen>
+</resources>

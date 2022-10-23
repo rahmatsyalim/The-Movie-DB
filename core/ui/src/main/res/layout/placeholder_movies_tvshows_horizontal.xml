@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:id="@+id/shimmer_ph_home_movie_list"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:layout_marginBottom="@dimen/dimen_regular"
+   android:orientation="vertical">
+
+   <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:padding="@dimen/dimen_regular">
+
+      <com.syalim.themoviedb.library.customviews.CustomImageView
+         android:layout_width="120dp"
+         android:layout_height="18dp"
+         android:background="@drawable/placeholder_background"
+         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Custom.Corner50Percent" />
+
+      <com.syalim.themoviedb.library.customviews.CustomImageView
+         android:layout_width="60dp"
+         android:layout_height="18dp"
+         android:layout_alignParentEnd="true"
+         android:background="@drawable/placeholder_background"
+         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Custom.Corner50Percent" />
+
+   </RelativeLayout>
+
+   <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:padding="@dimen/dimen_tiny">
+
+      <include layout="@layout/placeholder_item_movie_tvshows" />
+
+      <include layout="@layout/placeholder_item_movie_tvshows" />
+
+      <include layout="@layout/placeholder_item_movie_tvshows" />
+
+   </LinearLayout>
+</LinearLayout>

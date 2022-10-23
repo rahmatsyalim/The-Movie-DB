@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <string name="discover_tv_shows">Discover TV Shows</string>
+   <string name="search_tv_shows">Search TV Shows …</string>
+
+   <string name="airing_today">Airing Today</string>
+   <string name="popular">Popular</string>
+   <string name="top_rated">Top Rated</string>
+   <string name="on_the_air">On The Air</string>
+
+   <string name="no_tv_shows_discovered">No TV shows discovered.</string>
+</resources>

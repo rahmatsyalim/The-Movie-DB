@@ -3,9 +3,9 @@ plugins {
    `kotlin-dsl-precompiled-script-plugins`
 }
 
-repositories {
-   mavenCentral()
-   google()
+java {
+   sourceCompatibility = JavaVersion.VERSION_11
+   targetCompatibility = JavaVersion.VERSION_11
 }
 
 dependencies {
@@ -26,6 +26,10 @@ gradlePlugin {
       register("androidFeature") {
          id = "themoviedb.android.feature"
          implementationClass = "AndroidFeature"
+      }
+      register("kotlinLibrary") {
+         id = "themoviedb.kotlin.library"
+         implementationClass = "KotlinLibrary"
       }
    }
 }

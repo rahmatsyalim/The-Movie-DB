@@ -20,13 +20,17 @@ class AndroidLibrary : Plugin<Project> {
          }
          extensions.configure<LibraryExtension> {
             configureAndroid()
-            configureProguard()
             defaultConfig.targetSdk = AndroidConfigs.targetSdk
+            configureProguard()
          }
          val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
          dependencies {
             // logging
             add("implementation", libs.findLibrary("timber").get())
+
+            // test
+            add("testImplementation", libs.findLibrary("junit4").get())
+            add("androidTestImplementation", libs.findLibrary("androidx.test.ext").get())
          }
       }
    }

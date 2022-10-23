@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/swipe_refresh_layout"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:transitionGroup="true">
+
+   <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <com.facebook.shimmer.ShimmerFrameLayout
+         android:id="@+id/shimmer_movies_by_category"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:visibility="gone">
+
+         <include layout="@layout/placeholder_movies_tvshows_vertical" />
+
+      </com.facebook.shimmer.ShimmerFrameLayout>
+
+      <androidx.recyclerview.widget.RecyclerView
+         android:id="@+id/rv_movies"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:clipToPadding="false"
+         android:paddingHorizontal="@dimen/dimen_tiny"
+         android:paddingTop="@dimen/dimen_tiny"
+         android:paddingBottom="@dimen/dimen_actionBar"
+         android:visibility="gone" />
+
+   </RelativeLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

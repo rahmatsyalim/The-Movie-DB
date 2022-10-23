@@ -9,12 +9,9 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
  * rahmatsyalim@gmail.com
  */
 
-fun CommonExtension<*, *, *, *>.configureAndroid() {
-   defaultConfig {
-      compileSdk = AndroidConfigs.compileSdk
-      minSdk = AndroidConfigs.minSdk
-      testInstrumentationRunner = AndroidConfigs.androidJunitRunner
-   }
+internal fun CommonExtension<*, *, *, *>.configureAndroid() {
+   compileSdk = AndroidConfigs.compileSdk
+   defaultConfig.minSdk = AndroidConfigs.minSdk
 
    compileOptions {
       sourceCompatibility = AndroidConfigs.javaCompileVersion
@@ -24,7 +21,6 @@ fun CommonExtension<*, *, *, *>.configureAndroid() {
    kotlinOptions {
       jvmTarget = AndroidConfigs.javaCompileVersion.toString()
    }
-
 }
 
 
@@ -35,7 +31,6 @@ fun LibraryExtension.configureProguard() {
       }
 
       create("pre-release") {
-         signingConfig = signingConfigs.getByName("debug")
          consumerProguardFiles("consumer-rules.pro")
       }
    }

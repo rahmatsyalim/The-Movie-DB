@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <string name="app_name">The Movie DB</string>
+
+   <string name="discover">Discover</string>
+   <string name="search">Search</string>
+
+   <string name="unexpected_error">Unexpected error.</string>
+
+   <string name="reload">Reload</string>
+   <string name="filter">Filter</string>
+   <string name="genre">Genre</string>
+   <string name="apply">Apply</string>
+   <string name="sort_by">Sort By</string>
+</resources>

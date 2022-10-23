@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <string name="discover_movies">Discover Movies</string>
+   <string name="search_movies">Search Movies …</string>
+
+   <string name="in_theater">In Theaters</string>
+   <string name="upcoming">Upcoming</string>
+   <string name="popular">Popular</string>
+   <string name="top_rated">Top Rated</string>
+
+   <string name="no_movies_discovered">No movies discovered.</string>
+
+   <string name="reviews">Reviews</string>
+   <string name="recommendations">Recommendations</string>
+   <string name="play_trailer">Play Trailer</string>
+   <string name="bookmark">Bookmark</string>
+   <string name="bookmarked">Bookmarked</string>
+   <string name="user_score">User Score</string>
+   <string name="no_reviews">No Reviews.</string>
+   <string name="no_trailer">No trailer found.</string>
+   <string name="no_overview">No overview.</string>
+   <string name="bookmark_failed">Bookmark failed.</string>
+   <string name="added_to_bookmark">Added to bookmark.</string>
+   <string name="overview">Overview</string>
+</resources>

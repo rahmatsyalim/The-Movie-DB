@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <declare-styleable name="CustomImageView">
+      <attr name="image_aspectRatio" format="string" />
+   </declare-styleable>
+
+   <declare-styleable name="FadingEdgeLayout">
+      <attr name="fading_edge" format="flags">
+         <flag name="top" value="1" />
+         <flag name="bottom" value="2" />
+         <flag name="left" value="4" />
+         <flag name="right" value="8" />
+         <flag name="all" value="15" />
+      </attr>
+      <attr name="fading_size" format="dimension" />
+   </declare-styleable>
+</resources>

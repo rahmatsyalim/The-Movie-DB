@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <attr name="customFilterChip" format="reference" />
+   <attr name="customStaticShip" format="reference" />
+
+   <attr name="placeHolderContentColor" format="color" />
+</resources>

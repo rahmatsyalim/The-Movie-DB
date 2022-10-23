@@ -1,8 +1,8 @@
 [versions]
 android = "7.2.2"
+androidxAnnotation = "1.4.0"
 androidxAppCompat = "1.5.0"
 androidxArchCore = "2.7.1"
-androidxConstraintLayout = "2.1.4"
 androidxCore = "1.8.0"
 androidxCoreSplashscreen = "1.0.0"
 androidxDataStore = "1.0.0"
@@ -34,9 +34,9 @@ timber = "5.0.1"
 truth = "1.1.3"
 
 [libraries]
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidxAnnotation" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppCompat" }
 androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidxArchCore" }
-androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidxConstraintLayout" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 androidx-dataStore = { module = "androidx.datastore:datastore", version.ref = "androidxDataStore" }

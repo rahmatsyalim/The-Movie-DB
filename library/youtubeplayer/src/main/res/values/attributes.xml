@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <declare-styleable name="YtPlayerView">
+      <attr name="player_aspectRatio" format="string" />
+      <attr name="player_videoId" format="string" />
+   </declare-styleable>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+   <style name="ShapeAppearance.Custom.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+      <item name="cornerFamily">rounded</item>
+      <item name="cornerSize">@dimen/dimen_rounded_50percent</item>
+   </style>
+
+   <style name="ShapeAppearance.Custom.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+      <item name="cornerFamily">rounded</item>
+      <item name="cornerSize">@dimen/dimen_rounded_small</item>
+   </style>
+
+   <style name="ShapeAppearance.Custom.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+      <item name="cornerFamily">rounded</item>
+      <item name="cornerSize">@dimen/dimen_rounded_regular</item>
+   </style>
+
+   <style name="ShapeAppearanceOverlay.Custom.Corner50Percent" parent="">
+      <item name="cornerFamily">rounded</item>
+      <item name="cornerSize">@dimen/dimen_rounded_50percent</item>
+   </style>
+
+   <style name="ShapeAppearanceOverlay.Custom.CornerSmall" parent="">
+      <item name="cornerFamily">rounded</item>
+      <item name="cornerSize">@dimen/dimen_rounded_small</item>
+   </style>
+</resources>

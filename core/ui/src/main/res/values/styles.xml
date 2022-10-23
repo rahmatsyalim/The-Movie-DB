@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+   <!--TextView-->
+   <style name="Widget.Custom.Textview" parent="Widget.MaterialComponents.TextView">
+      <item name="android:textAppearance">@style/TextAppearance.Custom.Caption</item>
+   </style>
+   <!--AppBar-->
+   <style name="Widget.Custom.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+      <item name="elevation">0dp</item>
+   </style>
+
+   <style name="Widget.Custom.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">
+      <item name="elevation">0dp</item>
+   </style>
+
+   <style name="Widget.Custom.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+      <item name="elevation">0dp</item>
+   </style>
+
+   <style name="Widget.Custom.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+      <item name="materialThemeOverlay">@style/ThemeOverlay.Custom.Toolbar</item>
+      <item name="titleTextAppearance">@style/TextAppearance.Custom.Subtitle1</item>
+      <item name="subtitleTextAppearance">@style/TextAppearance.Custom.Subtitle2</item>
+      <item name="android:elevation">0dp</item>
+      <item name="navigationIconTint">?attr/colorOnSurface</item>
+   </style>
+
+   <style name="ThemeOverlay.Custom.Toolbar" parent="">
+      <item name="colorPrimary">?attr/colorSurface</item>
+      <item name="colorOnPrimary">?attr/colorOnSurface</item>
+   </style>
+   <!--Buttons-->
+   <style name="Widget.Custom.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+      <item name="materialThemeOverlay">@style/ThemeOverlay.Custom.FloatingActionButton</item>
+      <item name="android:outlineProvider">none</item>
+   </style>
+
+   <style name="Widget.Custom.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+      <item name="materialThemeOverlay">@style/ThemeOverlay.Custom.FloatingActionButton</item>
+      <item name="android:outlineProvider">none</item>
+   </style>
+
+   <style name="ThemeOverlay.Custom.FloatingActionButton" parent="">
+      <item name="colorSecondary">?attr/colorSurface</item>
+      <item name="colorOnSecondary">?attr/colorPrimary</item>
+   </style>
+
+   <style name="Widget.Custom.FloatingActionButton.Discover" parent="Widget.MaterialComponents.FloatingActionButton">
+      <item name="materialThemeOverlay">@style/ThemeOverlay.Custom.FloatingActionButton.Discover</item>
+   </style>
+
+   <style name="ThemeOverlay.Custom.FloatingActionButton.Discover" parent="">
+      <item name="colorSecondary">?attr/colorPrimary</item>
+      <item name="colorOnSecondary">?attr/colorSurface</item>
+   </style>
+
+   <style name="Widget.Custom.MaterialButton.IconOnly" parent="Widget.MaterialComponents.Button.TextButton">
+      <item name="iconPadding">0dp</item>
+      <item name="iconTint">?attr/colorOnSurface</item>
+      <item name="android:insetTop">0dp</item>
+      <item name="android:insetBottom">0dp</item>
+      <item name="android:paddingLeft">12dp</item>
+      <item name="android:paddingRight">12dp</item>
+      <item name="android:minWidth">48dp</item>
+      <item name="android:minHeight">48dp</item>
+   </style>
+
+   <style name="Widget.Custom.MaterialButton.IconOnly.Small" parent="Widget.MaterialComponents.Button.TextButton">
+      <item name="iconPadding">0dp</item>
+      <item name="iconTint">?attr/colorOnSurface</item>
+      <item name="android:insetTop">0dp</item>
+      <item name="android:insetBottom">0dp</item>
+      <item name="android:paddingLeft">6dp</item>
+      <item name="android:paddingRight">6dp</item>
+      <item name="android:minWidth">36dp</item>
+      <item name="android:minHeight">36dp</item>
+   </style>
+
+   <style name="Widget.Custom.MaterialTextButton.Toggle" parent="Widget.MaterialComponents.Button.TextButton">
+      <item name="materialThemeOverlay">@style/ThemeOverlay.MaterialTextButton.Toggle</item>
+      <item name="android:textColor">@color/toggle_button_color</item>
+      <item name="backgroundTint">@color/theme_surface</item>
+      <item name="android:insetTop">0dp</item>
+      <item name="android:insetBottom">0dp</item>
+      <item name="android:paddingLeft">6dp</item>
+      <item name="android:paddingRight">6dp</item>
+      <item name="android:minHeight">36dp</item>
+   </style>
+
+   <style name="ThemeOverlay.MaterialTextButton.Toggle" parent="">
+      <item name="colorPrimary">@color/theme_primary</item>
+   </style>
+   <!--Chips-->
+   <style name="Widget.Custom.Chip.Filter" parent="Widget.MaterialComponents.Chip.Filter">
+      <item name="checkedIconTint">?attr/colorPrimary</item>
+      <item name="chipStrokeWidth">1dp</item>
+      <item name="chipStrokeColor">@color/chip_stroke_color</item>
+   </style>
+
+   <style name="Widget.Custom.Chip.Entry" parent="Widget.MaterialComponents.Chip.Entry">
+      <item name="checkedIconVisible">false</item>
+   </style>
+
+   <style name="Widget.Custom.Chip.Choice" parent="Widget.MaterialComponents.Chip.Filter">
+      <item name="checkedIconVisible">false</item>
+      <item name="chipStrokeWidth">1dp</item>
+      <item name="chipStrokeColor">@color/chip_stroke_color</item>
+   </style>
+
+   <style name="Widget.Custom.Chip.Static" parent="Widget.MaterialComponents.Chip.Filter">
+      <item name="android:clickable">false</item>
+      <item name="android:checkable">false</item>
+   </style>
+   <!--TextInput-->
+   <style name="Widget.Custom.TextInput.Search" parent="ThemeOverlay.MaterialComponents.TextInputEditText">
+      <item name="android:background">@drawable/shape_search_bar_background</item>
+      <item name="android:padding">@dimen/dimen_small</item>
+      <item name="android:gravity">center_vertical</item>
+      <item name="android:textAppearance">@style/TextAppearance.Custom.Body1</item>
+      <item name="android:textColor">?attr/colorOnSurface</item>
+      <item name="android:textCursorDrawable">@null</item>
+      <item name="drawableStartCompat">@drawable/ic_search_field</item>
+      <item name="android:drawablePadding">@dimen/dimen_small</item>
+   </style>
+
+   <style name="Widget.Custom.TextInputLayout.FilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+      <item name="materialThemeOverlay">@style/ThemeOverlay.Custom.TextInputEditText.FilledBox</item>
+      <item name="shapeAppearance">@style/ShapeAppearance.Custom.TextInputLayout</item>
+   </style>
+
+   <style name="ThemeOverlay.Custom.TextInputEditText.FilledBox" parent="ThemeOverlay.MaterialComponents.TextInputEditText.FilledBox">
+      <item name="textAppearanceSubtitle1">@style/TextAppearance.Custom.Body1</item>
+      <item name="textAppearanceCaption">@style/TextAppearance.Custom.Body2</item>
+   </style>
+
+   <style name="Widget.Custom.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+      <item name="materialThemeOverlay">@style/ThemeOverlay.Custom.TextInputEditText.OutlinedBox</item>
+      <item name="shapeAppearance">@style/ShapeAppearance.Custom.TextInputLayout</item>
+   </style>
+
+   <style name="ThemeOverlay.Custom.TextInputEditText.OutlinedBox" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+      <item name="textAppearanceSubtitle1">@style/TextAppearance.Custom.Body1</item>
+      <item name="textAppearanceCaption">@style/TextAppearance.Custom.Body2</item>
+   </style>
+
+   <style name="ShapeAppearance.Custom.TextInputLayout" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+      <item name="cornerFamily">rounded</item>
+      <item name="cornerSize">@dimen/dimen_rounded_small</item>
+   </style>
+   <!--RatingBar-->
+   <style name="Widget.Custom.RatingBar" parent="Widget.AppCompat.RatingBar.Small">
+      <item name="android:numStars">5</item>
+      <item name="android:progressTint">?attr/colorSecondary</item>
+   </style>
+   <!--Facebook Shimmer-->
+   <style name="Widget.Custom.Facebook.Shimmer" parent="">
+      <item name="android:forceDarkAllowed" tools:targetApi="Q">false</item>
+      <item name="shimmer_auto_start">false</item>
+   </style>
+   <!--Material CardView-->
+   <style name="Widget.Custom.MaterialCardView.NoElevation" parent="Widget.MaterialComponents.CardView">
+      <item name="cardElevation">0dp</item>
+   </style>
+
+</resources>

@@ -49,14 +49,16 @@ android {
 }
 
 dependencies {
+   implementation(projects.core.ui)
    implementation(projects.core.common)
-   implementation(projects.data.repository)
-   implementation(projects.domain.movie)
-   implementation(projects.domain.connectivity)
+   implementation(projects.core.navigation)
+   implementation(projects.featureMovies.ui)
+   implementation(projects.featureTvshows.ui)
+   implementation(projects.featureBookmarks.ui)
+   implementation(projects.framework.connectivity)
 
    implementation(libs.androidx.core.ktx)
    implementation(libs.androidx.appcompat)
-   implementation(libs.androidx.constraintlayout)
    implementation(libs.material)
    implementation(libs.androidx.swiperefreshlayout)
    implementation(libs.androidx.recyclerview)
@@ -70,13 +72,12 @@ dependencies {
    implementation(libs.hilt.android)
    kapt(libs.hilt.android.compiler)
    implementation(libs.hilt.ext.navigation)
-   implementation(libs.coil.base)
    implementation(libs.facebook.shimmer)
-
+   // logging
+   implementation(libs.timber)
+   // test
    testImplementation(libs.junit4)
-   testImplementation(libs.truth)
    androidTestImplementation(libs.androidx.test.ext)
    androidTestImplementation(libs.androidx.test.espresso.core)
-   androidTestImplementation(libs.truth)
 
 }

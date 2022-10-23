@@ -58,14 +58,14 @@ object DateFormatter {
       }
    }
 
-   fun dateToStringDateDisplay(date: Date?): String? {
+   fun dateToStringDisplay(date: Date?): String? {
       return date?.let {
          val stringDate = formatter.format(it)
-         stringDateToDisplayShortMonth(stringDate)
+         stringDateToStringDisplay(stringDate)
       }
    }
 
-   fun stringDateToDisplayShortMonth(string: String?): String? {
+   fun stringDateToStringDisplay(string: String?): String? {
       return if (string.stringDateIsValid()) {
          val dateSplit = string!!.split("-").map { it.toInt() }
          val year = dateSplit[0]

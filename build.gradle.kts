@@ -1,14 +1,15 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
    alias(libs.plugins.android.application) apply false
    alias(libs.plugins.android.library) apply false
-   alias(libs.plugins.secrets) apply false
    alias(libs.plugins.kotlin.android) apply false
+   alias(libs.plugins.secrets) apply false
    alias(libs.plugins.kotlin.jvm) apply false
    alias(libs.plugins.hilt) apply false
    alias(libs.plugins.androidx.navigation.safeargs) apply false
-   alias(libs.plugins.ben.manes.versions) apply true
+   alias(libs.plugins.ben.manes.versions)
 }
 
 tasks.register("clean", Delete::class) {
@@ -24,8 +25,4 @@ fun String.isNonStable(): Boolean {
    return isStable.not()
 }
 
-tasks.withType<DependencyUpdatesTask> {
-   rejectVersionIf {
-      candidate.version.isNonStable()
-   }
-}
+tasks.withType<DependencyUpdatesTask>()
